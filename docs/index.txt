@@ -1,0 +1,17 @@
+jaraco.develop
+==============
+
+.. contents::
+
+Status and License
+------------------
+
+``jaraco.develop`` tools for development.
+
+Changes
+-------
+
+1.0
+~~~
+
+* Initial release
