@@ -37,6 +37,8 @@ import urlparse
 from optparse import OptionParser
 from BeautifulSoup import BeautifulSoup
 
+from jaraco.develop.vstudio import find_visual_studio
+
 def init():
 	global test_dir
 	test_dir = os.path.expanduser('~/build/python')
@@ -101,21 +103,6 @@ def apply_patch():
 		print("Error applying patch", file=sys.stderr)
 		raise SystemExit(1)
 
-def find_visual_studio():
-	"Find Visual Studio 9 or 10"
-	versions = ['9.0', '10.0']
-	keys = ['PROGRAMFILES', 'PROGRAMFILES(X86)']
-	search_path = [os.environ.get(key) for key in keys if os.environ.has_key(key)]
-	path_versions = itertools.product(search_path, versions)
-	vs_candidate_dirs = [
-		os.path.join(base, 'Microsoft Visual Studio ' + version)
-		for base, version in path_versions
-		]
-	has_VC_child = lambda dir: os.path.isdir(os.path.join(dir, 'VC'))
-	tests = os.path.isdir, has_VC_child
-	test_adequacy = lambda candidate: all(t(candidate) for t in tests)
-	return next(iter(itertools.ifilter(test_adequacy, vs_candidate_dirs)))
-
 def validate_pair(ob):
 	try:
 		if not (len(ob) == 2):
@@ -168,7 +155,7 @@ def get_environment_from_batch_command(env_cmd, initial=None):
 	return result
 
 def get_vcvars_env(*params):
-	visual_studio = find_visual_studio()
+	visual_studio = find_visual_studio('9.0')
 	vcvarsall = os.path.join(visual_studio, 'VC', 'vcvarsall.bat')
 	if not os.path.isfile(vcvarsall):
 		print("Couldn't find vcvarsall", file=sys.stderr)
