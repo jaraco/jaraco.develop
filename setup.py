@@ -34,6 +34,7 @@ setup (name = name,
 		url = 'http://pypi.python.org/pypi/'+name,
 		packages = find_packages(exclude=['tests']),
 		namespace_packages = ['jaraco',],
+		scripts = ['scripts/test-python-symlink-patch.py'],
 		license = 'MIT',
 		classifiers = [
 			"Development Status :: 4 - Beta",
