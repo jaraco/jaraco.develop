@@ -26,7 +26,7 @@ __date__ = '$Date$'[7:-2]
 name = 'jaraco.develop'
 
 setup (name = name,
-		version = '1.0',
+		version = '1.1',
 		description = 'Routines to assist development',
 		long_description = long_description,
 		author = 'Jason R. Coombs',
@@ -46,6 +46,7 @@ setup (name = name,
 				],
 		},
 		install_requires=[
+			'jaraco.util',
 		],
 		extras_require = {
 		},
