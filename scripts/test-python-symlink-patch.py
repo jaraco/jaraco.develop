@@ -137,7 +137,7 @@ def do_builds():
 	init()
 	create_test_dir()
 	checkout_source()
-	apply_patch()
+	options.no_patch or apply_patch()
 	code, output = do_build(32)
 	if not options.skip_64_bit:
 		code, output = do_build(64)
@@ -148,7 +148,7 @@ def orchestrate_test():
 	create_test_dir()
 	try:
 		checkout_source()
-		if not options.no_patch: apply_patch()
+		options.no_patch or apply_patch()
 		save_results(do_build(32), '32-bit build results')
 		save_results(run_test(), '32-bit test results')
 		if not options.skip_64_bit:
@@ -186,8 +186,13 @@ def get_options():
 		action="store_true",
 		help="Just run cleanup; all other options ignored",
 		)
-	parser.add_option('--no-patch', default=False, action="store_true")
-	parser.add_option('--skip-64-bit', default=False, action="store_true")
+	parser.add_option('--no-patch', default=False, action="store_true",
+		help="Skip patching the code",
+		)
+	parser.add_option('--skip-64-bit', default=False,
+		action="store_true",
+		help="Skip the 64-bit builds (do 32-bit only)"
+		)
 	options, args = parser.parse_args()
 
 if __name__ == '__main__':
