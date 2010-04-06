@@ -47,6 +47,7 @@ setup (name = name,
 		},
 		install_requires=[
 			'jaraco.util',
+			'BeautifulSoup',
 		],
 		extras_require = {
 		},
