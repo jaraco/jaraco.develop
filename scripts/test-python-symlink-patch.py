@@ -139,7 +139,8 @@ def do_builds():
 	checkout_source()
 	apply_patch()
 	code, output = do_build(32)
-	#code, output = do_build(64)
+	if not options.skip_64_bit:
+		code, output = do_build(64)
 
 # orchestrate the test
 def orchestrate_test():
