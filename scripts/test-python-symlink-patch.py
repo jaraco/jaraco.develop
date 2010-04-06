@@ -39,6 +39,8 @@ from BeautifulSoup import BeautifulSoup
 
 from jaraco.develop.vstudio import get_vcvars_env
 
+bug_id = 1578269
+
 def init():
 	global test_dir
 	test_dir = os.path.expanduser('~/build/python')
@@ -67,41 +69,72 @@ def checkout_source():
 		raise SystemExit(result)
 	pcbuild_dir = os.path.join(target, 'pcbuild')
 
-def patch_number(link):
-	number = re.compile(r'\d+(\.\d+)?')
-	return float(number.search(link.string).group(0))
+class RoundupTracker(object):
+	"""
+	An object representing a RoundUp issue (referenced by URL).
+	"""
+	def __init__(self, url):
+		self.url = url
 
-def find_patches(soup):
-	files = soup.find(attrs='files')
-	links = files.findAll(text=re.compile(r'.*\.patch'))
-	links.sort(key=patch_number, reverse=True)
-	return links
+	def get_patch_refs(self):
+		return (
+			urlparse.urljoin(self.url, link.parent['href'])
+			for link in self.find_patch_links()
+			)
 
-def get_patches(soup):
-	for link in find_patches(soup):
-		yield get_patch(link.parent['href'])
+	@staticmethod
+	def patch_number(link):
+		number = re.compile(r'\d+(\.\d+)?')
+		return float(number.search(link.string).group(0))
 
-bug_url = 'http://bugs.python.org/issue1578269'
+	def find_patch_links(self):
+		soup = BeautifulSoup(urllib2.urlopen(self.url).read())
+		files = soup.find(attrs='files')
+		links = files.findAll(text=re.compile(r'.*\.patch'))
+		links.sort(key=self.patch_number, reverse=True)
+		return links
 
-def get_patch(link_ref):
-	href = urlparse.urljoin(bug_url, link_ref)
-	url = urllib2.urlopen(href)
-	filename = urllib.unquote(os.path.basename(href))
-	return filename, url.read()
+	def get_patches(self):
+		return itertools.imap(Patch.urlopen, self.get_patch_refs())
 
-def get_soup():
-	return BeautifulSoup(urllib2.urlopen(bug_url).read())
+	def get_latest_patch(self):
+		return next(self.get_patches())
+
+class PythonBugTracker(RoundupTracker):
+	def __init__(self, id):
+		url = 'http://bugs.python.org/issue' + str(id)
+		super(PythonBugTracker, self).__init__(url)
+
+class Patch(str):
+	"""
+	A unified diff object that can be applied to a file or folder.
+	Depends on GNU patch.exe being in the path.
+	"""
+	def __new__(cls, *args, **kwargs):
+		return str.__new__(cls, *args)
+
+	def __init__(self, *args, **kwargs):
+		self.__dict__.update(kwargs)
+
+	@classmethod
+	def urlopen(cls, url):
+		filename = urllib.unquote(os.path.basename(url))
+		return cls(urllib2.urlopen(url).read(), filename=filename)
+
+	def apply(self, target):
+		filename = self.filename
+		print("Applying {filename} on {target}".format(**vars()))
+		cmd = ['patch', '-p0', '-t', '-d', target]
+		proc = subprocess.Popen(cmd, stdin=subprocess.PIPE)
+		stdout, stderr = proc.communicate(self)
+		if proc.returncode != 0:
+			print("Error applying patch", file=sys.stderr)
+			raise RuntimeError("Error applying patch")
 
 def apply_patch():
-	filename, patch = next(get_patches(get_soup()))
-	patch_target = os.path.join(test_dir, 'python-py3k')
-	print("Applying {filename} on {patch_target}".format(**vars()))
-	cmd = ['patch', '-p0', '-t', '-d', patch_target]
-	proc = subprocess.Popen(cmd, stdin=subprocess.PIPE)
-	stdout, stderr = proc.communicate(patch)
-	if proc.returncode != 0:
-		print("Error applying patch", file=sys.stderr)
-		raise SystemExit(1)
+	patch = PythonBugTracker(bug_id).get_latest_patch()
+	target = os.path.join(test_dir, 'python-py3k')
+	patch.apply(target)
 
 def construct_build_command(args=[]):
 	"""
@@ -185,6 +218,8 @@ def orchestrate_test():
 		if not options.skip_64_bit:
 			save_results(do_build(64), '64-bit build results')
 			save_results(run_test('-x64'), '64-bit test results')
+	except KeyboardInterrupt:
+		print("Cancelled by user")
 	finally:
 		print("Cleaning up...")
 		cleanup()
@@ -203,9 +238,18 @@ def handle_command_line():
 def get_options():
 	global options
 	parser = OptionParser()
-	parser.add_option('-s', '--skip', default=False, action="store_true", help="Don't do anything - useful for interactive mode")
-	parser.add_option('-b', '--just-build', default=False, action="store_true")
-	parser.add_option('-c', '--clean', default=False, action="store_true")
+	parser.add_option('-s', '--skip', default=False,
+		action="store_true",
+		help="Don't do anything - useful for interactive mode",
+		)
+	parser.add_option('-b', '--just-build', default=False,
+		action="store_true",
+		help="Download, patch, and build, but don't test or clean up",
+		)
+	parser.add_option('-c', '--clean', default=False,
+		action="store_true",
+		help="Just run cleanup; all other options ignored",
+		)
 	parser.add_option('--no-patch', default=False, action="store_true")
 	parser.add_option('--skip-64-bit', default=False, action="store_true")
 	options, args = parser.parse_args()
