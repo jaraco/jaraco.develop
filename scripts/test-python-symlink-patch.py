@@ -27,17 +27,12 @@ It then cleans up the rest.
 from __future__ import print_function
 import os
 import sys
-import re
 import subprocess
-import itertools
 import traceback
-import urllib2
-import urllib
-import urlparse
 from optparse import OptionParser
-from BeautifulSoup import BeautifulSoup
 
 from jaraco.develop.vstudio import get_vcvars_env
+from jaraco.develop.trackers import PythonBugTracker
 
 bug_id = 1578269
 
@@ -63,73 +58,13 @@ def checkout_source():
 	print("Checking out Python from {url}".format(**vars()))
 	target = os.path.join(test_dir, 'python-py3k')
 	cmd = ['svn', 'co', '-q', url, target]
+	if False:
+		cmd.extend(['--depth', 'immediates', ]) # for debugging
 	result = subprocess.Popen(cmd).wait()
 	if result != 0:
 		print("Checkout failed", file=sys.stderr)
 		raise SystemExit(result)
 	pcbuild_dir = os.path.join(target, 'pcbuild')
-
-class RoundupTracker(object):
-	"""
-	An object representing a RoundUp issue (referenced by URL).
-	"""
-	def __init__(self, url):
-		self.url = url
-
-	def get_patch_refs(self):
-		return (
-			urlparse.urljoin(self.url, link.parent['href'])
-			for link in self.find_patch_links()
-			)
-
-	@staticmethod
-	def patch_number(link):
-		number = re.compile(r'\d+(\.\d+)?')
-		return float(number.search(link.string).group(0))
-
-	def find_patch_links(self):
-		soup = BeautifulSoup(urllib2.urlopen(self.url).read())
-		files = soup.find(attrs='files')
-		links = files.findAll(text=re.compile(r'.*\.patch'))
-		links.sort(key=self.patch_number, reverse=True)
-		return links
-
-	def get_patches(self):
-		return itertools.imap(Patch.urlopen, self.get_patch_refs())
-
-	def get_latest_patch(self):
-		return next(self.get_patches())
-
-class PythonBugTracker(RoundupTracker):
-	def __init__(self, id):
-		url = 'http://bugs.python.org/issue' + str(id)
-		super(PythonBugTracker, self).__init__(url)
-
-class Patch(str):
-	"""
-	A unified diff object that can be applied to a file or folder.
-	Depends on GNU patch.exe being in the path.
-	"""
-	def __new__(cls, *args, **kwargs):
-		return str.__new__(cls, *args)
-
-	def __init__(self, *args, **kwargs):
-		self.__dict__.update(kwargs)
-
-	@classmethod
-	def urlopen(cls, url):
-		filename = urllib.unquote(os.path.basename(url))
-		return cls(urllib2.urlopen(url).read(), filename=filename)
-
-	def apply(self, target):
-		filename = self.filename
-		print("Applying {filename} on {target}".format(**vars()))
-		cmd = ['patch', '-p0', '-t', '-d', target]
-		proc = subprocess.Popen(cmd, stdin=subprocess.PIPE)
-		stdout, stderr = proc.communicate(self)
-		if proc.returncode != 0:
-			print("Error applying patch", file=sys.stderr)
-			raise RuntimeError("Error applying patch")
 
 def apply_patch():
 	patch = PythonBugTracker(bug_id).get_latest_patch()
