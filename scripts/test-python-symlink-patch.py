@@ -133,15 +133,6 @@ def cleanup():
 		print("Error cleaning up", file=sys.stderr)
 		raise SystemExit(1)
 
-def do_builds():
-	init()
-	create_test_dir()
-	checkout_source()
-	options.no_patch or apply_patch()
-	code, output = do_build(32)
-	if not options.skip_64_bit:
-		code, output = do_build(64)
-
 # orchestrate the test
 def orchestrate_test():
 	init()
@@ -150,23 +141,20 @@ def orchestrate_test():
 		checkout_source()
 		options.no_patch or apply_patch()
 		save_results(do_build(32), '32-bit build results')
-		save_results(run_test(), '32-bit test results')
+		options.just_build or save_results(run_test(), '32-bit test results')
 		if not options.skip_64_bit:
 			save_results(do_build(64), '64-bit build results')
-			save_results(run_test('-x64'), '64-bit test results')
+			options.just_build or save_results(run_test('-x64'), '64-bit test results')
 	except KeyboardInterrupt:
 		print("Cancelled by user")
 	finally:
 		print("Cleaning up...")
-		cleanup()
+		options.just_build or cleanup()
 
 def handle_command_line():
 	get_options()
 	if options.clean:
 		init(); cleanup()
-		return
-	if options.just_build:
-		do_builds()
 		return
 	if not options.skip:
 		orchestrate_test()
