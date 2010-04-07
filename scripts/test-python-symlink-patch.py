@@ -32,7 +32,7 @@ import traceback
 from optparse import OptionParser
 
 from jaraco.develop.vstudio import get_vcvars_env
-from jaraco.develop.trackers import PythonBugTracker
+from jaraco.develop import apply_python_bug_patch
 
 bug_id = 1578269
 
@@ -68,9 +68,8 @@ def checkout_source():
 	pcbuild_dir = os.path.join(target, 'pcbuild')
 
 def apply_patch():
-	patch = PythonBugTracker(bug_id).get_latest_patch()
 	target = os.path.join(test_dir, 'python-py3k')
-	patch.apply(target)
+	apply_python_bug_patch(bug_id, target)
 
 def construct_build_command(args=[]):
 	"""

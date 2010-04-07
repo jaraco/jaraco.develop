@@ -43,6 +43,7 @@ setup (name = name,
 		],
 		entry_points = {
 			'console_scripts': [
+				'apply-python-bug-patch=jaraco.develop:apply_python_bug_patch_cmd',
 				],
 		},
 		install_requires=[
