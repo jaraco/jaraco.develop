@@ -161,7 +161,7 @@ def orchestrate_test():
 		options.just_build or run_test(save_results=Results('32-bit test results'))
 		if not options.skip_64_bit:
 			do_build(64, save_results=Results('64-bit build results'))
-			options.just_build or run_test('-x64', save_results=Results('64-bit test results'))
+			options.just_build or run_test(save_results=Results('64-bit test results'), '-x64')
 	except KeyboardInterrupt:
 		print("Cancelled by user")
 	finally:
