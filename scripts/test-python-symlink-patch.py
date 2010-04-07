@@ -99,28 +99,31 @@ def get_externals(word_size):
 		32: 'external.bat',
 		64: 'external-amd64.bat',
 		}[word_size]
-	os.chdir(os.path.join(pcbuild_dir, '..'))
+	# the externals scripts are particular about the cwd
+	cwd = os.path.join(pcbuild_dir, '..')
 	script_path = os.path.join('Tools', 'buildbot', script_name)
 	cmd = [script_path]
-	#proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-	proc = subprocess.Popen(cmd)
+	proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
+		stderr=subprocess.STDOUT, cwd=cwd)
+	for line in proc.stdout:
+		sys.stdout.write(line)
 	output, stderr = proc.communicate()
 	print("result of {script_name} is {proc.returncode}".format(**vars()))
 	return proc.returncode, output
 
-def do_build(word_size):
+def do_build(word_size, save_results):
 	options.get_externals and get_externals(word_size)
 	print("building {word_size}-bit python".format(**vars()))
 	env_args = {32: [], 64: ['x64']}[word_size]
 	env = get_vcvars_env(*env_args)
 	cmd_args = {32: [], 64: ['-p', 'x64']}[word_size]
 	cmd = construct_build_command(cmd_args)
-	proc = subprocess.Popen(cmd, env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-	output, stderr = proc.communicate()
+	proc = subprocess.Popen(cmd, env=env, stdout=save_results, stderr=subprocess.STDOUT)
+	proc.communicate()
 	print("result of {word_size}-bit build is {proc.returncode}".format(**vars()))
-	return proc.returncode, output
+	save_results.write(proc.returncode)
 
-def run_test(*params):
+def run_test(save_results, *params):
 	print("Running regression tests")
 	cmd = [
 		'rt.bat',
@@ -128,19 +131,17 @@ def run_test(*params):
 		] + list(params)
 	orig_dir = os.getcwd()
 	os.chdir(pcbuild_dir)
-	proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-	output, stderr = proc.communicate()
+	proc = subprocess.Popen(cmd, stdout=save_results, stderr=subprocess.STDOUT)
+	proc.communicate()
 	if not proc.returncode == 0:
 		print("Warning: rt.bat returned {proc.returncode}".format(**vars()))
 	os.chdir(orig_dir)
-	return proc.returncode, output
+	save_results.write(proc.returncode)
 
-def save_results(results, filename):
-	filename = os.path.join(os.environ['USERPROFILE'], filename+'.txt')
-	code, output = results
-	f = open(filename, 'wb')
-	f.write(str(code)+'\n')
-	f.write(output)
+class Results(file):
+	def __init__(self, filename):
+		filename = os.path.expanduser('~/{filename}.txt'.format(**vars()))
+		super(Results, self).__init__(filename, 'wb')
 
 def cleanup():
 	cmd = ['cmd', '/c', 'rmdir', '/s', '/q', test_dir]
@@ -156,16 +157,15 @@ def orchestrate_test():
 	try:
 		checkout_source()
 		options.no_patch or apply_patch()
-		save_results(do_build(32), '32-bit build results')
-		options.just_build or save_results(run_test(), '32-bit test results')
+		do_build(32, save_results=Results('32-bit build results'))
+		options.just_build or run_test(save_results=Results('32-bit test results'))
 		if not options.skip_64_bit:
-			save_results(do_build(64), '64-bit build results')
-			options.just_build or save_results(run_test('-x64'), '64-bit test results')
+			do_build(64, save_results=Results('64-bit build results'))
+			options.just_build or run_test('-x64', save_results=Results('64-bit test results'))
 	except KeyboardInterrupt:
 		print("Cancelled by user")
 	finally:
-		print("Cleaning up...")
-		options.just_build or cleanup()
+		options.just_build or print("Cleaning up...") and cleanup()
 
 def handle_command_line():
 	get_options()
