@@ -158,10 +158,10 @@ def orchestrate_test():
 		checkout_source()
 		options.no_patch or apply_patch()
 		do_build(32, save_results=Results('32-bit build results'))
-		options.just_build or run_test(save_results=Results('32-bit test results'))
+		options.just_build or run_test(Results('32-bit test results'))
 		if not options.skip_64_bit:
 			do_build(64, save_results=Results('64-bit build results'))
-			options.just_build or run_test(save_results=Results('64-bit test results'), '-x64')
+			options.just_build or run_test(Results('64-bit test results'), '-x64')
 	except KeyboardInterrupt:
 		print("Cancelled by user")
 	finally:
