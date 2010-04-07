@@ -121,7 +121,7 @@ def do_build(word_size, save_results):
 	proc = subprocess.Popen(cmd, env=env, stdout=save_results, stderr=subprocess.STDOUT)
 	proc.communicate()
 	print("result of {word_size}-bit build is {proc.returncode}".format(**vars()))
-	save_results.write(proc.returncode)
+	save_results.write('\nresult: {proc.returncode}'.format(**vars()))
 
 def run_test(save_results, *params):
 	print("Running regression tests")
@@ -136,7 +136,7 @@ def run_test(save_results, *params):
 	if not proc.returncode == 0:
 		print("Warning: rt.bat returned {proc.returncode}".format(**vars()))
 	os.chdir(orig_dir)
-	save_results.write(proc.returncode)
+	save_results.write('\nresult: {proc.returncode}'.format(**vars()))
 
 class Results(file):
 	def __init__(self, filename):
