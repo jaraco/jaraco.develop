@@ -48,6 +48,7 @@ def create_test_dir():
 	"""
 	build_existed_prior = os.path.exists(os.path.expanduser('~/build'))
 	if os.path.exists(test_dir):
+		if options.reuse: return
 		print("Test directory already exists. Aborting", file=sys.stderr)
 		raise SystemExit(1)
 	os.makedirs(test_dir)
@@ -93,7 +94,22 @@ def construct_build_command(args=[]):
 		cmd[-1:-1] = ['/rebuild']
 	return cmd
 
+def get_externals(word_size):
+	script_name = {
+		32: 'external.bat',
+		64: 'external-amd64.bat',
+		}[word_size]
+	os.chdir(os.path.join(pcbuild_dir, '..'))
+	script_path = os.path.join('Tools', 'buildbot', script_name)
+	cmd = [script_path]
+	#proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+	proc = subprocess.Popen(cmd)
+	output, stderr = proc.communicate()
+	print("result of {script_name} is {proc.returncode}".format(**vars()))
+	return proc.returncode, output
+
 def do_build(word_size):
+	options.get_externals and get_externals(word_size)
 	print("building {word_size}-bit python".format(**vars()))
 	env_args = {32: [], 64: ['x64']}[word_size]
 	env = get_vcvars_env(*env_args)
@@ -180,6 +196,13 @@ def get_options():
 	parser.add_option('--skip-64-bit', default=False,
 		action="store_true",
 		help="Skip the 64-bit builds (do 32-bit only)"
+		)
+	parser.add_option('--get-externals', default=False,
+		action="store_true",
+		help="Get the external dependencies",
+		)
+	parser.add_option('--reuse', default=False, action="store_true",
+		help="Re-use an existing checkout (if it exists)",
 		)
 	options, args = parser.parse_args()
 
