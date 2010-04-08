@@ -26,7 +26,7 @@ __date__ = '$Date$'[7:-2]
 name = 'jaraco.develop'
 
 setup (name = name,
-		version = '1.1.1',
+		version = '1.2',
 		description = 'Routines to assist development',
 		long_description = long_description,
 		author = 'Jason R. Coombs',
