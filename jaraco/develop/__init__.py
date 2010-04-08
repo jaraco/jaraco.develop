@@ -9,6 +9,6 @@ def apply_python_bug_patch(bug_id, target):
 
 def apply_python_bug_patch_cmd():
 	options, args = OptionParser().parse_args()
-	bug_id = int(args.pop())
-	target = args.pop()
+	bug_id, target = args
+	bug_id = int(bug_id)
 	return apply_python_bug_patch(bug_id, target)
