@@ -1,6 +1,7 @@
 import subprocess
 import os
 import sys
+import optparse
 
 def find_firefox_win32():
 	import _winreg
@@ -25,11 +26,34 @@ def add_firefox_to_path():
 		pass
 	return env
 
-def start_selenium_server(
-	java = r'c:\program files\java\jdk\bin\java.exe',
-	selenium = r'c:\program files\java\selenium-server\selenium-server.jar'):
+def get_options():
+	parser = optparse.OptionParser()
+	parser.add_option('-j', '--java-vm', default=r'c:\program files\java\jdk\bin\java.exe')
+	parser.add_option('-s', '--selenium-jar', default=r'c:\program files\java\selenium-server\selenium-server.jar')
+	parser.add_option('-p', '--firefox-profile')
+	options, args = parser.parse_args()
+	if args:
+		parser.error('%prog does not accept any positional arguments')
+	return options
+
+def get_firefox_profile(name):
+	profile_path = os.path.join(
+		os.environ['APPDATA'],'Mozilla','Firefox','Profiles')
+	profiles = os.listdir(profile_path)
+	for profile in profiles:
+		id, sep, profile_name = profile.partition('.')
+		if profile_name == name:
+			return os.path.join(profile_path, profile)
+
+def start_selenium_server():
+	options = get_options()
 	env = add_firefox_to_path()
+	
 	try:
-		subprocess.check_call([java, '-jar', selenium], env=env)
+		cmd = [options.java_vm, '-jar', options.selenium_jar]
+		if options.firefox_profile:
+			p = get_firefox_profile(options.firefox_profile)
+			cmd.extend(['-firefoxProfileTemplate', p])
+		subprocess.check_call(cmd, env=env)
 	except KeyboardInterrupt:
 		pass
