@@ -14,7 +14,10 @@ def find_firefox_win32():
 	return install_loc
 
 def find_firefox_linux2():
+	# firefox is probably already in the PATH, so don't bother
 	raise NotImplementedError()
+# ditto for OSX
+find_firefox_darwin = find_firefox_linux2
 
 def add_firefox_to_path():
 	env = dict(os.environ)
