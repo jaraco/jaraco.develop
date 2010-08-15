@@ -26,7 +26,7 @@ __date__ = '$Date$'[7:-2]
 name = 'jaraco.develop'
 
 setup (name = name,
-		version = '1.2',
+		use_hg_version=True,
 		description = 'Routines to assist development',
 		long_description = long_description,
 		author = 'Jason R. Coombs',
@@ -60,4 +60,7 @@ setup (name = name,
 		],
 		test_suite = "nose.collector",
 		cmdclass=dict(build_py=build_py),
+		setup_requires=[
+			'hgtools>=0.4',
+		],
 	)
