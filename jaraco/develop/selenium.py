@@ -1,7 +1,11 @@
+from __future__ import absolute_import
 import subprocess
 import os
 import sys
 import optparse
+import json
+import getpass
+from collections import namedtuple
 
 def find_firefox_win32():
 	import _winreg
@@ -60,3 +64,37 @@ def start_selenium_server():
 		subprocess.check_call(cmd, env=env)
 	except KeyboardInterrupt:
 		pass
+
+browser_spec = namedtuple('browser_spec', 'name version')
+
+class browsers:
+	ie7 = browser_spec('iexplore', '7.')
+	ie6 = browser_spec('iexplore', '6.')
+	ie8 = browser_spec('iexplore', '8.')
+	
+	@classmethod
+	def all(cls):
+		return dict(
+			(name, spec)
+			for name, spec in vars(cls).items()
+			if isinstance(spec, browser_spec)
+			)
+
+def get_saucelabs_params(os = 'Windows 2003', browser = browsers.ie7, job_name = None):
+	import keyring
+	username = getpass.getuser()
+	params = dict(
+		username = username,
+		os = os,
+		browser = browser.name,
+		)
+	params["browser-version"] = browser.version
+	params['access-key'] = keyring.get_password('saucelabs.com', username)
+	if job_name:
+		params['job-name'] = job_name
+	return json.dumps(params)
+
+def get_saucelabs_connection(url, *args, **kwargs):
+	params = get_saucelabs_params(*args, **kwargs)
+	import selenium
+	return selenium.selenium('saucelabs.com', 4444, params, url)
