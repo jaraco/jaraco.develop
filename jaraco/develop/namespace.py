@@ -4,7 +4,6 @@ from textwrap import dedent
 from path import path
 
 try:
-	raise ImportError
 	from jaraco.util.string import local_format as lf
 except ImportError:
 	def local_format(string):
