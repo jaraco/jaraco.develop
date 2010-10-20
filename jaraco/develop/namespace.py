@@ -11,13 +11,15 @@ def DALS(string):
 
 _setup_template = """
 from setuptools import setup, find_packages
-setup(
+setup_params = dict(
 	name='{project_name}',
 	version='1.0',
 	packages=find_packages(),
 	namespace_packages=['{namespace}'],
 	zip_safe=False,
 )
+if __name__ == '__main__':
+	setup(**setup_params)
 """
 
 def create_namespace_package(root):
