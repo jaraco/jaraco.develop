@@ -3,7 +3,14 @@ from textwrap import dedent
 # requires path.py (easy_install path.py)
 from path import path
 
-from jaraco.util.string import local_format as lf
+try:
+	raise ImportError
+	from jaraco.util.string import local_format as lf
+except ImportError:
+	def local_format(string):
+		import inspect
+		return string.format(**inspect.currentframe().f_back.f_locals)
+	lf = local_format
 
 # dedent and left strip
 def DALS(string):
