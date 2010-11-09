@@ -26,7 +26,7 @@ __date__ = '$Date$'[7:-2]
 name = 'jaraco.develop'
 
 setup (name = name,
-		version = '1.1.1',
+		use_hg_version=True,
 		description = 'Routines to assist development',
 		long_description = long_description,
 		author = 'Jason R. Coombs',
@@ -44,6 +44,8 @@ setup (name = name,
 		entry_points = {
 			'console_scripts': [
 				'apply-python-bug-patch=jaraco.develop:apply_python_bug_patch_cmd',
+				'start-selenium=jaraco.develop.selenium:start_selenium_server',
+				'release-package = jaraco.develop.package:release',
 				],
 		},
 		install_requires=[
@@ -59,4 +61,7 @@ setup (name = name,
 		],
 		test_suite = "nose.collector",
 		cmdclass=dict(build_py=build_py),
+		setup_requires=[
+			'hgtools>=0.4',
+		],
 	)
