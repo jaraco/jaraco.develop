@@ -16,6 +16,15 @@ You can install it with ``easy_install jaraco.develop``, or from the
 Changes
 -------
 
+1.3
+~~~
+
+* Added package module (from jaraco.util).
+* Added some helpful routines for invoking saucelabs including shortcuts
+  for selecting browsers.
+* Added a script to create the simple namespace package configuration.
+* Added env_tool from the Gryphon project.
+
 1.0
 ~~~
 
