@@ -27,6 +27,18 @@ Changes
 * Added a script to create the simple namespace package configuration.
 * Added env_tool from the Gryphon project.
 
+1.2
+~~~
+
+* Adding module for patching the msvc9compiler module
+* Added command-line options to start-selenium
+
+1.1
+~~~
+
+* Added routines for working with the Core CPython project (building,
+  applying patches, etc).
+
 1.0
 ~~~
 
