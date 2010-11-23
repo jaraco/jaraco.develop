@@ -10,12 +10,9 @@ import subprocess
 import os
 import re
 import urllib2
-import signal
 import functools
-import posixpath
 import optparse
 import platform
-from textwrap import dedent
 
 class LinuxPlatform(object):
 	@staticmethod
