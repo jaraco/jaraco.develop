@@ -317,3 +317,5 @@ class MercurialSupport():
 			open(setup_py_file, 'w').write(setup_py)
 
 
+if __name__ == '__main__':
+	PythonEnvironment.handle_command_line()
