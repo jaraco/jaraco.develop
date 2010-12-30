@@ -1,4 +1,5 @@
 from textwrap import dedent
+import optparse
 
 # requires path.py (easy_install path.py)
 from path import path
@@ -40,6 +41,16 @@ def create_namespace_package(root):
 	(namespace_root/package).mkdir()
 	(namespace_root/package/'__init__.py').touch()
 	return namespace_root/package
+
+def create_namespace_package_cmd():
+	parser = optparse.OptionParser()
+	options, args = parser.parse_args()
+	if not args:
+		parser.error('namespace name required')
+	root = args.pop(0)
+	if args:
+		parser.error('unexpected positional arguments')
+	create_namespace_package(path(root))
 
 def create_namespace_sandbox(root='.'):
 	"""

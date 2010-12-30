@@ -34,10 +34,15 @@ setup_params = dict(
 	],
 	entry_points = {
 		'console_scripts': [
-			'apply-python-bug-patch=jaraco.develop:apply_python_bug_patch_cmd',
-			'start-selenium=jaraco.develop.selenium:start_selenium_server',
+			'apply-python-bug-patch=jaraco.develop:'
+				'apply_python_bug_patch_cmd',
+			'start-selenium=jaraco.develop.selenium:'
+				'start_selenium_server',
 			'release-package = jaraco.develop.package:release',
-			'py-exc-env = jaraco.develop.environments:PythonEnvironment.handle_command_line',
+			'py-exc-env = jaraco.develop.environments:'
+				'PythonEnvironment.handle_command_line',
+			'make-namespace-package = jaraco.develop.namespace:'
+				'create_namespace_package_cmd',
 			],
 	},
 	install_requires=[
