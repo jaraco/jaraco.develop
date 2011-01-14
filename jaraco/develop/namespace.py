@@ -36,7 +36,7 @@ if __name__ == '__main__':
 def create_namespace_package(root):
 	project_name = root.basename()
 	namespace, package = project_name.split('.')
-	root.mkdir()
+	if not root.isdir(): root.mkdir()
 	(root/'setup.py').open('w').write(lf(_setup_template))
 	namespace_root = root/namespace
 	namespace_root.mkdir()
