@@ -3,26 +3,24 @@
 import os
 import sys
 import inspect
+import subprocess
 import pkg_resources
 
-def set_environment_for_PyPI():
+def get_environment_for_PyPI():
 	"""
 	PyPI requires that the HOME environment be set before running
 	upload, so go ahead and set it to something reasonable.
 	"""
 	if sys.platform in ('win32',):
-		# set the HOME environment variable if it's not already set
-		drivepath = map(os.environ.get, ('HOMEDRIVE', 'HOMEPATH'))
-		calculated_home = os.path.join(*drivepath)
-		# todo: consider os.expanduser('~') instead
-		os.environ.setdefault('HOME', calculated_home)
+		env = dict(os.environ)
+		env.setdefault('HOME', os.expanduser('~'))
 
 def release():
-	set_environment_for_PyPI()
-
-	sys.argv[1:] = ['egg_info', '-RDb', '', 'sdist', 'upload']
-	__name__ = '__main__'
-	execfile('setup.py')
+	subprocess.check_call([
+		sys.executable, 'setup.py', 'egg_info', '-RDb', '', 'sdist',
+		'upload',
+		], env=get_environment_for_PyPI(),
+		)
 
 def read_long_description():
 	"""
