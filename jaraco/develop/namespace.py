@@ -17,15 +17,19 @@ def DALS(string):
 	return dedent(string).lstrip()
 
 _setup_template = """
-from setuptools import setup, find_packages
+from setuptools import find_packages
 setup_params = dict(
 	name='{project_name}',
-	version='1.0',
+	use_hg_version=True,
 	packages=find_packages(),
 	namespace_packages=['{namespace}'],
 	zip_safe=False,
+	setup_requires=[
+		'hgtools',
+	],
 )
 if __name__ == '__main__':
+	from setuptools import setup
 	setup(**setup_params)
 """
 
