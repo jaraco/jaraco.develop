@@ -37,11 +37,11 @@ def create_namespace_package(root):
 	project_name = root.basename()
 	namespace, package = project_name.split('.')
 	if not root.isdir(): root.mkdir()
-	(root/'setup.py').open('w').write(lf(_setup_template))
+	(root/'setup.py').open('wb').write(lf(_setup_template))
 	namespace_root = root/namespace
 	namespace_root.mkdir()
 	ns_decl = '__import__("pkg_resources").declare_namespace(__name__)\n'
-	(namespace_root/'__init__.py').open('w').write(ns_decl)
+	(namespace_root/'__init__.py').open('wb').write(ns_decl)
 	(namespace_root/package).mkdir()
 	(namespace_root/package/'__init__.py').touch()
 	return namespace_root/package
