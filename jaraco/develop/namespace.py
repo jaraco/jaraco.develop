@@ -33,11 +33,12 @@ if __name__ == '__main__':
 	setup(**setup_params)
 """
 
-def create_namespace_package(root):
+def create_namespace_package(root, indent_with_spaces=False):
 	project_name = root.basename()
 	namespace, package = project_name.split('.')
 	if not root.isdir(): root.mkdir()
-	(root/'setup.py').open('wb').write(lf(_setup_template))
+	template = _setup_template.replace('\t', '    ') if indent_with_spaces else _setup_template
+	(root/'setup.py').open('wb').write(lf(template))
 	namespace_root = root/namespace
 	namespace_root.mkdir()
 	ns_decl = '__import__("pkg_resources").declare_namespace(__name__)\n'
@@ -48,13 +49,15 @@ def create_namespace_package(root):
 
 def create_namespace_package_cmd():
 	parser = optparse.OptionParser()
+	parser.add_option('-s', '--indent-with-spaces', default=False,
+		action='store_true',)
 	options, args = parser.parse_args()
 	if not args:
 		parser.error('namespace name required')
 	root = args.pop(0)
 	if args:
 		parser.error('unexpected positional arguments')
-	create_namespace_package(path(root))
+	create_namespace_package(path(root), options.indent_with_spaces)
 
 def create_namespace_sandbox(root='.'):
 	"""
