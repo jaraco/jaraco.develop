@@ -22,6 +22,7 @@ Changes
 ~~~
 
 * Added support for 4-space indentation in namespace package generation.
+* Added preliminary bitbucket support (create-repo command).
 
 1.3
 ~~~
