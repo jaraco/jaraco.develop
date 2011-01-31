@@ -7,9 +7,12 @@ import argparse
 
 def create_repository(name, auth, url):
 	make_url = functools.partial(urlparse.urljoin, url)
-	res = restclient.POST(make_url('repositories/'), params=dict(name=name),
-		async=False, headers=dict(Authorization=auth), accept=['text/json'])
-	if res: print(res, file=sys.stderr)
+	resp, content = restclient.POST(make_url('repositories/'),
+		params=dict(name=name), resp=True,
+		async=False, headers=dict(Authorization=auth),
+		)
+	import pdb;
+	pdb.set_trace()
 
 def create_repository_cmd():
 	from getpass import getuser, getpass
