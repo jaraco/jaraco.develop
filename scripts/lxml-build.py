@@ -96,7 +96,7 @@ class LibraryManager64(LibraryManager):
 platform_bits = platform.architecture()[0][:2]
 
 def get_source():
-	url = 'http://codespeak.net/lxml/lxml-2.2.7.tgz'
+	url = 'http://codespeak.net/lxml/lxml-2.3.tgz'
 	stream = urllib2.urlopen(url)
 	# mode='r|gz' doesn't work as advertised, queue up the whole file in memory
 	stream = StringIO(stream.read())
