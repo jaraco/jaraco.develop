@@ -31,6 +31,7 @@ setup_params = dict(
 		"Development Status :: 4 - Beta",
 		"Intended Audience :: Developers",
 		"Programming Language :: Python",
+		"Programming Language :: Python :: 2",
 	],
 	entry_points = {
 		'console_scripts': [
@@ -49,7 +50,7 @@ setup_params = dict(
 	},
 	install_requires=[
 		'jaraco.util',
-		'BeautifulSoup',
+		#'html5lib',
 	],
 	extras_require = {
 	},
