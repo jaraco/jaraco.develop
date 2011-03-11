@@ -16,7 +16,6 @@ def apply_python_bug_patch_cmd():
 	bug_id = int(bug_id)
 	return apply_python_bug_patch(bug_id, target)
 
-class Results(file):
-	def __init__(self, filename):
-		filename = os.path.expanduser('~/{filename}.txt'.format(**vars()))
-		super(Results, self).__init__(filename, 'wb')
+def Results(filename):
+	filename = os.path.expanduser('~/{filename}.txt'.format(**vars()))
+	return open(filename, 'wb')

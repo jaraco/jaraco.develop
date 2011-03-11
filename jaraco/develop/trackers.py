@@ -4,6 +4,7 @@
 from __future__ import absolute_import
 
 import html5lib
+import html5lib.treebuilders
 import re
 import itertools
 import urlparse
@@ -30,7 +31,9 @@ class RoundupTracker(object):
 		return float(number.search(link.string).group(0))
 
 	def find_patch_links(self):
-		parser = html5lib.HTMLParser(tree=treebuilders.getTreeBuilder("beautifulsoup"))
+		# note, this will only work if BeautifulSoup is present
+		parser = html5lib.HTMLParser(
+			tree=html5lib.treebuilders.getTreeBuilder("beautifulsoup"))
 		soup = parser.parse(urllib2.urlopen(self.url))
 		files = soup.find(attrs='files')
 		links = files.findAll(text=re.compile(r'.*\.patch'))
