@@ -3,7 +3,7 @@
 """
 Setup script for building jaraco.develop
 
-Copyright © 2010 Jason R. Coombs
+Copyright © 2010-2011 Jason R. Coombs
 """
 
 try:
@@ -36,7 +36,7 @@ setup_params = dict(
 	],
 	entry_points = {
 		'console_scripts': [
-			'apply-python-bug-patch=jaraco.develop:'
+			'apply-python-bug-patch=jaraco.develop.python:'
 				'apply_python_bug_patch_cmd',
 			'start-selenium=jaraco.develop.selenium:'
 				'start_selenium_server',
