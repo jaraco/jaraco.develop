@@ -13,7 +13,7 @@ def get_environment_for_PyPI():
 	"""
 	if sys.platform in ('win32',):
 		env = dict(os.environ)
-		env.setdefault('HOME', os.expanduser('~'))
+		env.setdefault('HOME', os.path.expanduser('~'))
 
 def release():
 	subprocess.check_call([
