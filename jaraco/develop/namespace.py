@@ -39,11 +39,11 @@ def create_namespace_package(root, indent_with_spaces=False):
 	namespace, package = project_name.split('.')
 	if not root.isdir(): root.mkdir()
 	template = _setup_template.replace('\t', '    ') if indent_with_spaces else _setup_template
-	(root/'setup.py').open('wb').write(lf(template))
+	(root/'setup.py').open('wb').write(lf(template).encode('utf-8'))
 	namespace_root = root/namespace
 	namespace_root.mkdir()
 	ns_decl = '__import__("pkg_resources").declare_namespace(__name__)\n'
-	(namespace_root/'__init__.py').open('wb').write(ns_decl)
+	(namespace_root/'__init__.py').open('wb').write(ns_decl.encode('utf-8'))
 	(namespace_root/package).mkdir()
 	(namespace_root/package/'__init__.py').touch()
 	return namespace_root/package
