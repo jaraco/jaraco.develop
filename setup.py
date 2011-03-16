@@ -47,6 +47,7 @@ setup_params = dict(
 				'create_namespace_package_cmd',
 			'create-bitbucket-repository = jaraco.develop.bitbucket:'
 				'create_repository_cmd',
+			'build-python = jaraco.develop.python:build_python',
 			],
 	},
 	install_requires=[

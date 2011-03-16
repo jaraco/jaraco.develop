@@ -18,6 +18,13 @@ You can install it with ``easy_install jaraco.develop``, or from the
 Changes
 -------
 
+1.5
+~~~
+
+* Added build-python command, which finds Visual Studio, loads the
+  appropriate environment, and then builds Python in the current PCBuild
+  directory.
+
 1.4
 ~~~
 
