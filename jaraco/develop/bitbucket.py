@@ -5,13 +5,13 @@ import urlparse
 import functools
 import argparse
 import json
+import pprint
 
 def create_repository(name, auth, url):
 	make_url = functools.partial(urlparse.urljoin, url)
 	res = restclient.POST(make_url('repositories/'), params=dict(name=name),
 		async=False, headers=dict(Authorization=auth), accept=['text/json'])
 	res = json.loads(res)
-	print(res)
 	return res
 
 def create_repository_cmd():
@@ -24,7 +24,8 @@ def create_repository_cmd():
 	if not args.auth:
 		args.auth = ':'.join((getuser(), getpass()))
 	args.auth = 'Basic ' + args.auth.encode('base64')
-	create_repository(args.repo_name, args.auth, args.url)
+	res = create_repository(args.repo_name, args.auth, args.url)
+	pprint.pprint(res)
 
 if __name__ == '__main__':
 	create_repository_cmd()
