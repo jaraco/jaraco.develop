@@ -6,11 +6,6 @@ Setup script for building jaraco.develop
 Copyright © 2010-2011 Jason R. Coombs
 """
 
-try:
-	from distutils.command.build_py import build_py_2to3 as build_py
-except ImportError:
-	from distutils.command.build_py import build_py
-
 from setuptools import find_packages
 
 name = 'jaraco.develop'
@@ -60,7 +55,7 @@ setup_params = dict(
 	],
 	tests_require=[
 	],
-	cmdclass=dict(build_py=build_py),
+	use_2to3=True,
 	setup_requires=[
 		'hgtools',
 	],
