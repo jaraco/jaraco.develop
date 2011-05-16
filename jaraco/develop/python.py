@@ -33,11 +33,10 @@ def find_in_path(filename, search_path):
 
 def build_python():
 	parser = ArgumentParser()
-	parser.add_argument('target', default='x64')
 	options = parser.parse_args()
 	vs = VisualStudio.find()
 	env = vs.get_vcvars_env()
 	msbuild = find_in_path('msbuild.exe', env['Path'])
-	cmd = [msbuild, 'pcbuild.sln', '/t:Build',
+	cmd = [msbuild, 'pcbuild.sln', '/target:python',
 		'/p:Configuration=Release', '/p:Platform=x64']
 	subprocess.check_call(cmd, env=env)
