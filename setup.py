@@ -43,7 +43,8 @@ setup_params = dict(
 			'create-bitbucket-repository = jaraco.develop.bitbucket:'
 				'create_repository_cmd',
 			'build-python = jaraco.develop.python:build_python',
-			],
+			'vs-upgrade = jaraco.develop.vstudio:upgrade_file',
+		],
 	},
 	install_requires=[
 		'jaraco.util',

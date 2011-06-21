@@ -4,6 +4,8 @@ from __future__ import absolute_import
 
 import os
 import itertools
+import subprocess
+
 from .environ import get_environment_from_batch_command
 
 class VisualStudio(str):
@@ -46,3 +48,18 @@ class VisualStudio(str):
 			msg = "Couldn't find vcvarsall"
 			raise RuntimeError(msg)
 		return get_environment_from_batch_command([vcvarsall]+list(params))
+
+	def upgrade(self, file):
+		"""
+		Upgrade project or solution file to the current version
+		"""
+		devenv = os.path.join(self, 'Common7', 'IDE', 'devenv.com')
+		subprocess.check_call([devenv, file, '/upgrade'])
+
+def upgrade_file():
+	import argparse
+	parser = argparse.ArgumentParser()
+	parser.add_argument('filename', help="Solution or Project file")
+	args = parser.parse_args()
+	vs = VisualStudio.find()
+	return vs.upgrade(args.filename)
