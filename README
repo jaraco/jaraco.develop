@@ -24,6 +24,8 @@ Changes
 * Added build-python command, which finds Visual Studio, loads the
   appropriate environment, and then builds Python in the current PCBuild
   directory.
+* Added vs-upgrade command which will take a Visual Studio project or solution
+  file and upgrade it to the latest version.
 
 1.4
 ~~~
