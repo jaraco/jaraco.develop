@@ -18,6 +18,12 @@ You can install it with ``easy_install jaraco.develop``, or from the
 Changes
 -------
 
+1.6
+~~~
+
+* Added `compiler` module with a function `can_compile_extension` which
+  will check if distutils can likely compile an extension module.
+
 1.5
 ~~~
 
