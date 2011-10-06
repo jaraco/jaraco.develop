@@ -10,7 +10,8 @@ import pprint
 def create_repository(name, auth, url, private=False):
 	make_url = functools.partial(urlparse.urljoin, url)
 	res = restclient.POST(make_url('repositories/'),
-		params=dict(name=name, is_private=private), async=False,
+		params=dict(name=name, is_private=private, scm='hg'),
+		async=False,
 		headers=dict(Authorization=auth), accept=['text/json'],
 	)
 	res = json.loads(res)
