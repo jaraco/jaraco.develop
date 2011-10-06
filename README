@@ -18,6 +18,12 @@ You can install it with ``easy_install jaraco.develop``, or from the
 Changes
 -------
 
+1.6.1
+~~~~~
+
+* Updated create-bitbucket-repository command so it now passes the new
+  required parameter 'scm' (always mercurial).
+
 1.6
 ~~~
 
