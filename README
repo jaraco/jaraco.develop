@@ -18,6 +18,11 @@ You can install it with ``easy_install jaraco.develop``, or from the
 Changes
 -------
 
+1.7
+~~~
+
+* create-namespace-package will now also generate non-namespace packages.
+
 1.6.1
 ~~~~~
 
