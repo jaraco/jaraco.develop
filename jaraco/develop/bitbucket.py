@@ -1,4 +1,5 @@
 from __future__ import print_function
+
 import sys
 import restclient
 import urlparse
@@ -7,15 +8,20 @@ import argparse
 import json
 import pprint
 
+from jaraco.util.string import local_format as lf
+
 def create_repository(name, auth, url, private=False):
 	make_url = functools.partial(urlparse.urljoin, url)
-	res = restclient.POST(make_url('repositories/'),
+	headers, content = restclient.POST(make_url('repositories/'),
 		params=dict(name=name, is_private=private, scm='hg'),
 		async=False,
 		headers=dict(Authorization=auth), accept=['text/json'],
+		resp=True,
 	)
-	res = json.loads(res)
-	return res
+	if not 200 <= int(headers['status']) <= 300:
+		print(lf("Error occurred: {headers[status]}"), file=sys.stderr)
+		raise SystemExit(1)
+	return json.loads(content)
 
 def create_repository_cmd():
 	from getpass import getuser, getpass
