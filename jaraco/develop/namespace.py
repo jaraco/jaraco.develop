@@ -45,9 +45,12 @@ def create_namespace_package(root, indent_with_spaces=False):
 	template = _setup_template
 	if not namespace:
 		# remove the namespace_packages declaration
-		template = re.sub(r'^\tnamespace_packages.*\n', '', template)
+		template = re.sub(r'^\tnamespace_packages.*\n', '', template,
+			flags=re.MULTILINE)
+		assert not 'namespace_packages' in template
 	if indent_with_spaces:
-		template = re.sub(r'^\t+', tabs_to_spaces, template, flags=re.MULTILINE)
+		template = re.sub(r'^\t+', tabs_to_spaces, template,
+			flags=re.MULTILINE)
 	(root/'setup.py').open('wb').write(lf(template).encode('utf-8'))
 	if namespace:
 		namespace_root = root/namespace
