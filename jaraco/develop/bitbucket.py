@@ -13,7 +13,8 @@ from jaraco.util.string import local_format as lf
 def create_repository(name, auth, url, private=False):
 	make_url = functools.partial(urlparse.urljoin, url)
 	headers, content = restclient.POST(make_url('repositories/'),
-		params=dict(name=name, is_private=private, scm='hg'),
+		params=dict(name=name, is_private=private, scm='hg',
+			language='python'),
 		async=False,
 		headers=dict(Authorization=auth), accept=['text/json'],
 		resp=True,
