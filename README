@@ -18,11 +18,15 @@ You can install it with ``easy_install jaraco.develop``, or from the
 Changes
 -------
 
-1.7
-~~~
+1.6.3
+~~~~~
+
+* Updated jaraco.develop.msvc to support Python 3.
+
+1.6.2
+~~~~~
 
 * create-namespace-package will now also generate non-namespace packages.
-* Updated jaraco.develop.msvc to support Python 3.
 
 1.6.1
 ~~~~~
