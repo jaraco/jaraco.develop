@@ -1,7 +1,9 @@
 import functools
 
 def _add_MANIFEST_postarg(link_method):
-	func = link_method.im_func
+	# If the method was passed in Python 2, grab the function from the
+	#  UnboundMethod wrapper.
+	func = getattr(link_method, 'im_func', link_method)
 	@functools.wraps(func)
 	def wrapper(
 		self,
@@ -38,7 +40,7 @@ def patch_msvc9compiler_module():
 	See
 	http://nukeit.org/compile-python-2-7-packages-with-visual-studio-2010-express/
 	for more information.
-	
+
 	Call this method (in sitecustomize for example) to trick msvc9compiler to
 	work with VS2010 if VS2008 is not present.
 	"""
@@ -50,6 +52,6 @@ def patch_msvc9compiler_module():
 		# We don't have 10.0 either, so the default behavior is fine
 		return
 	mc.VERSION = 10.0
-	
+
 	# patch MSVCCompiler.link so the /MANIFEST parameter is present
 	mc.MSVCCompiler.link = _add_MANIFEST_postarg(mc.MSVCCompiler.link)
