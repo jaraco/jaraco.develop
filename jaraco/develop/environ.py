@@ -5,7 +5,7 @@ from __future__ import print_function
 import subprocess
 import itertools
 
-from jaraco.util.iter_ import consume
+from jaraco.util.itertools import consume
 
 def validate_pair(ob):
 	"Return True if the object represents a pair"
@@ -23,7 +23,7 @@ def get_environment_from_batch_command(env_cmd, initial=None):
 	and return the environment created after running that command.
 	Note that if the command must be a batch file or .cmd file, or the
 	changes to the environment will not be captured.
-	
+
 	If initial is supplied, it is used as the initial environment passed
 	to the child process.
 	"""
