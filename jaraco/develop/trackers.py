@@ -3,12 +3,16 @@
 
 from __future__ import absolute_import
 
-import html5lib
-import html5lib.treebuilders
 import re
 import itertools
 import urlparse
 import urllib2
+
+try:
+	import html5lib.treebuilders
+except ImportError:
+	#html5lib not available on Python 3 so suppress import errors
+	pass
 
 from .patch import Patch
 
