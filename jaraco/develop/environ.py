@@ -39,6 +39,9 @@ def get_environment_from_batch_command(env_cmd, initial=None):
 	proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, env=initial)
 	# parse the output sent to stdout
 	lines = proc.stdout
+	# make sure the lines are strings
+	make_str = lambda s: s.decode()
+	lines = itertools.imap(make_str, lines)
 	# consume whatever output occurs until the tag is reached
 	consume(itertools.takewhile(lambda l: tag not in l, lines))
 	# define a way to handle each KEY=VALUE line
