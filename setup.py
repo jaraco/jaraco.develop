@@ -6,7 +6,7 @@ Setup script for building jaraco.develop
 Copyright © 2010-2011 Jason R. Coombs
 """
 
-from setuptools import find_packages
+import setuptools
 
 name = 'jaraco.develop'
 
@@ -18,7 +18,7 @@ setup_params = dict(
 	author = 'Jason R. Coombs',
 	author_email = 'jaraco@jaraco.com',
 	url = 'http://bitbucket.org/jaraco/'+name,
-	packages = find_packages(),
+	packages = setuptools.find_packages(),
 	namespace_packages = ['jaraco',],
 	scripts = ['scripts/test-python-symlink-patch.py'],
 	license = 'MIT',
@@ -63,5 +63,4 @@ setup_params = dict(
 )
 
 if __name__ == '__main__':
-	from setuptools import setup
-	setup(**setup_params)
+	setuptools.setup(**setup_params)
