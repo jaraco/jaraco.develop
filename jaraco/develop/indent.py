@@ -1,6 +1,9 @@
+import os
 import glob
 import argparse
 import functools
+
+import jaraco.filesystem
 
 no_tabs_mode = "# tab-width: 4; indent-tabs-mode: nil;"
 tabs_mode = "# tab-width: 4; indent-tabs-mode: t;"
@@ -22,7 +25,13 @@ def guess_newline(f):
 	return '\n'
 
 def recursive_glob(spec):
-	raise NotImplementedError("The recursive functionality is stubbed.")
+    """
+    Take a single spec and use the first part as the root and the latter
+    part as the spec.
+    """
+    root, spec = os.path.split(spec)
+    root = root or '.'
+    return jaraco.filesystem.recursive_glob(root, spec)
 
 def set_tabs_mode_cmd():
 	"""
