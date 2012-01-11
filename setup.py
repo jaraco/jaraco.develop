@@ -44,6 +44,7 @@ setup_params = dict(
 				'create_repository_cmd',
 			'build-python = jaraco.develop.python:build_python',
 			'vs-upgrade = jaraco.develop.vstudio:upgrade_file',
+			'set-tabs-mode = jaraco.develop.indent:set_tabs_mode_cmd',
 		],
 	},
 	install_requires=[
