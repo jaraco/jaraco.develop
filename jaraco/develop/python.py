@@ -2,6 +2,7 @@
 #-*- coding: utf-8 -*-
 
 import os
+import sys
 import subprocess
 from optparse import OptionParser
 from argparse import ArgumentParser
@@ -36,6 +37,9 @@ def build_python():
 	options = parser.parse_args()
 	vs = VisualStudio.find()
 	env = vs.get_vcvars_env()
+	if sys.version_info < (3,0):
+		# subprocess in Python 2 doesn't accept unicode for env
+		env = dict((k.encode(), v.encode()) for k,v in env.iteritems())
 	msbuild = find_in_path('msbuild.exe', env['Path'])
 	cmd = [msbuild, 'pcbuild.sln', '/target:python',
 		'/p:Configuration=Release', '/p:Platform=x64']
