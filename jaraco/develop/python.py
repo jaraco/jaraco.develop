@@ -34,6 +34,8 @@ def find_in_path(filename, search_path):
 
 def build_python():
 	parser = ArgumentParser()
+	parser.add_argument('-t', '--target', dest='targets', default=[],
+		action='append',)
 	options = parser.parse_args()
 	vs = VisualStudio.find()
 	env = vs.get_vcvars_env()
@@ -41,6 +43,7 @@ def build_python():
 		# subprocess in Python 2 doesn't accept unicode for env
 		env = dict((k.encode(), v.encode()) for k,v in env.iteritems())
 	msbuild = find_in_path('msbuild.exe', env['Path'])
-	cmd = [msbuild, 'pcbuild.sln', '/target:python',
+	cmd = [msbuild, 'pcbuild.sln',
 		'/p:Configuration=Release', '/p:Platform=x64']
+	if options.targets: cmd[2:2] = ['/target:' + ';'.join(options.targets)]
 	subprocess.check_call(cmd, env=env)
