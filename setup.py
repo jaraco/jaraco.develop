@@ -48,7 +48,7 @@ setup_params = dict(
 		],
 	},
 	install_requires=[
-		'jaraco.util>=4.3dev',
+		'jaraco.util>=4.3',
 		#'html5lib',
 	],
 	extras_require = {
