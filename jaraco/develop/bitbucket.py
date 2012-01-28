@@ -7,7 +7,10 @@ import functools
 import argparse
 import json
 import pprint
+import getpass
+import collections
 
+import keyring
 from jaraco.util.string import local_format as lf
 
 def create_repository(name, auth, url, private=False):
@@ -24,8 +27,28 @@ def create_repository(name, auth, url, private=False):
 		raise SystemExit(1)
 	return json.loads(content)
 
+Credential = collections.namedtuple('Credential', 'username password')
+
+def get_mercurial_creds(system, username=None):
+	"""
+	Return named tuple of username,password in much the same way that
+	Mercurial would (from the keyring).
+	"""
+	# todo: consider getting this from .hgrc
+	username = username or getpass.getuser()
+	keyring_username = '@@'.join((username, system))
+	system = '@'.join((keyring_username, 'Mercurial'))
+	password = keyring.get_password(system, keyring_username)
+	if not password:
+		password = getpass.getpass()
+	return Credential(username, password)
+
+def print_result(res):
+	width = max(len(key) for key in res) + 1
+	for key, value in res.iteritems():
+		print(lf("{key:<{width}}: {value}"))
+
 def create_repository_cmd():
-	from getpass import getuser, getpass
 	parser = argparse.ArgumentParser()
 	parser.add_argument('repo_name')
 	parser.add_argument('-a', '--auth')
@@ -34,11 +57,11 @@ def create_repository_cmd():
 		action="store_true")
 	args = parser.parse_args()
 	if not args.auth:
-		args.auth = ':'.join((getuser(), getpass()))
+		args.auth = ':'.join(get_mercurial_creds('https://bitbucket.org'))
 	args.auth = 'Basic ' + args.auth.encode('base64')
 	res = create_repository(args.repo_name, args.auth, args.url,
 		private = args.private)
-	pprint.pprint(res)
+	print_result(res)
 
 if __name__ == '__main__':
 	create_repository_cmd()
