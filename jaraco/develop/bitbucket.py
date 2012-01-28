@@ -6,7 +6,6 @@ import urlparse
 import functools
 import argparse
 import json
-import pprint
 import getpass
 import collections
 
