@@ -18,6 +18,17 @@ You can install it with ``easy_install jaraco.develop``, or from the
 Changes
 -------
 
+1.8
+~~~
+
+* Added keyring support for bitbucket operations.
+* Added command to patch hgrc files in a tree (patch-hgrc).
+
+1.7
+~~~
+
+* Added support for recursive globs in indent module.
+
 1.6.3
 ~~~~~
 
