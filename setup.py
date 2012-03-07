@@ -17,9 +17,9 @@ setup_params = dict(
 	long_description = open('README').read(),
 	author = 'Jason R. Coombs',
 	author_email = 'jaraco@jaraco.com',
-	url = 'http://bitbucket.org/jaraco/'+name,
+	url = 'http://bitbucket.org/jaraco/' + name,
 	packages = setuptools.find_packages(),
-	namespace_packages = ['jaraco',],
+	namespace_packages = ['jaraco'],
 	scripts = ['scripts/test-python-symlink-patch.py'],
 	license = 'MIT',
 	classifiers = [
@@ -45,6 +45,7 @@ setup_params = dict(
 			'build-python = jaraco.develop.python:build_python',
 			'vs-upgrade = jaraco.develop.vstudio:upgrade_file',
 			'set-tabs-mode = jaraco.develop.indent:set_tabs_mode_cmd',
+			'patch-hgrc = jaraco.develop.mercurial:patch_hgrc',
 		],
 	},
 	install_requires=[
