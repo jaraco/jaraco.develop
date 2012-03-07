@@ -8,8 +8,8 @@ import sys
 import subprocess
 from optparse import OptionParser
 
-from .vstudio import get_vcvars_env
-from jaraco.develop import apply_python_bug_patch
+from . import vstudio
+from . import python
 
 class TestStage(object):
 	"""
@@ -23,7 +23,6 @@ class TestStage(object):
 		"""
 		create a directory for the test
 		"""
-		build_existed_prior = os.path.exists(os.path.expanduser('~/build'))
 		loc_exists = os.path.exists(self.location)
 		if loc_exists and not reuse:
 			msg = "Test directory already exists."
@@ -38,7 +37,7 @@ class TestStage(object):
 		target = os.path.join(self.location, self.project_name)
 		cmd = ['svn', 'co', '-q', url, target]
 		if False:
-			cmd.extend(['--depth', 'immediates', ]) # for debugging
+			cmd.extend(['--depth', 'immediates', ])  # for debugging
 		result = subprocess.Popen(cmd).wait()
 		if result != 0:
 			print("Checkout failed", file=sys.stderr)
@@ -62,7 +61,7 @@ class PythonTestStage(TestStage):
 		return os.path.join(self.project_location, 'PCBuild')
 
 	def apply_patch(self, bug_id):
-		apply_python_bug_patch(bug_id, self.project_location)
+		python.apply_python_bug_patch(bug_id, self.project_location)
 
 	def get_externals(self, word_size):
 		script_name = {
@@ -72,7 +71,7 @@ class PythonTestStage(TestStage):
 		script_path = os.path.join('Tools', 'buildbot', script_name)
 		proc = subprocess.Popen(script_path, stdout=subprocess.PIPE,
 			stderr=subprocess.STDOUT,
-			cwd=self.project_location, # external scripts are particular about the cwd
+			cwd=self.project_location,  # external scripts are particular about the cwd
 			)
 		output, stderr = proc.communicate()
 		print("result of {script_name} is {proc.returncode}".format(**vars()))
@@ -82,7 +81,7 @@ class PythonTestStage(TestStage):
 		get_externals and self.get_externals(word_size)
 		print("building {word_size}-bit python".format(**vars()))
 		env_args = {32: [], 64: ['x64']}[word_size]
-		env = get_vcvars_env(*env_args)
+		env = vstudio.get_vcvars_env(*env_args)
 		cmd_args = {32: [], 64: ['-p', 'x64']}[word_size]
 		cmd = self.construct_build_command(self.project_location, cmd_args)
 		proc = subprocess.Popen(cmd, env=env, stdout=save_results, stderr=subprocess.STDOUT)
@@ -125,4 +124,3 @@ class PythonTestStage(TestStage):
 		if not proc.returncode == 0:
 			print("Warning: rt.bat returned {proc.returncode}".format(**vars()))
 		save_results.write('\nresult: {proc.returncode}'.format(**vars()))
-

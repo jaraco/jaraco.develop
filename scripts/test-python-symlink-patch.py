@@ -27,7 +27,7 @@ It then cleans up the rest.
 from __future__ import print_function
 from optparse import OptionParser
 
-from jaraco.develop import Results
+from jaraco.develop import python
 from jaraco.develop.stage import PythonTestStage
 
 bug_id = 1578269
@@ -39,16 +39,21 @@ class TestConductor:
 		if options.skip: return
 		stage = PythonTestStage()
 		if options.clean:
-			stage.cleanup(); return
+			stage.cleanup()
+			return
 		stage.create(options.reuse)
 		try:
 			stage.checkout_source(source_url)
 			options.no_patch or stage.apply_patch(bug_id)
-			stage.do_build(32, Results('32-bit build results'), options.get_externals)
-			options.just_build or stage.run_test(Results('32-bit test results'))
+			stage.do_build(32, python.Results('32-bit build results'),
+				options.get_externals)
+			options.just_build or stage.run_test(
+				python.Results('32-bit test results'))
 			if not options.skip_64_bit:
-				stage.do_build(64, Results('64-bit build results'), options.get_externals)
-				options.just_build or stage.run_test(Results('64-bit test results'), '-x64')
+				stage.do_build(64, python.Results('64-bit build results'),
+					options.get_externals)
+				options.just_build or stage.run_test(
+					python.Results('64-bit test results'), '-x64')
 		except KeyboardInterrupt:
 			print("Cancelled by user")
 		finally:
