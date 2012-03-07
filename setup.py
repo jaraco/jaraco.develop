@@ -49,7 +49,9 @@ setup_params = dict(
 		],
 	},
 	install_requires=[
-		'jaraco.util>=4.3',
+		'jaraco.util>=5.0',
+		'keyring',
+		'path.py',
 		#'html5lib',
 	],
 	extras_require = {
