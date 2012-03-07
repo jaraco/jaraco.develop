@@ -35,7 +35,7 @@ def patch_hgrc():
 	parser.add_argument('-r', '--recurse', default=False, action="store_true")
 	jaraco.util.logging.add_arguments(parser)
 	args = parser.parse_args()
-	jaraco.util.logging.setup(args)
+	jaraco.util.logging.setup(args, format="%(levelname)s:%(message)s")
 	for hgrc in get_hgrcs(path.path('.'), recurse=args.recurse):
 		if args.replace:
 			replace(hgrc, *args.replace)
