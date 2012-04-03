@@ -6,15 +6,26 @@ Setup script for building jaraco.develop
 Copyright © 2010-2011 Jason R. Coombs
 """
 
+import platform
+
 import setuptools
 
 name = 'jaraco.develop'
+
+plat_requirements = []
+if platform.system() == 'Windows':
+	plat_requirements.extend(
+		['jaraco.windows >= 2.7b1']
+	)
+
+with open('README') as readme:
+	long_description = readme.read()
 
 setup_params = dict(
 	name = name,
 	use_hg_version=True,
 	description = 'Routines to assist development',
-	long_description = open('README').read(),
+	long_description = long_description,
 	author = 'Jason R. Coombs',
 	author_email = 'jaraco@jaraco.com',
 	url = 'http://bitbucket.org/jaraco/' + name,
@@ -54,7 +65,7 @@ setup_params = dict(
 		'keyring',
 		'path.py',
 		#'html5lib',
-	],
+	] + plat_requirements,
 	extras_require = {
 	},
 	dependency_links = [

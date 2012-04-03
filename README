@@ -18,6 +18,11 @@ You can install it with ``easy_install jaraco.develop``, or from the
 Changes
 -------
 
+1.9
+~~~
+
+* Added command to mark .hg directories as hidden (Windows).
+
 1.8
 ~~~
 
