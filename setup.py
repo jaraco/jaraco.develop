@@ -46,6 +46,7 @@ setup_params = dict(
 			'vs-upgrade = jaraco.develop.vstudio:upgrade_file',
 			'set-tabs-mode = jaraco.develop.indent:set_tabs_mode_cmd',
 			'patch-hgrc = jaraco.develop.mercurial:patch_hgrc',
+			'hide-hg-dirs = jaraco.develop.mercurial:hide_hg_dirs',
 		],
 	},
 	install_requires=[
