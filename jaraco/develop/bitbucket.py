@@ -26,6 +26,25 @@ def create_repository(name, auth, url, private=False):
 		raise SystemExit(1)
 	return json.loads(content)
 
+def add_version(project, version, auth, url):
+	"""
+	project should be something like user/project
+	"""
+	make_url = functools.partial(urlparse.urljoin, url)
+	url = make_url(lf('repositories/{project}/versions'))
+	headers, content = restclient.POST(
+		url,
+		params=dict(name=version),
+		async=False,
+		headers=dict(Authorization=auth),
+		accept=['text/json'],
+		resp=True,
+	)
+	if not 200 <= int(headers['status']) <= 300:
+		print(lf("Error occurred: {headers[status]}"), file=sys.stderr)
+		raise SystemExit(1)
+	return json.loads(content)
+
 Credential = collections.namedtuple('Credential', 'username password')
 
 def get_mercurial_creds(system, username=None):
@@ -47,17 +66,19 @@ def print_result(res):
 	for key, value in res.iteritems():
 		print(lf("{key:<{width}}: {value}"))
 
+def basic_auth(userpass):
+	return 'Basic ' + userpass.encode('base64')
+
 def create_repository_cmd():
 	parser = argparse.ArgumentParser()
 	parser.add_argument('repo_name')
-	parser.add_argument('-a', '--auth')
+	parser.add_argument('-a', '--auth', type=basic_auth,
+		default = ':'.join(get_mercurial_creds('https://bitbucket.org'))
+	)
 	parser.add_argument('-u', '--url', default='https://api.bitbucket.org/1.0/')
 	parser.add_argument('-p', '--private', default=False,
 		action="store_true")
 	args = parser.parse_args()
-	if not args.auth:
-		args.auth = ':'.join(get_mercurial_creds('https://bitbucket.org'))
-	args.auth = 'Basic ' + args.auth.encode('base64')
 	res = create_repository(args.repo_name, args.auth, args.url,
 		private = args.private)
 	print_result(res)
