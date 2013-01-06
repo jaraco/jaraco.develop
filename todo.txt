@@ -1,0 +1,2 @@
+* remove restclient/httplib2 dependency (use requests)
+* add script for locating unmanaged repos in a subrepo structure
