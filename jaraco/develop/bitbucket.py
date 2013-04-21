@@ -64,19 +64,18 @@ def print_result(res):
 		print(lf("{key:<{width}}: {value}"))
 
 def basic_auth(userpass):
-	return 'Basic ' + userpass.encode('base64')
+	return Credential(userpass.split(':'))
 
 def create_repository_cmd():
 	parser = argparse.ArgumentParser()
 	parser.add_argument('repo_name')
-	parser.add_argument('-a', '--auth', type=basic_auth,
-		default = ':'.join(get_mercurial_creds('https://bitbucket.org'))
+	parser.add_argument(
+		'-a', '--auth', type=basic_auth, default=get_mercurial_creds(),
 	)
-	parser.add_argument('-u', '--url', default=api_url)
 	parser.add_argument('-p', '--private', default=False,
 		action="store_true")
 	args = parser.parse_args()
-	res = create_repository(args.repo_name, args.auth, args.url,
+	res = create_repository(args.repo_name, args.auth,
 		private = args.private)
 	print_result(res)
 
