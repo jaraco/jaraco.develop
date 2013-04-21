@@ -1,11 +1,9 @@
 from __future__ import print_function
 
 import sys
-import restclient
 import urlparse
 import functools
 import argparse
-import json
 import getpass
 import collections
 
@@ -16,38 +14,32 @@ from jaraco.util.string import local_format as lf
 api_url = 'https://api.bitbucket.org/1.0/'
 make_url = functools.partial(urlparse.urljoin, api_url)
 
-def create_repository(name, auth, url, private=False):
-	make_url = functools.partial(urlparse.urljoin, url)
-	headers, content = restclient.POST(make_url('repositories/'),
-		params=dict(name=name, is_private=private, scm='hg',
-			language='python'),
-		async=False,
-		headers=dict(Authorization=auth), accept=['text/json'],
-		resp=True,
+def create_repository(name, auth, private=False):
+	resp = requests.post(make_url('repositories/'),
+		data=dict(name=name, is_private=private, scm='hg',
+			language='python'), auth=auth,
+		headers=dict(Accept='text/json'),
 	)
-	if not 200 <= int(headers['status']) <= 300:
-		print(lf("Error occurred: {headers[status]}"), file=sys.stderr)
+	if not 200 <= resp.status_code <= 300:
+		print(lf("Error occurred: {resp.status_code}"), file=sys.stderr)
 		raise SystemExit(1)
-	return json.loads(content)
+	return resp.json()
 
-def add_version(project, version, auth, url):
+def add_version(project, version, auth):
 	"""
 	project should be something like user/project
 	"""
-	make_url = functools.partial(urlparse.urljoin, url)
 	url = make_url(lf('repositories/{project}/versions'))
-	headers, content = restclient.POST(
+	resp = requests.post(
 		url,
 		params=dict(name=version),
-		async=False,
-		headers=dict(Authorization=auth),
-		accept=['text/json'],
-		resp=True,
+		auth=auth,
+		headers=dict(Accept='text/json'),
 	)
-	if not 200 <= int(headers['status']) <= 300:
-		print(lf("Error occurred: {headers[status]}"), file=sys.stderr)
+	if not 200 <= resp.status_code <= 300:
+		print(lf("Error occurred: {resp.status_code}"), file=sys.stderr)
 		raise SystemExit(1)
-	return json.loads(content)
+	return resp.json()
 
 Credential = collections.namedtuple('Credential', 'username password')
 
