@@ -18,6 +18,17 @@ You can install it with ``easy_install jaraco.develop``, or from the
 Changes
 -------
 
+2.0
+~~~
+
+* Removed 'url' parameter from calls in bitbucket module.
+* Now use Requests in favor of restclient for bitbucket operations.
+
+1.10
+~~~~
+
+* Added ``add_version`` to ``bitbucket`` module.
+
 1.9
 ~~~
 
