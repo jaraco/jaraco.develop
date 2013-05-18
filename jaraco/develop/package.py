@@ -16,11 +16,16 @@ def get_environment_for_PyPI():
 		env.setdefault('HOME', os.path.expanduser('~'))
 
 def release():
-	subprocess.check_call([
-		sys.executable, 'setup.py', 'egg_info', '-RDb', '', 'sdist',
-		'upload',
-		], env=get_environment_for_PyPI(),
-		)
+	cmd = [
+		sys.executable, 'setup.py',
+		'egg_info', '-RDb', '',
+		'sdist',
+		'upload', '-r', 'pypi',
+	]
+	subprocess.check_call(
+		cmd,
+		env=get_environment_for_PyPI(),
+	)
 
 def read_long_description():
 	"""
@@ -30,7 +35,7 @@ def read_long_description():
 		os.path.join(
 			'docs',
 			'index.txt',
-		) ).read().strip()
+		)).read().strip()
 
 def test_compile_rst(filename):
 	try:
@@ -39,7 +44,7 @@ def test_compile_rst(filename):
 		# if we don't have docutils, just fail silently
 		return
 	docs = open(filename).read()
-	res = publish_string(docs)
+	publish_string(docs)
 
 def local_resource_filename(filename):
 	"""
