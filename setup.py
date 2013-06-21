@@ -31,7 +31,6 @@ setup_params = dict(
 	url = 'http://bitbucket.org/jaraco/' + name,
 	packages = setuptools.find_packages(),
 	namespace_packages = ['jaraco'],
-	scripts = ['scripts/test-python-symlink-patch.py'],
 	license = 'MIT',
 	classifiers = [
 		"Development Status :: 5 - Production/Stable",
