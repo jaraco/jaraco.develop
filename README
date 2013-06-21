@@ -18,6 +18,16 @@ You can install it with ``easy_install jaraco.develop``, or from the
 Changes
 -------
 
+2.2
+~~~
+
+* Runs natively on Python 3.
+
+2.1
+~~~
+
+* Specify PyPI for releases.
+
 2.0
 ~~~
 
