@@ -67,12 +67,14 @@ class PythonTestStage(TestStage):
 		script_name = {
 			32: 'external.bat',
 			64: 'external-amd64.bat',
-			}[word_size]
+		}[word_size]
 		script_path = os.path.join('Tools', 'buildbot', script_name)
-		proc = subprocess.Popen(script_path, stdout=subprocess.PIPE,
+		proc = subprocess.Popen(
+			script_path, stdout=subprocess.PIPE,
 			stderr=subprocess.STDOUT,
-			cwd=self.project_location,  # external scripts are particular about the cwd
-			)
+			# external scripts are particular about the cwd
+			cwd=self.project_location,
+		)
 		output, stderr = proc.communicate()
 		print("result of {script_name} is {proc.returncode}".format(**vars()))
 		return proc.returncode, output
@@ -84,9 +86,11 @@ class PythonTestStage(TestStage):
 		env = vstudio.get_vcvars_env(*env_args)
 		cmd_args = {32: [], 64: ['-p', 'x64']}[word_size]
 		cmd = self.construct_build_command(self.project_location, cmd_args)
-		proc = subprocess.Popen(cmd, env=env, stdout=save_results, stderr=subprocess.STDOUT)
+		proc = subprocess.Popen(cmd, env=env, stdout=save_results,
+			stderr=subprocess.STDOUT)
 		proc.communicate()
-		print("result of {word_size}-bit build is {proc.returncode}".format(**vars()))
+		print("result of {word_size}-bit build is {proc.returncode}"
+			.format(**vars()))
 		save_results.write('\nresult: {proc.returncode}'.format(**vars()))
 
 	@staticmethod
@@ -97,8 +101,10 @@ class PythonTestStage(TestStage):
 		parser = OptionParser()
 		parser.add_option('-c', '--conf', default='Release')
 		parser.add_option('-p', '--platf', default='Win32')
-		parser.add_option('-r', '--rebuild', action='store_true', default=False)
-		parser.add_option('-d', '--debug', dest='conf', action='store_const', const='Debug')
+		parser.add_option('-r', '--rebuild', action='store_true',
+			default=False)
+		parser.add_option('-d', '--debug', dest='conf', action='store_const',
+			const='Debug')
 		options, args = parser.parse_args(args)
 
 		cmd = [
@@ -117,7 +123,7 @@ class PythonTestStage(TestStage):
 		cmd = [
 			os.path.join(self.pcbuild_dir, 'rt.bat'),
 			'-q',
-			] + list(params)
+		] + list(params)
 		proc = subprocess.Popen(cmd, stdout=save_results,
 			stderr=subprocess.STDOUT, cwd=self.pcbuild_dir)
 		proc.wait()

@@ -5,14 +5,20 @@ Classes for managing virtual execution environments (including such
 things as a Python virtual environment).
 """
 
+from __future__ import print_function
+
 import sys
 import subprocess
 import os
 import re
-import urllib2
 import functools
 import optparse
 import platform
+
+try:
+	import urllib.request as urllib_request
+except ImportError:
+	import urllib2 as urllib_request
 
 class LinuxPlatform(object):
 	@staticmethod
@@ -44,9 +50,9 @@ class Environment(object):
 	A base class for describing and manipulating an execution
 	environment.
 	"""
-	
+
 	install_options = []
-	
+
 	@classmethod
 	def get_arg_parser(cls):
 		parser = optparse.OptionParser()
@@ -77,15 +83,13 @@ class Environment(object):
 		dist = getattr(cls, 'dist', ())
 		return get_platform_dist() == dist
 
-
-		
 	def patch_Popen(self):
 		"""
 		Create a log file and patch Popen to redirect stdout to that
 		file by default.
 		"""
 		deploy_log_filename = os.path.join(self.env_root, 'deploy.log')
-		print "Logging to", deploy_log_filename
+		print("Logging to", deploy_log_filename)
 		deploy_log = open(deploy_log_filename, 'w')
 		@functools.wraps(subprocess.Popen)
 		def redirected_Popen(*args, **kwargs):
@@ -94,11 +98,10 @@ class Environment(object):
 
 		self.Popen = redirected_Popen
 
-
 	def check_target_does_not_exist(self):
 		if os.path.exists(self.env_root):
-			env_root = self.env_root
-			print "ROOT directory %(env_root)s already exists. Remove it or set a different target." % vars()
+			print("ROOT directory {self.env_root} already exists. Remove it"
+				" or set a different target.".format(**vars()))
 			raise SystemExit(3)
 
 	##
@@ -109,8 +112,8 @@ class Environment(object):
 			return
 		prereqs = self.get_prereqs()
 		missing = [str(p) for p in prereqs if not self.package_installed(p)]
-		print "You are missing %d prerequisites:" % len(missing)
-		print 'use sudo apt-get install -y ' + ' '.join(missing)
+		print("You are missing %d prerequisites:" % len(missing))
+		print('use sudo apt-get install -y ' + ' '.join(missing))
 		if not self.options.ignore_prerequisites:
 			raise SystemExit(2)
 
@@ -125,7 +128,8 @@ class Environment(object):
 		# install mongodb
 		import tarfile
 		from StringIO import StringIO
-		mongo_tgz_data = StringIO(urllib2.urlopen(self.mongodb_source).read())
+		url = self.mongodb_source
+		mongo_tgz_data = StringIO(urllib_request.urlopen(url).read())
 		mongo_tar = tarfile.TarFile.open(fileobj=mongo_tgz_data, mode='r:gz')
 		mongo_dest,_,_ = mongo_tar.getnames()[0].partition('/')
 		mongo_tar.extractall(self.env_root)
@@ -153,21 +157,20 @@ class VirtualEnvSupport:
 		cmd = [os.path.join(self.env_root, 'bin', 'virtualenv'), '--no-site-packages', self.env_root]
 		res = self.Popen(cmd).wait()
 		if not res == 0:
-			env_root = self.env_root
-			print "Error creating virtual environment in %(env_root)s" % vars()
+			print("Error creating virtual environment in {self.env_root}"
+				.format(**vars()))
 			raise SystemExit(6)
-			
+
 		# from here out, virtualenv handles the Python path, so we can unset
 		#  the environment variable
 		del os.environ['PYTHONPATH']
-
 
 	def install_virtualenv(self):
 		"install virtualenv into the new python environment"
 		cmd = [os.path.join(self.env_root, 'bin', 'easy_install'), '--prefix', self.env_root, 'virtualenv']
 		res = self.Popen(cmd).wait()
 		if not res == 0:
-			print "Error installing virtualenv"
+			print("Error installing virtualenv")
 			raise SystemExit(5)
 
 	def install_setuptools(self):
@@ -176,11 +179,11 @@ class VirtualEnvSupport:
 		"""
 		# Here we install setuptools and virtualenv into the python_prefix dir
 
-		short_python_ver = self.python_ver
-		url = self.setuptools_href % vars()
+		url = self.setuptools_href % dict(short_python_ver=self.python_ver)
 
 		# create the libs dir and add it to the environment
-		python_libs = os.path.join(self.env_root, 'lib', self.python_name, 'site-packages')
+		python_libs = os.path.join(self.env_root, 'lib', self.python_name,
+			'site-packages')
 		os.makedirs(python_libs)
 		os.environ['PYTHONPATH'] = python_libs
 
@@ -188,7 +191,8 @@ class VirtualEnvSupport:
 		setuptools_installer_filename,_,_ = os.path.basename(url).partition('#')
 		# we can't pass the data directly to sh because it will ignore the
 		#  --prefix option, so save it to a file instead.
-		setuptools_installer_path = os.path.join(self.env_root, setuptools_installer_filename)
+		setuptools_installer_path = os.path.join(self.env_root,
+			setuptools_installer_filename)
 		data = urllib2.urlopen(url).read()
 		open(setuptools_installer_path, 'wb').write(data)
 		# on Unix, the setuptools egg is a shell archive, and is installed by
@@ -199,13 +203,14 @@ class VirtualEnvSupport:
 		# we don't need the setuptools installer anymore, so delete it
 		os.remove(setuptools_installer_path)
 		if not res == 0:
-			print "Error installing setuptools"
+			print("Error installing setuptools")
 			raise SystemExit(4)
 
 	def check_cheeseshop(self):
-		try: urllib2.urlopen(self.cheeseshop)
-		except StandardError:
-			print 'error: cannot reach %s' % self.cheeseshop
+		try:
+			urllib2.urlopen(self.cheeseshop)
+		except:
+			print('error: cannot reach %s' % self.cheeseshop)
 			raise SystemExit(3)
 
 	def easy_install(self, requirement, find_links=None):
@@ -219,13 +224,13 @@ class VirtualEnvSupport:
 		cmd = [
 			os.path.join(self.env_root, 'bin', 'easy_install'),
 			requirement,
-			]
+		]
 		for link in find_links:
 			cmd[-1:-1] = ['-f', link]
-		
+
 		res = self.Popen(cmd).wait()
 		if not res == 0:
-			print "Error installing %(requirement)s" % vars()
+			print("Error installing %(requirement)s" % vars())
 			raise SystemExit(7)
 
 
@@ -252,7 +257,6 @@ class PythonEnvironment(VirtualEnvSupport, Environment):
 		else:
 			self.patch_Popen()
 
-
 	def install_mercurial(self):
 		"Get mercurial so we can checkout sources"
 		self.easy_install('mercurial>=1.6')
@@ -264,7 +268,7 @@ class PythonEnvironment(VirtualEnvSupport, Environment):
 
 	def check_python_version(self):
 		if not self.correct_python_version():
-			print 'Python 2.5 or later is required'
+			print('Python 2.5 or later is required')
 			raise SystemExit(1)
 
 	def correct_python_version(self):
@@ -296,18 +300,18 @@ class MercurialSupport():
 		dest_name = os.path.basename(path)
 		dest_path = os.path.join(self.sources, dest_name)
 		mercurial = os.path.join(self.env_root, 'bin', 'hg')
-		
+
 		cmd = [mercurial, 'clone', path, dest_path,] + args
-		
+
 		res = self.Popen(cmd).wait()
 		if not res == 0:
-			print "Failed to check out %(path)s" % vars()
+			print("Failed to check out %(path)s" % vars())
 			raise SystemExit(8)
 
 		# add find_links to setup.cfg so it will use the cheeseshop
 		setup_cfg_file = os.path.join(dest_path, 'setup.cfg')
-		cheeseshop = self.cheeseshop
-		content = '\n[easy_install]\nfind_links=%(cheeseshop)s\n' % vars()
+		content = '\n[easy_install]\nfind_links={self.cheeseshop}\n'.format(
+			**vars())
 		open(setup_cfg_file, 'a').write(content)
 
 		if as_version:

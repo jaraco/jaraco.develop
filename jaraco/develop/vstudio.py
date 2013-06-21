@@ -6,6 +6,8 @@ import os
 import itertools
 import subprocess
 
+import six
+
 from .environ import get_environment_from_batch_command
 
 class VisualStudio(str):
@@ -15,23 +17,27 @@ class VisualStudio(str):
 		Find the location of the locally-installed
 		Visual Studio instance. Uses the heuristic of searching the
 		default paths for the supplied versions.
-		
+
 		Versions should be a string or list of strings
 		indicating the version
 		as found in the file path.
-		
+
 		>>> VisualStudio.find('9.0') #doctest:+SKIP
 		'C:\\Program Files\\Microsoft Visual Studio 9.0'
 		"""
-		if isinstance(versions, basestring):
+		if isinstance(versions, six.string_type):
 			versions = [versions]
 		keys = ['PROGRAMFILES', 'PROGRAMFILES(X86)']
-		search_path = [os.environ.get(key) for key in keys if os.environ.has_key(key)]
+		search_path = [
+			os.environ[key]
+			for key in keys
+			if key in os.environ
+		]
 		path_versions = itertools.product(search_path, versions)
 		vs_candidate_dirs = [
 			os.path.join(base, 'Microsoft Visual Studio ' + version)
 			for base, version in path_versions
-			]
+		]
 		has_VC_child = lambda dir: os.path.isdir(os.path.join(dir, 'VC'))
 		tests = os.path.isdir, has_VC_child
 		test_adequacy = lambda candidate: all(t(candidate) for t in tests)

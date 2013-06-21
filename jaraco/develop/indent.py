@@ -3,6 +3,7 @@ import glob
 import argparse
 import functools
 
+import six
 import jaraco.filesystem
 
 no_tabs_mode = "# tab-width: 4; indent-tabs-mode: nil;"
@@ -18,7 +19,7 @@ def add_mode(mode, file):
 		f.write(content)
 
 def guess_newline(f):
-	if isinstance(f.newlines, basestring):
+	if isinstance(f.newlines, six.string_types):
 		return f.newlines
 	if isinstance(f.newlines, tuple):
 		return f.newlines[0]

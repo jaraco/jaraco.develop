@@ -1,12 +1,17 @@
 #!python
 #-*- coding: utf-8 -*-
 
+"""
+Support for developing CPython core
+"""
+
 import os
 import sys
 import subprocess
 from optparse import OptionParser
 from argparse import ArgumentParser
-from itertools import ifilter
+
+import six
 
 from jaraco.develop.trackers import PythonBugTracker
 from .vstudio import VisualStudio
@@ -26,10 +31,10 @@ def Results(filename):
 	return open(filename, 'wb')
 
 def find_in_path(filename, search_path):
-	if isinstance(search_path, basestring):
+	if isinstance(search_path, six.string_types):
 		search_path = search_path.split(os.path.pathsep)
 	candidates = [os.path.join(root, filename) for root in search_path]
-	matches = ifilter(os.path.exists, candidates)
+	matches = six.filter(os.path.exists, candidates)
 	return next(matches)
 
 def build_python():

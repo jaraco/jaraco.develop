@@ -2,6 +2,7 @@
 
 from __future__ import print_function
 
+import sys
 import subprocess
 import itertools
 
@@ -55,4 +56,3 @@ def get_environment_from_batch_command(env_cmd, initial=None):
 	# let the process finish
 	proc.communicate()
 	return result
-

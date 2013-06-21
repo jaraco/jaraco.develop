@@ -3,7 +3,7 @@
 """
 Setup script for building jaraco.develop
 
-Copyright © 2010-2011 Jason R. Coombs
+Copyright © 2010-2013 Jason R. Coombs
 """
 
 import platform
@@ -61,7 +61,7 @@ setup_params = dict(
 		],
 	},
 	install_requires=[
-		'jaraco.util>=5.0',
+		'jaraco.util>=8.0',
 		'keyring',
 		'path.py',
 		#'html5lib',
@@ -72,7 +72,6 @@ setup_params = dict(
 	],
 	tests_require=[
 	],
-	use_2to3=True,
 	setup_requires=[
 		'hgtools',
 	],

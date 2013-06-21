@@ -45,7 +45,7 @@ def can_compile_extension():
 		with temp_dir() as output_dir:
 			try:
 				compiler = ccompiler.new_compiler()
-				out = compiler.compile([file.name], output_dir=output_dir,
+				compiler.compile([file.name], output_dir=output_dir,
 					include_dirs=get_include_dirs())
 				result = True
 			except Exception as e:

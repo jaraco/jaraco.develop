@@ -5,8 +5,13 @@ from __future__ import absolute_import
 
 import re
 import itertools
-import urlparse
-import urllib2
+
+try:
+	import urllib.request as urllib_request
+	import urllib.parse as urllib_parse
+except ImportError:
+	import urllib2 as urllib_request
+	import urlparse as urllib_parse
 
 try:
 	import html5lib.treebuilders
@@ -25,9 +30,9 @@ class RoundupTracker(object):
 
 	def get_patch_refs(self):
 		return (
-			urlparse.urljoin(self.url, link.parent['href'])
+			urllib_parse.urljoin(self.url, link.parent['href'])
 			for link in self.find_patch_links()
-			)
+		)
 
 	@staticmethod
 	def patch_number(link):
@@ -38,7 +43,7 @@ class RoundupTracker(object):
 		# note, this will only work if BeautifulSoup is present
 		parser = html5lib.HTMLParser(
 			tree=html5lib.treebuilders.getTreeBuilder("beautifulsoup"))
-		soup = parser.parse(urllib2.urlopen(self.url))
+		soup = parser.parse(urllib_request.urlopen(self.url))
 		files = soup.find(attrs='files')
 		links = files.findAll(text=re.compile(r'.*\.patch'))
 		links.sort(key=self.patch_number, reverse=True)
