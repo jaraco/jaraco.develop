@@ -18,7 +18,7 @@ def DALS(string):
 	return textwrap.dedent(string).lstrip()
 
 _setup_template = (
-	pkg_resources.resource_string(__file__, 'setup template.py')
+	pkg_resources.resource_string(__name__, 'setup template.py')
 	.decode('utf-8')
 )
 
@@ -39,6 +39,10 @@ def create_namespace_package(root, indent_with_spaces=False):
 		template = re.sub(r'^\t+', tabs_to_spaces, template,
 			flags=re.MULTILINE)
 	(root/'setup.py').open('wb').write(lf(template).encode('utf-8'))
+	with (root/'README.txt').open('w') as readme:
+		print(project_name, file=readme)
+		print('='*len(project_name), file=readme)
+	(root/'CHANGES.txt').touch()
 	if namespace:
 		namespace_root = root/namespace
 		namespace_root.mkdir()
