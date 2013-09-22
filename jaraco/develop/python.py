@@ -34,7 +34,7 @@ def find_in_path(filename, search_path):
 	if isinstance(search_path, six.string_types):
 		search_path = search_path.split(os.path.pathsep)
 	candidates = [os.path.join(root, filename) for root in search_path]
-	matches = six.filter(os.path.exists, candidates)
+	matches = six.moves.filter(os.path.exists, candidates)
 	return next(matches)
 
 def build_python():

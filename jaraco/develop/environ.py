@@ -6,6 +6,8 @@ import sys
 import subprocess
 import itertools
 
+import six
+
 from jaraco.util.itertools import consume
 
 def validate_pair(ob):
@@ -42,7 +44,7 @@ def get_environment_from_batch_command(env_cmd, initial=None):
 	lines = proc.stdout
 	# make sure the lines are strings
 	make_str = lambda s: s.decode()
-	lines = itertools.imap(make_str, lines)
+	lines = six.moves.map(make_str, lines)
 	# consume whatever output occurs until the tag is reached
 	consume(itertools.takewhile(lambda l: tag not in l, lines))
 	# define a way to handle each KEY=VALUE line

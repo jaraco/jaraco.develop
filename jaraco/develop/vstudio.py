@@ -25,7 +25,7 @@ class VisualStudio(str):
 		>>> VisualStudio.find('9.0') #doctest:+SKIP
 		'C:\\Program Files\\Microsoft Visual Studio 9.0'
 		"""
-		if isinstance(versions, six.string_type):
+		if isinstance(versions, six.string_types):
 			versions = [versions]
 		keys = ['PROGRAMFILES', 'PROGRAMFILES(X86)']
 		search_path = [
@@ -41,7 +41,7 @@ class VisualStudio(str):
 		has_VC_child = lambda dir: os.path.isdir(os.path.join(dir, 'VC'))
 		tests = os.path.isdir, has_VC_child
 		test_adequacy = lambda candidate: all(t(candidate) for t in tests)
-		path = next(iter(itertools.ifilter(test_adequacy, vs_candidate_dirs)))
+		path = next(iter(six.moves.filter(test_adequacy, vs_candidate_dirs)))
 		return cls(path)
 
 	def get_vcvars_env(self, *params):
