@@ -22,13 +22,13 @@ def get_hg_dirs(base, recurse=False):
 	return hg_dirs
 
 def replace(filename, pattern, repl):
-	with open(filename, 'rb') as file:
+	with open(filename, 'r') as file:
 		content = file.read()
 	new_content = re.sub(pattern, repl, content)
 	if new_content == content:
 		log.warning("No change in {filename}".format(**vars()))
 		return
-	with open(filename, 'wb') as file:
+	with open(filename, 'w') as file:
 		file.write(new_content)
 
 def patch_hgrc():
