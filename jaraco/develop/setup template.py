@@ -17,7 +17,6 @@ setup_params = dict(
 	url="https://bitbucket.org/jaraco/{project_name}",
 	packages=setuptools.find_packages(),
 	namespace_packages=['{namespace}'],
-	zip_safe=False,
 	setup_requires=[
 		'hgtools',
 	],
