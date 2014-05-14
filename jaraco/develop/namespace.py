@@ -52,6 +52,9 @@ def create_namespace_package(root, indent_with_spaces=False):
 		(namespace_root/'__init__.py').open('wb').write(ns_decl.encode('utf-8'))
 		root = namespace_root
 
+	with (root/'.hgignore').open('w') as hgignore:
+		hgignore.write('build\ndist\n')
+
 	(root/package).mkdir()
 	(root/package/'__init__.py').touch()
 	return root/package
