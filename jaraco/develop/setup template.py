@@ -19,6 +19,10 @@ setup_params = dict(
 	namespace_packages=['{namespace}'],
 	setup_requires=[
 		'hgtools',
+		'pytest-runner',
+	],
+	tests_require=[
+		'pytest',
 	],
 	classifiers = [
 		"Development Status :: 5 - Production/Stable",
