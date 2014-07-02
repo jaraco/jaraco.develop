@@ -45,6 +45,12 @@ def create_namespace_package(root, indent_with_spaces=False):
 		print(project_name, file=readme)
 		print('='*len(project_name), file=readme)
 	(root/'CHANGES.txt').touch()
+	with (root/'setup.cfg').open('w') as setupcfg:
+		setupcfg.writelines([
+			'[pytest]\n',
+			'norecursedirs=*.egg dist build\n',
+			'addopts=--doctest-modules\n',
+		])
 
 	with (root/'.hgignore').open('w') as hgignore:
 		hgignore.write('build\ndist\n')
