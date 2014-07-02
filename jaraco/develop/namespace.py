@@ -2,7 +2,7 @@ from __future__ import print_function
 
 import re
 import textwrap
-import optparse
+import argparse
 
 import pkg_resources
 from path import path
@@ -61,16 +61,13 @@ def create_namespace_package(root, indent_with_spaces=False):
 	return root/package
 
 def create_namespace_package_cmd():
-	parser = optparse.OptionParser()
-	parser.add_option('-s', '--indent-with-spaces', default=False,
+	parser = argparse.ArgumentParser()
+	parser.add_argument('-s', '--indent-with-spaces', default=False,
 		action='store_true',)
-	options, args = parser.parse_args()
-	if not args:
-		parser.error('namespace name required')
-	root = args.pop(0)
-	if args:
-		parser.error('unexpected positional arguments')
-	create_namespace_package(path(root), options.indent_with_spaces)
+	parser.add_argument('target', help="path to new project",
+		type=path)
+	args = parser.parse_args()
+	create_namespace_package(args.target, args.indent_with_spaces)
 
 def create_namespace_sandbox(root='.'):
 	"""
