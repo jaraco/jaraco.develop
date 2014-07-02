@@ -45,15 +45,16 @@ def create_namespace_package(root, indent_with_spaces=False):
 		print(project_name, file=readme)
 		print('='*len(project_name), file=readme)
 	(root/'CHANGES.txt').touch()
+
+	with (root/'.hgignore').open('w') as hgignore:
+		hgignore.write('build\ndist\n')
+
 	if namespace:
 		namespace_root = root/namespace
 		namespace_root.mkdir()
 		ns_decl = '__import__("pkg_resources").declare_namespace(__name__)\n'
 		(namespace_root/'__init__.py').open('wb').write(ns_decl.encode('utf-8'))
 		root = namespace_root
-
-	with (root/'.hgignore').open('w') as hgignore:
-		hgignore.write('build\ndist\n')
 
 	(root/package).mkdir()
 	(root/package/'__init__.py').touch()
