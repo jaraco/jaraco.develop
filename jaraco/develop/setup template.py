@@ -27,8 +27,8 @@ setup_params = dict(
 	tests_require=[
 		'pytest',
 	],
-	license = 'MIT',
-	classifiers = [
+	license='MIT',
+	classifiers=[
 		"Development Status :: 5 - Production/Stable",
 		"Intended Audience :: Developers",
 		"License :: OSI Approved :: MIT License",
