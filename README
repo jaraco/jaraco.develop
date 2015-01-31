@@ -18,6 +18,11 @@ You can install it with ``easy_install jaraco.develop``, or from the
 Changes
 -------
 
+2.7
+~~~
+
+* Added sphinx doc and release alias.
+
 2.2
 ~~~
 
