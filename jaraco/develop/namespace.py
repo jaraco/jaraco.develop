@@ -3,44 +3,58 @@ from __future__ import print_function
 import re
 import textwrap
 import argparse
+import inspect
+import io
+import datetime
 
 import pkg_resources
 from path import path
+from jaraco.functools import compose
 
-try:
-	from jaraco.util.string import local_format as lf
-except ImportError:
-	def local_format(string):
-		import inspect
-		return string.format(**inspect.currentframe().f_back.f_locals)
-	lf = local_format
 
 def DALS(string):
 	"Dedent and left strip"
 	return textwrap.dedent(string).lstrip()
 
-_setup_template = (
-	pkg_resources.resource_string(__name__, 'setup template.py')
-	.decode('utf-8')
-)
+def load_template(name, transform=None, context=None):
+	if transform is None:
+		transform = lambda x: x
+	result = pkg_resources.resource_string(__name__, name).decode('utf-8')
+	if context is None:
+		context = inspect.currentframe().f_back.f_locals
+	return transform(result).format(**context)
+
+def to_spaces(script):
+	"""
+	Replace tab indentation with space indentation.
+	"""
+	return re.sub(r'^\t+', tabs_to_spaces, script, flags=re.MULTILINE)
 
 def tabs_to_spaces(tabs):
 	return ' '*4*len(tabs.group(0))
 
+def remove_namespace_packages(script):
+	"remove the namespace_packages declaration"
+	return re.sub(r'^\tnamespace_packages.*\n', '', script, flags=re.MULTILINE)
+
 def create_namespace_package(root, indent_with_spaces=False):
 	project_name = root.basename()
+	year = datetime.date.today().year
 	namespace, sep, package = project_name.rpartition('.')
 	if not root.isdir(): root.mkdir()
-	template = DALS(_setup_template)
-	if not namespace:
-		# remove the namespace_packages declaration
-		template = re.sub(r'^\tnamespace_packages.*\n', '', template,
-			flags=re.MULTILINE)
-		assert not 'namespace_packages' in template
-	if indent_with_spaces:
-		template = re.sub(r'^\t+', tabs_to_spaces, template,
-			flags=re.MULTILINE)
-	(root/'setup.py').open('wb').write(lf(template).encode('utf-8'))
+	whitespace = to_spaces if indent_with_spaces else lambda x: x
+	namespace_adj = remove_namespace_packages if namespace else lambda x: x
+	transform = compose(whitespace, namespace_adj)
+	setup_py = load_template('setup template.py', transform=transform)
+	io.open(root/'setup.py', 'w', encoding='utf-8').write(setup_py)
+
+	docs = root / 'docs'
+	docs.mkdir_p()
+	sphinx_i = load_template('sphinx index template.rst', transform)
+	io.open(docs/'index.rst', 'w', encoding='utf-8').write(sphinx_i)
+	sphinx_c = load_template('sphinx conf template.py', transform)
+	io.open(docs/'conf.py', 'w', encoding='utf-8').write(sphinx_c)
+
 	with (root/'README.txt').open('w') as readme:
 		print(project_name, file=readme)
 		print('='*len(project_name), file=readme)
@@ -48,8 +62,11 @@ def create_namespace_package(root, indent_with_spaces=False):
 	with (root/'setup.cfg').open('w') as setupcfg:
 		setupcfg.writelines([
 			'[pytest]\n',
-			'norecursedirs=*.egg dist build\n',
+			'norecursedirs=*.egg .eggs dist build\n',
 			'addopts=--doctest-modules\n',
+			'\n',
+			'[aliases]\n',
+			'release = sdist build_sphinx upload upload_docs\n',
 		])
 
 	with (root/'.hgignore').open('w') as hgignore:
