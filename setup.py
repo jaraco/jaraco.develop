@@ -31,6 +31,7 @@ setup_params = dict(
 	url = 'http://bitbucket.org/jaraco/' + name,
 	packages = setuptools.find_packages(),
 	namespace_packages = ['jaraco'],
+	include_package_data=True,
 	license = 'MIT',
 	classifiers = [
 		"Development Status :: 5 - Production/Stable",
