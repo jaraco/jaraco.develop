@@ -22,25 +22,25 @@ with open('README') as readme:
 	long_description = readme.read()
 
 setup_params = dict(
-	name = name,
+	name=name,
 	use_hg_version=True,
-	description = 'Routines to assist development',
-	long_description = long_description,
-	author = 'Jason R. Coombs',
-	author_email = 'jaraco@jaraco.com',
-	url = 'http://bitbucket.org/jaraco/' + name,
-	packages = setuptools.find_packages(),
-	namespace_packages = ['jaraco'],
+	description='Routines to assist development',
+	long_description=long_description,
+	author='Jason R. Coombs',
+	author_email='jaraco@jaraco.com',
+	url='http://bitbucket.org/jaraco/' + name,
+	packages=setuptools.find_packages(),
+	namespace_packages=['jaraco'],
 	include_package_data=True,
-	license = 'MIT',
-	classifiers = [
+	license='MIT',
+	classifiers=[
 		"Development Status :: 5 - Production/Stable",
 		"Intended Audience :: Developers",
 		"Programming Language :: Python",
 		"Programming Language :: Python :: 2",
 		"Programming Language :: Python :: 3",
 	],
-	entry_points = {
+	entry_points={
 		'console_scripts': [
 			'apply-python-bug-patch=jaraco.develop.python:'
 				'apply_python_bug_patch_cmd',
@@ -66,9 +66,9 @@ setup_params = dict(
 		'path.py',
 		#'html5lib',
 	] + plat_requirements,
-	extras_require = {
+	extras_require={
 	},
-	dependency_links = [
+	dependency_links=[
 	],
 	tests_require=[
 	],
