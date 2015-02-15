@@ -19,6 +19,8 @@ setup_params = dict(
 	url="https://bitbucket.org/jaraco/{project_name}",
 	packages=setuptools.find_packages(),
 	namespace_packages=['{namespace}'],
+	install_requires=[
+	],
 	setup_requires=[
 		'hgtools',
 		'pytest-runner',
