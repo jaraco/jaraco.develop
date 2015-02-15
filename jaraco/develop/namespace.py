@@ -61,12 +61,14 @@ def create_namespace_package(root, indent_with_spaces=False):
 	(root/'CHANGES.txt').touch()
 	with (root/'setup.cfg').open('w') as setupcfg:
 		setupcfg.writelines([
+			'[aliases]\n',
+			'release = sdist build_sphinx upload upload_docs\n',
+		])
+	with (root/'pytest.ini').open('w') as setupcfg:
+		setupcfg.writelines([
 			'[pytest]\n',
 			'norecursedirs=*.egg .eggs dist build\n',
 			'addopts=--doctest-modules\n',
-			'\n',
-			'[aliases]\n',
-			'release = sdist build_sphinx upload upload_docs\n',
 		])
 
 	with (root/'.hgignore').open('w') as hgignore:
