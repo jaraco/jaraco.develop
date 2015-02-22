@@ -3,7 +3,7 @@
 """
 Setup script for building jaraco.develop
 
-Copyright © 2010-2013 Jason R. Coombs
+Copyright © 2010-2015 Jason R. Coombs
 """
 
 import platform
