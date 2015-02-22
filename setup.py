@@ -6,11 +6,17 @@ Setup script for building jaraco.develop
 Copyright © 2010-2015 Jason R. Coombs
 """
 
+import sys
 import platform
 
 import setuptools
 
 name = 'jaraco.develop'
+
+needs_pytest = {'pytest', 'test'}.intersection(sys.argv)
+pytest_runner = ['pytest_runner'] if needs_pytest else []
+needs_sphinx = {'release', 'build_sphinx', 'upload_docs'}.intersection(sys.argv)
+sphinx = ['sphinx'] if needs_sphinx else []
 
 plat_requirements = []
 if platform.system() == 'Windows':
@@ -71,10 +77,11 @@ setup_params = dict(
 	dependency_links=[
 	],
 	tests_require=[
+		'pytest',
 	],
 	setup_requires=[
 		'hgtools',
-	],
+	] + pytest_runner,
 )
 
 if __name__ == '__main__':
