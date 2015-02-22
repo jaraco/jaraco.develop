@@ -14,7 +14,7 @@ except ImportError:
 
 import requests
 import keyring
-from jaraco.util.string import local_format as lf
+from jaraco.text import local_format as lf
 
 api_url = 'https://api.bitbucket.org/1.0/'
 make_url = functools.partial(urllib_parse.urljoin, api_url)

@@ -71,6 +71,8 @@ setup_params = dict(
 		'keyring',
 		'path.py',
 		#'html5lib',
+		'jaraco.text',
+		'more_itertools',
 	] + plat_requirements,
 	extras_require={
 	},

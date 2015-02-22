@@ -8,7 +8,7 @@ import itertools
 
 import six
 
-from jaraco.util.itertools import consume
+from more_itertools.recipes import consume
 
 def validate_pair(ob):
 	"Return True if the object represents a pair"
