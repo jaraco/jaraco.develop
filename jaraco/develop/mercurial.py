@@ -5,7 +5,7 @@ import itertools
 import importlib
 
 import path
-import jaraco.util.logging
+import jaraco.logging
 
 log = logging.getLogger(__name__)
 
@@ -38,9 +38,9 @@ def patch_hgrc():
 	parser = argparse.ArgumentParser()
 	parser.add_argument('--replace', nargs=2)
 	parser.add_argument('-r', '--recurse', default=False, action="store_true")
-	jaraco.util.logging.add_arguments(parser)
+	jaraco.logging.add_arguments(parser)
 	args = parser.parse_args()
-	jaraco.util.logging.setup(args, format="%(levelname)s:%(message)s")
+	jaraco.logging.setup(args, format="%(levelname)s:%(message)s")
 	for hgrc in get_hgrcs(path.path('.'), recurse=args.recurse):
 		if args.replace:
 			replace(hgrc, *args.replace)
@@ -52,9 +52,9 @@ def hide_hg_dirs():
 	fs = importlib.import_module('jaraco.windows.filesystem')
 	parser = argparse.ArgumentParser()
 	parser.add_argument('-r', '--recurse', default=False, action="store_true")
-	jaraco.util.logging.add_arguments(parser)
+	jaraco.logging.add_arguments(parser)
 	args = parser.parse_args()
-	jaraco.util.logging.setup(args, format="%(levelname)s:%(message)s")
+	jaraco.logging.setup(args, format="%(levelname)s:%(message)s")
 	for hg_dir in get_hg_dirs(path.path('.'), recurse=args.recurse):
 		# make the file hidden
 		fs.SetFileAttributes(hg_dir, 'hidden')

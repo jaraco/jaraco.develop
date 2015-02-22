@@ -73,6 +73,7 @@ setup_params = dict(
 		#'html5lib',
 		'jaraco.text',
 		'more_itertools',
+		'jaraco.logging',
 	] + plat_requirements,
 	extras_require={
 	},
