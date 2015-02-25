@@ -63,6 +63,7 @@ def create_namespace_package(root, indent_with_spaces=False):
 		setupcfg.writelines([
 			'[aliases]\n',
 			'release = sdist build_sphinx upload upload_docs\n',
+			'test = pytest\n',
 		])
 	with (root/'pytest.ini').open('w') as setupcfg:
 		setupcfg.writelines([
