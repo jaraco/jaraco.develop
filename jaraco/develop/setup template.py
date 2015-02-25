@@ -18,7 +18,7 @@ sphinx = ['sphinx'] if needs_sphinx else []
 
 setup_params = dict(
 	name='{project_name}',
-	use_hg_version=True,
+	use_scm_version=True,
 	author="Jason R. Coombs",
 	author_email="jaraco@jaraco.com",
 	description="{project_name}",
@@ -29,7 +29,7 @@ setup_params = dict(
 	install_requires=[
 	],
 	setup_requires=[
-		'hgtools',
+		'setuptools_scm',
 	] + pytest_runner + sphinx,
 	tests_require=[
 		'pytest',
