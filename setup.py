@@ -29,7 +29,7 @@ with open('README') as readme:
 
 setup_params = dict(
 	name=name,
-	use_hg_version=True,
+	use_scm_version=True,
 	description='Routines to assist development',
 	long_description=long_description,
 	author='Jason R. Coombs',
@@ -83,7 +83,7 @@ setup_params = dict(
 		'pytest',
 	],
 	setup_requires=[
-		'hgtools',
+		'setuptools_scm',
 	] + pytest_runner,
 )
 
