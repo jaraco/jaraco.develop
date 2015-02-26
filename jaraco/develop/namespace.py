@@ -56,6 +56,10 @@ def create_namespace_package(root, indent_with_spaces=False):
 	io.open(docs/'conf.py', 'w', encoding='utf-8').write(sphinx_c)
 
 	with (root/'README.txt').open('w') as readme:
+		docs_url = 'https://pythonhosted.org/' + project_name
+		readme.writelines([
+			'`Documentation <{docs_url}>`_'.format(**locals()),
+		])
 		print(project_name, file=readme)
 		print('='*len(project_name), file=readme)
 	(root/'CHANGES.txt').touch()
