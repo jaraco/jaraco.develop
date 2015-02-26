@@ -67,13 +67,13 @@ setup_params = dict(
 		],
 	},
 	install_requires=[
-		'jaraco.util>=8.0',
 		'keyring',
 		'path.py',
 		#'html5lib',
 		'jaraco.text',
 		'more_itertools',
 		'jaraco.logging',
+		'jaraco.ui',
 	] + plat_requirements,
 	extras_require={
 	},

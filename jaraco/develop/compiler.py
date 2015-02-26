@@ -4,8 +4,8 @@ import shutil
 import mimetypes
 
 from distutils import ccompiler, sysconfig
+from jaraco.ui.editor import EditableFile
 
-from jaraco.util.editor import EditableFile
 
 @contextlib.contextmanager
 def temp_dir():
