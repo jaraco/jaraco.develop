@@ -1,3 +1,9 @@
+2.14
+====
+
+* Allow make-namespace-package to complete even when
+  the tree already exists.
+
 2.13
 ====
 

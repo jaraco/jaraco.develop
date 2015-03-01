@@ -84,12 +84,12 @@ def create_namespace_package(root, indent_with_spaces=False):
 
 	if namespace:
 		namespace_root = root/namespace
-		namespace_root.mkdir()
+		namespace_root.mkdir_p()
 		ns_decl = '__import__("pkg_resources").declare_namespace(__name__)\n'
 		(namespace_root/'__init__.py').open('wb').write(ns_decl.encode('utf-8'))
 		root = namespace_root
 
-	(root/package).mkdir()
+	(root/package).mkdir_p()
 	(root/package/'__init__.py').touch()
 	return root/package
 
