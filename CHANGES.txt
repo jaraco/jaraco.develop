@@ -1,3 +1,32 @@
+2.12
+====
+
+* Add link to documentation from readme.
+* Remove changelog from package metadata.
+* Include the history in the documentation.
+
+2.11
+====
+
+* Drop dependency on jaraco.util.
+
+2.10
+====
+
+* Use setuptools_scm.
+* Add test = pytest alias.
+
+2.9
+===
+
+* Include pytest and sphinx only when indicated.
+
+2.8
+===
+
+* Added placeholder for install_requires.
+* Use pytest.ini for pytest settings.
+
 2.7
 ===
 
