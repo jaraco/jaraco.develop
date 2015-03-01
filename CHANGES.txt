@@ -1,3 +1,8 @@
+2.15
+====
+
+* Use setuptools_scm in sphinx config.
+
 2.14
 ====
 
