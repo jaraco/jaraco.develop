@@ -54,6 +54,8 @@ def create_namespace_package(root, indent_with_spaces=False):
 	io.open(docs/'index.rst', 'w', encoding='utf-8').write(sphinx_i)
 	sphinx_c = load_template('sphinx conf template.py', transform)
 	io.open(docs/'conf.py', 'w', encoding='utf-8').write(sphinx_c)
+	history = load_template('history.rst', transform)
+	io.open(docs/'history.rst', 'w', encoding='utf-8').write(history)
 
 	with (root/'README.txt').open('w') as readme:
 		docs_url = 'https://pythonhosted.org/' + project_name

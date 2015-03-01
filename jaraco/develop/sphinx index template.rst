@@ -1,6 +1,12 @@
 Welcome to {project_name} documentation!
 ========================================
 
+.. toctree::
+   :maxdepth: 1
+
+   history
+
+
 .. automodule:: {project_name}
     :members:
     :undoc-members:
