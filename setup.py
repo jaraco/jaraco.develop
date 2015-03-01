@@ -24,7 +24,7 @@ if platform.system() == 'Windows':
 		['jaraco.windows >= 2.7b1']
 	)
 
-with open('README') as readme:
+with open('README.txt') as readme:
 	long_description = readme.read()
 
 setup_params = dict(
