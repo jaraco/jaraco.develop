@@ -40,6 +40,7 @@ def remove_namespace_packages(script):
 def create_namespace_package(root, indent_with_spaces=False):
 	project_name = root.basename()
 	year = datetime.date.today().year
+	version = pkg_resources.require('jaraco.develop')[0].version
 	namespace, sep, package = project_name.rpartition('.')
 	if not root.isdir(): root.mkdir()
 	whitespace = to_spaces if indent_with_spaces else lambda x: x
