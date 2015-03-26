@@ -6,6 +6,7 @@ import io
 import sys
 
 import setuptools
+import platform
 
 with io.open('README.txt', encoding='utf-8') as readme:
 	long_description = readme.read()
@@ -14,12 +15,8 @@ needs_pytest = {'pytest', 'test'}.intersection(sys.argv)
 pytest_runner = ['pytest_runner'] if needs_pytest else []
 needs_sphinx = {'release', 'build_sphinx', 'upload_docs'}.intersection(sys.argv)
 sphinx = ['sphinx'] if needs_sphinx else []
-
-plat_requirements = []
-if platform.system() == 'Windows':
-	plat_requirements.extend(
-		['jaraco.windows >= 2.7b1']
-	)
+is_windows = platform.system() == 'Windows'
+plat_reqs = ['jaraco.windows>=2.7'] if is_windows else []
 
 setup_params = dict(
 	name='jaraco.develop',
@@ -39,7 +36,7 @@ setup_params = dict(
 		'more_itertools',
 		'jaraco.logging',
 		'jaraco.ui',
-	] + plat_requirements,
+	] + plat_reqs,
 	entry_points={
 		'console_scripts': [
 			'apply-python-bug-patch=jaraco.develop.python:'
