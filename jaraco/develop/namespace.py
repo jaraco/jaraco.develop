@@ -44,7 +44,7 @@ def create_namespace_package(root, indent_with_spaces=False):
 	namespace, sep, package = project_name.rpartition('.')
 	if not root.isdir(): root.mkdir()
 	whitespace = to_spaces if indent_with_spaces else lambda x: x
-	namespace_adj = remove_namespace_packages if namespace else lambda x: x
+	namespace_adj = remove_namespace_packages if not namespace else lambda x: x
 	transform = compose(whitespace, namespace_adj)
 	setup_py = load_template('setup template.py', transform=transform)
 	io.open(root/'setup.py', 'w', encoding='utf-8').write(setup_py)
