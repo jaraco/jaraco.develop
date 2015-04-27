@@ -1,3 +1,16 @@
+2.17
+====
+
+* Setup template now includes package data by default.
+* Added stub for entry points to define where in the script
+  it should appear.
+
+2.16
+====
+
+* Regenerated project structure using ``make-namespace-package``.
+* Normalized syntax around plat requirements.
+
 2.15
 ====
 
