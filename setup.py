@@ -27,6 +27,7 @@ setup_params = dict(
 	long_description=long_description,
 	url="https://bitbucket.org/jaraco/jaraco.develop",
 	packages=setuptools.find_packages(),
+	include_package_data=True,
 	namespace_packages=['jaraco'],
 	install_requires=[
 		'keyring',
