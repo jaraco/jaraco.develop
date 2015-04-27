@@ -24,6 +24,7 @@ setup_params = dict(
 	long_description=long_description,
 	url="https://bitbucket.org/jaraco/{project_name}",
 	packages=setuptools.find_packages(),
+	include_package_data=True,
 	namespace_packages=['{namespace}'],
 	install_requires=[
 	],
@@ -40,6 +41,8 @@ setup_params = dict(
 		"Programming Language :: Python :: 2.7",
 		"Programming Language :: Python :: 3",
 	],
+	entry_points={
+	},
 )
 if __name__ == '__main__':
 	setuptools.setup(**setup_params)
