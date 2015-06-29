@@ -28,6 +28,8 @@ setup_params = dict(
 	namespace_packages=['{namespace}'],
 	install_requires=[
 	],
+	extras_require={{
+	}},
 	setup_requires=[
 		'setuptools_scm',
 	] + pytest_runner + sphinx,
