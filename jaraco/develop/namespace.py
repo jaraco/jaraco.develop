@@ -7,9 +7,15 @@ import inspect
 import io
 import datetime
 
+import path
 import pkg_resources
-from path import Path
 from jaraco.functools import compose
+
+
+class Path(path.Path):
+	def write_text(self, *args, **kwargs):
+		kwargs.setdefault('linesep', '\n')
+		super(Path, self).write_text(*args, **kwargs)
 
 
 def DALS(string):
