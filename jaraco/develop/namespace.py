@@ -4,7 +4,6 @@ import re
 import textwrap
 import argparse
 import inspect
-import io
 import datetime
 
 import path
@@ -15,12 +14,14 @@ from jaraco.functools import compose
 class Path(path.Path):
 	def write_text(self, *args, **kwargs):
 		kwargs.setdefault('linesep', '\n')
+		kwargs.setdefault('encoding', 'utf-8')
 		super(Path, self).write_text(*args, **kwargs)
 
 
 def DALS(string):
 	"Dedent and left strip"
 	return textwrap.dedent(string).lstrip()
+
 
 def load_template(name, transform=None, context=None):
 	if transform is None:
@@ -53,43 +54,44 @@ def create_namespace_package(root, indent_with_spaces=False):
 	namespace_adj = remove_namespace_packages if not namespace else lambda x: x
 	transform = compose(whitespace, namespace_adj)
 	setup_py = load_template('setup template.py', transform=transform)
-	io.open(root/'setup.py', 'w', encoding='utf-8').write(setup_py)
+	(root/'setup.py').write_text(setup_py)
 
 	docs = root / 'docs'
 	docs.mkdir_p()
 	sphinx_i = load_template('sphinx index template.rst', transform)
-	io.open(docs/'index.rst', 'w', encoding='utf-8').write(sphinx_i)
+	(docs/'index.rst').write_text(sphinx_i)
 	sphinx_c = load_template('sphinx conf template.py', transform)
-	io.open(docs/'conf.py', 'w', encoding='utf-8').write(sphinx_c)
+	(docs/'conf.py').write_text(sphinx_c)
 	history = load_template('history.rst', transform)
-	io.open(docs/'history.rst', 'w', encoding='utf-8').write(history)
+	(docs/'history.rst').write_text(history)
 
-	with (root/'README.txt').open('w') as readme:
-		print(project_name, file=readme)
-		print('='*len(project_name), file=readme)
+	separator = '=' * len(project_name)
+	(root/'README.txt').write_text(DALS("""
+		{project_name}
+		{separator}
+		""").format(**locals()))
 
 	(root/'CHANGES.txt').touch()
-	with (root/'setup.cfg').open('w') as setupcfg:
-		setupcfg.writelines([
-			'[aliases]\n',
-			'release = sdist build_sphinx upload upload_docs\n',
-			'test = pytest\n',
-		])
-	with (root/'pytest.ini').open('w') as setupcfg:
-		setupcfg.writelines([
-			'[pytest]\n',
-			'norecursedirs=*.egg .eggs dist build\n',
-			'addopts=--doctest-modules\n',
-		])
 
-	with (root/'.hgignore').open('w') as hgignore:
-		hgignore.write('build\ndist\n')
+	(root/'setup.cfg').write_text(DALS("""
+		[aliases]
+		release = sdist build_sphinx upload upload_docs
+		test = pytest
+		"""))
+
+	(root/'pytest.ini').write_text(DALS("""
+		[pytest]
+		norecursedirs=*.egg .eggs dist build
+		addopts=--doctest-modules
+		"""))
+
+	(root/'.hgignore').write_text("build\ndist\n")
 
 	if namespace:
 		namespace_root = root/namespace
 		namespace_root.mkdir_p()
 		ns_decl = '__import__("pkg_resources").declare_namespace(__name__)\n'
-		(namespace_root/'__init__.py').open('wb').write(ns_decl.encode('utf-8'))
+		(namespace_root/'__init__.py').write_text(ns_decl)
 		root = namespace_root
 
 	(root/package).mkdir_p()
