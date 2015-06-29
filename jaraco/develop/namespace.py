@@ -8,7 +8,7 @@ import io
 import datetime
 
 import pkg_resources
-from path import path
+from path import Path
 from jaraco.functools import compose
 
 
@@ -95,7 +95,7 @@ def create_namespace_package_cmd():
 	parser.add_argument('-s', '--indent-with-spaces', default=False,
 		action='store_true',)
 	parser.add_argument('target', help="path to new project",
-		type=path)
+		type=Path)
 	args = parser.parse_args()
 	create_namespace_package(args.target, args.indent_with_spaces)
 
@@ -107,7 +107,7 @@ def create_namespace_sandbox(root='.'):
 		myns.projB
 			- contains a test which references myns.projA.modA
 	"""
-	root = path(root)
+	root = Path(root)
 	pkg = create_namespace_package(root / 'myns.projA')
 	(pkg/'modA.py').open('w').write(DALS(
 		"""
