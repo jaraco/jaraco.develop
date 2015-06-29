@@ -1,3 +1,18 @@
+2.20
+====
+
+* Added stub for "extra" dependencies.
+
+2.19
+====
+
+* Write templates using LF for line endings.
+
+2.18
+====
+
+* Remove documentation link from README in skeleton generation.
+
 2.17
 ====
 
