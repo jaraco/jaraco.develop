@@ -83,6 +83,7 @@ def create_namespace_package(root, indent_with_spaces=False):
 		[pytest]
 		norecursedirs=*.egg .eggs dist build
 		addopts=--doctest-modules
+		doctest_optionflags=ALLOW_UNICODE ELLIPSIS
 		"""))
 
 	(root/'.hgignore').write_text("build\ndist\n")

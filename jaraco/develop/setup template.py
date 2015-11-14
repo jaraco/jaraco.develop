@@ -34,7 +34,7 @@ setup_params = dict(
 		'setuptools_scm',
 	] + pytest_runner + sphinx,
 	tests_require=[
-		'pytest',
+		'pytest>=2.8',
 	],
 	classifiers=[
 		"Development Status :: 5 - Production/Stable",
