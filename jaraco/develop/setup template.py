@@ -31,7 +31,7 @@ setup_params = dict(
 	extras_require={{
 	}},
 	setup_requires=[
-		'setuptools_scm',
+		'setuptools_scm>=1.9',
 	] + pytest_runner + sphinx,
 	tests_require=[
 		'pytest>=2.8',
