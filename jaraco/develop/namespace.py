@@ -75,8 +75,11 @@ def create_namespace_package(root, indent_with_spaces=False):
 
 	(root/'setup.cfg').write_text(DALS("""
 		[aliases]
-		release = sdist build_sphinx upload upload_docs
+		release = sdist bdist_wheel build_sphinx upload upload_docs
 		test = pytest
+
+		[wheel]
+		universal = 1
 		"""))
 
 	(root/'pytest.ini').write_text(DALS("""
