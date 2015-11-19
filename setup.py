@@ -34,6 +34,7 @@ setup_params = dict(
 		'more_itertools',
 		'jaraco.logging',
 		'jaraco.ui',
+		'PyGithub',
 	],
 	extras_require={
 		':sys_platform=="win32"': [
@@ -66,6 +67,8 @@ setup_params = dict(
 				'create_namespace_package_cmd',
 			'create-bitbucket-repository = jaraco.develop.bitbucket:'
 				'create_repository_cmd',
+			'create-github-repo = jaraco.develop.github:'
+				'create_repo_cmd',
 			'build-python = jaraco.develop.python:build_python',
 			'vs-upgrade = jaraco.develop.vstudio:upgrade_file',
 			'set-tabs-mode = jaraco.develop.indent:set_tabs_mode_cmd',
