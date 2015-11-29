@@ -1,3 +1,8 @@
+2.24
+====
+
+In project skeleton generation, set default hosting to github.com.
+
 2.23
 ====
 
