@@ -89,6 +89,16 @@ def create_namespace_package(root, indent_with_spaces=False):
 		doctest_optionflags=ALLOW_UNICODE ELLIPSIS
 		"""))
 
+	(root/'.travis.yml').write_text(DALS("""
+		sudo: false
+		language: python
+		python:
+		 - 2.7
+		 - 3.5
+		script:
+		 - python setup.py test
+		"""))
+
 	(root/'.hgignore').write_text("build\ndist\n")
 
 	if namespace:

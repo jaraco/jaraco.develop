@@ -1,3 +1,8 @@
+2.25
+====
+
+Add .travis.yml to skeleton.
+
 2.24
 ====
 
