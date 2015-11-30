@@ -96,6 +96,7 @@ def create_namespace_package(root, indent_with_spaces=False):
 		 - 2.7
 		 - 3.5
 		script:
+		 - pip install -U pytest
 		 - python setup.py test
 		"""))
 
