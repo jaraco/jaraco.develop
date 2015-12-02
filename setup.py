@@ -34,7 +34,10 @@ setup_params = dict(
 		'more_itertools',
 		'jaraco.logging',
 		'jaraco.ui',
-		'PyGithub',
+		'PyGithub>=1.25.2',
+		'six',
+		'jaraco.itertools',
+		'jaraco.functools',
 	],
 	extras_require={
 		':sys_platform=="win32"': [
