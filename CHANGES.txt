@@ -1,3 +1,9 @@
+2.27
+====
+
+Render README and CHANGES with .rst extensions for nicer rendering
+on Github.
+
 2.26
 ====
 

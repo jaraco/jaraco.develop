@@ -66,12 +66,12 @@ def create_namespace_package(root, indent_with_spaces=False):
 	(docs/'history.rst').write_text(history)
 
 	separator = '=' * len(project_name)
-	(root/'README.txt').write_text(DALS("""
+	(root/'README.rst').write_text(DALS("""
 		{project_name}
 		{separator}
 		""").format(**locals()))
 
-	(root/'CHANGES.txt').touch()
+	(root/'CHANGES.rst').touch()
 
 	(root/'setup.cfg').write_text(DALS("""
 		[aliases]
