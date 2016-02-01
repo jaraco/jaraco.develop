@@ -1,3 +1,8 @@
+2.29
+====
+
+Allow creation of Github repositories in an organization.
+
 2.28
 ====
 
