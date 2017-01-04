@@ -1,6 +1,5 @@
 from __future__ import print_function
 
-import urllib2
 import tarfile
 import zipfile
 import posixpath
@@ -8,10 +7,12 @@ import platform
 import os
 from textwrap import dedent
 import subprocess
-from cStringIO import StringIO
+import io
 import pkg_resources
 import shutil
 from distutils import msvccompiler
+
+from six.moves import urllib
 
 pkg_resources.require('cython')
 assert msvccompiler.get_build_version() >= 9.0
@@ -28,8 +29,8 @@ class LibraryManager():
 	def get_lib(self, lib):
 		url = posixpath.join(self.root, lib)
 		print('getting', url)
-		u = urllib2.urlopen(url)
-		f = StringIO(u.read())
+		u = urllib.request.urlopen(url)
+		f = io.BytesIO(u.read())
 		zf = zipfile.ZipFile(f)
 		zf_topdir = self.zip_topdir(zf)
 		if zf_topdir:
@@ -97,9 +98,9 @@ platform_bits = platform.architecture()[0][:2]
 
 def get_source():
 	url = 'http://codespeak.net/lxml/lxml-2.3.tgz'
-	stream = urllib2.urlopen(url)
+	stream = urllib.request.urlopen(url)
 	# mode='r|gz' doesn't work as advertised, queue up the whole file in memory
-	stream = StringIO(stream.read())
+	stream = io.BytesIO(stream.read())
 	stream.seek(0)
 	tf = tarfile.TarFile.open(fileobj=stream, mode='r:gz')
 	m = tf.getmembers()[0]
