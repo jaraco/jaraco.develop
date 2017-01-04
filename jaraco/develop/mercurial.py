@@ -41,7 +41,7 @@ def patch_hgrc():
 	jaraco.logging.add_arguments(parser)
 	args = parser.parse_args()
 	jaraco.logging.setup(args, format="%(levelname)s:%(message)s")
-	for hgrc in get_hgrcs(path.path('.'), recurse=args.recurse):
+	for hgrc in get_hgrcs(path.Path('.'), recurse=args.recurse):
 		if args.replace:
 			replace(hgrc, *args.replace)
 
@@ -55,6 +55,6 @@ def hide_hg_dirs():
 	jaraco.logging.add_arguments(parser)
 	args = parser.parse_args()
 	jaraco.logging.setup(args, format="%(levelname)s:%(message)s")
-	for hg_dir in get_hg_dirs(path.path('.'), recurse=args.recurse):
+	for hg_dir in get_hg_dirs(path.Path('.'), recurse=args.recurse):
 		# make the file hidden
 		fs.SetFileAttributes(hg_dir, 'hidden')

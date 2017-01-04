@@ -29,7 +29,7 @@ setup_params = dict(
 	namespace_packages=name.split('.')[:-1],
 	install_requires=[
 		'keyring',
-		'path.py',
+		'path.py>=6.2',
 		#'html5lib',
 		'jaraco.text',
 		'more_itertools',
