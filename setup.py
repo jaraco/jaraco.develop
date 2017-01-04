@@ -38,6 +38,7 @@ setup_params = dict(
 		'six',
 		'jaraco.itertools',
 		'jaraco.functools',
+		'requests',
 	],
 	extras_require={
 		':sys_platform=="win32"': [
