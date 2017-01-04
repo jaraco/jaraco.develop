@@ -7,10 +7,10 @@ import requests
 
 
 url = 'https://pypi.python.org/pypi'
-client = xmlrpc.client.ServerProxy(url)
 
 def get_projects():
 	username = getpass.getuser()
+	client = xmlrpc.client.ServerProxy(url)
 	return client.user_packages(username)
 
 
