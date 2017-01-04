@@ -14,8 +14,6 @@ from distutils import msvccompiler
 
 from six.moves import urllib
 
-pkg_resources.require('cython')
-assert msvccompiler.get_build_version() >= 9.0
 
 def shortest(strings):
 	return next(iter(sorted(strings, key=len)))
@@ -121,6 +119,8 @@ def alter_source(source_dir):
 
 def handle_command_line():
 	global lib_manager
+	pkg_resources.require('cython')
+	assert msvccompiler.get_build_version() >= 9.0
 	lib_manager = globals()['LibraryManager' + platform_bits]()
 	lib_manager.get_libs()
 	src = get_source()
