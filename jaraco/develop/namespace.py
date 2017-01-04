@@ -32,8 +32,11 @@ def load_template(name, transform=None, context=None):
 	return transform(result).format(**context)
 
 def to_spaces(script):
-	"""
+	r"""
 	Replace tab indentation with space indentation.
+
+	>>> to_spaces("\tfoo")
+	'    foo'
 	"""
 	return re.sub(r'^\t+', tabs_to_spaces, script, flags=re.MULTILINE)
 
