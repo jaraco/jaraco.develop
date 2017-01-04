@@ -1,3 +1,8 @@
+3.0
+===
+
+Drop support for Python 3.0.
+
 2.29.1
 ======
 
