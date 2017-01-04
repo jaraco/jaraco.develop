@@ -2,9 +2,10 @@ import os
 import glob
 import argparse
 import functools
+import sys
+import fnmatch
 
 import six
-import jaraco.filesystem
 
 no_tabs_mode = "# tab-width: 4; indent-tabs-mode: nil;"
 tabs_mode = "# tab-width: 4; indent-tabs-mode: t;"
@@ -25,14 +26,26 @@ def guess_newline(f):
 		return f.newlines[0]
 	return '\n'
 
+if sys.version_info > (3, 4):
+	def _recursive_glob(root, spec):
+		spec = os.path.join([root, '**', spec])
+		return glob.iglob(spec, recursive=True)
+else:
+	def _recursive_glob(root, spec):
+		return (
+			os.path.join(base, filename)
+			for base, dirnames, filenames in os.walk(root)
+			for filename in fnmatch.filter(filenames, spec)
+		)
+
 def recursive_glob(spec):
 	"""
 	Take a single spec and use the first part as the root and the latter
 	part as the spec.
 	"""
-	root, spec = os.path.split(spec)
+	root, sep, spec = spec.rpartition(os.pathsep)
 	root = root or '.'
-	return jaraco.filesystem.recursive_glob(root, spec)
+	return _recursive_glob(root, spec)
 
 def remove_tabs_mode(file):
 	with open(file, 'rb') as f:
