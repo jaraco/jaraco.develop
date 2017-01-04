@@ -30,7 +30,6 @@ setup_params = dict(
 	install_requires=[
 		'keyring',
 		'path.py>=6.2',
-		#'html5lib',
 		'jaraco.text',
 		'more_itertools',
 		'jaraco.logging',
