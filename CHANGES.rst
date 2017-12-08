@@ -3,6 +3,9 @@
 
 Refreshed package metadata. Dropped support for Python 3.3.
 
+Added ``jaraco.develop.lib2to3``, which addresses Python #11594
+by retaining newlines.
+
 3.0
 ===
 
