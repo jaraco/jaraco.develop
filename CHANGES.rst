@@ -1,3 +1,8 @@
+4.1
+===
+
+Exposed ``jaraco.develop.lib2to3.patch_for_newlines``.
+
 4.0
 ===
 
