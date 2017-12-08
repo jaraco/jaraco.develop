@@ -1,3 +1,8 @@
+4.0
+===
+
+Refreshed package metadata. Dropped support for Python 3.3.
+
 3.0
 ===
 

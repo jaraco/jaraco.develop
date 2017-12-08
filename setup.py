@@ -3,20 +3,21 @@
 # Project skeleton maintained at https://github.com/jaraco/skeleton
 
 import io
-import sys
 
 import setuptools
 
 with io.open('README.rst', encoding='utf-8') as readme:
 	long_description = readme.read()
 
-needs_wheel = {'release', 'bdist_wheel', 'dists'}.intersection(sys.argv)
-wheel = ['wheel'] if needs_wheel else []
-
 name = 'jaraco.develop'
 description = ''
+nspkg_technique = 'managed'
+"""
+Does this package use "native" namespace packages or
+pkg_resources "managed" namespace packages?
+"""
 
-setup_params = dict(
+params = dict(
 	name=name,
 	use_scm_version=True,
 	author="Jason R. Coombs",
@@ -26,7 +27,11 @@ setup_params = dict(
 	url="https://github.com/jaraco/" + name,
 	packages=setuptools.find_packages(),
 	include_package_data=True,
-	namespace_packages=name.split('.')[:-1],
+	namespace_packages=(
+		name.split('.')[:-1] if nspkg_technique == 'managed'
+		else []
+	),
+	python_requires='>=3.4',
 	install_requires=[
 		'keyring',
 		'path.py>=6.2',
@@ -41,13 +46,23 @@ setup_params = dict(
 		'requests',
 	],
 	extras_require={
+		'testing': [
+			'pytest>=2.8',
+			'pytest-sugar',
+			'collective.checkdocs',
+		],
+		'docs': [
+			'sphinx',
+			'jaraco.packaging>=3.2',
+			'rst.linker>=1.9',
+		],
 		':sys_platform=="win32"': [
 			'jaraco.windows>=2.7',
 		],
 	},
 	setup_requires=[
 		'setuptools_scm>=1.15.0',
-	] + wheel,
+	],
 	classifiers=[
 		"Development Status :: 5 - Production/Stable",
 		"Intended Audience :: Developers",
@@ -78,4 +93,4 @@ setup_params = dict(
 	},
 )
 if __name__ == '__main__':
-	setuptools.setup(**setup_params)
+	setuptools.setup(**params)
