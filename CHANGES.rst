@@ -1,3 +1,9 @@
+4.2
+===
+
+Updated github to expect a token instead of username/password
+in the keyring.
+
 4.1
 ===
 
