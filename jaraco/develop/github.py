@@ -9,8 +9,8 @@ from github import Github
 def create_repository(name):
 	org, sep, name = name.rpartition('/')
 	username = getpass.getuser()
-	password = keyring.get_password('Github', username)
-	g = Github(username, password)
+	token = keyring.get_password('github.com', username)
+	g = Github(token)
 	owner = g.get_organization(org) if org else g.get_user()
 	return owner.create_repo(name)
 
