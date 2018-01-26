@@ -4,7 +4,7 @@
 .. image:: https://img.shields.io/pypi/pyversions/jaraco.develop.svg
 
 .. image:: https://img.shields.io/travis/jaraco/jaraco.develop/master.svg
-   :target: http://travis-ci.org/jaraco/jaraco.develop
+   :target: https://travis-ci.org/jaraco/jaraco.develop
 
 .. image:: https://readthedocs.org/projects/jaracodevelop/badge/?version=latest
-   :target: http://jaracodevelop.readthedocs.io/en/latest/?badge=latest
+   :target: https://jaracodevelop.readthedocs.io/en/latest/?badge=latest
