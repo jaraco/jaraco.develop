@@ -1,9 +1,11 @@
 import functools
 
+
 def _add_MANIFEST_postarg(link_method):
 	# If the method was passed in Python 2, grab the function from the
 	#  UnboundMethod wrapper.
 	func = getattr(link_method, 'im_func', link_method)
+
 	@functools.wraps(func)
 	def wrapper(
 		self,
@@ -26,13 +28,15 @@ def _add_MANIFEST_postarg(link_method):
 			# make sure extra_postargs is a list (so we can append)
 			extra_postargs = list(extra_postargs)
 			# if /MANIFEST isn't present, add it
-			if not '/MANIFEST' in extra_postargs:
+			if '/MANIFEST' not in extra_postargs:
 				extra_postargs.append('/MANIFEST')
-			return func(self, target_desc, objects, output_filename,
+			return func(
+				self, target_desc, objects, output_filename,
 				output_dir, libraries, library_dirs, runtime_library_dirs,
 				export_symbols, debug, extra_preargs, extra_postargs,
 				build_temp, target_lang)
 	return wrapper
+
 
 def patch_msvc9compiler_module():
 	"""

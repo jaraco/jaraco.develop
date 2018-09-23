@@ -10,15 +10,17 @@ import six
 
 from more_itertools.recipes import consume
 
+
 def validate_pair(ob):
 	"Return True if the object represents a pair"
 	try:
 		if not (len(ob) == 2):
 			print("Unexpected result:", ob, file=sys.stderr)
 			raise ValueError
-	except:
+	except Exception:
 		return False
 	return True
+
 
 def get_environment_from_batch_command(env_cmd, initial=None):
 	"""
@@ -43,12 +45,16 @@ def get_environment_from_batch_command(env_cmd, initial=None):
 	# parse the output sent to stdout
 	lines = proc.stdout
 	# make sure the lines are strings
-	make_str = lambda s: s.decode()
+
+	def make_str(s):
+		return s.decode()
 	lines = six.moves.map(make_str, lines)
 	# consume whatever output occurs until the tag is reached
 	consume(itertools.takewhile(lambda l: tag not in l, lines))
 	# define a way to handle each KEY=VALUE line
-	handle_line = lambda l: l.rstrip().split('=',1)
+
+	def handle_line(line):
+		return line.rstrip().split('=', 1)
 	# parse key/values into pairs
 	pairs = map(handle_line, lines)
 	# make sure the pairs are valid

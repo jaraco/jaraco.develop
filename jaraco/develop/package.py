@@ -6,6 +6,7 @@ import inspect
 import subprocess
 import pkg_resources
 
+
 def get_environment_for_PyPI():
 	"""
 	PyPI requires that the HOME environment be set before running
@@ -14,6 +15,7 @@ def get_environment_for_PyPI():
 	if sys.platform in ('win32',):
 		env = dict(os.environ)
 		env.setdefault('HOME', os.path.expanduser('~'))
+
 
 def release():
 	cmd = [
@@ -27,6 +29,7 @@ def release():
 		env=get_environment_for_PyPI(),
 	)
 
+
 def read_long_description():
 	"""
 	return the text in docs/index.txt
@@ -37,6 +40,7 @@ def read_long_description():
 			'index.txt',
 		)).read().strip()
 
+
 def test_compile_rst(filename):
 	try:
 		from docutils.core import publish_string
@@ -45,6 +49,7 @@ def test_compile_rst(filename):
 		return
 	docs = open(filename).read()
 	publish_string(docs)
+
 
 def local_resource_filename(filename):
 	"""

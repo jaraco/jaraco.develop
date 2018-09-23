@@ -33,10 +33,12 @@ from jaraco.develop.stage import PythonTestStage
 bug_id = 1578269
 source_url = 'http://svn.python.org/projects/python/branches/py3k'
 
+
 class TestConductor:
 	# orchestrate the test
 	def go(self, options):
-		if options.skip: return
+		if options.skip:
+			return
 		stage = PythonTestStage()
 		if options.clean:
 			stage.cleanup()
@@ -45,12 +47,14 @@ class TestConductor:
 		try:
 			stage.checkout_source(source_url)
 			options.no_patch or stage.apply_patch(bug_id)
-			stage.do_build(32, python.Results('32-bit build results'),
+			stage.do_build(
+				32, python.Results('32-bit build results'),
 				options.get_externals)
 			options.just_build or stage.run_test(
 				python.Results('32-bit test results'))
 			if not options.skip_64_bit:
-				stage.do_build(64, python.Results('64-bit build results'),
+				stage.do_build(
+					64, python.Results('64-bit build results'),
 					options.get_externals)
 				options.just_build or stage.run_test(
 					python.Results('64-bit test results'), '-x64')
@@ -66,34 +70,42 @@ class TestConductor:
 
 	def get_options(self):
 		parser = OptionParser()
-		parser.add_option('-s', '--skip', default=False,
+		parser.add_option(
+			'-s', '--skip', default=False,
 			action="store_true",
 			help="Don't do anything - useful for interactive mode",
-			)
-		parser.add_option('-b', '--just-build', default=False,
+		)
+		parser.add_option(
+			'-b', '--just-build', default=False,
 			action="store_true",
 			help="Download, patch, and build, but don't test or clean up",
-			)
-		parser.add_option('-c', '--clean', default=False,
+		)
+		parser.add_option(
+			'-c', '--clean', default=False,
 			action="store_true",
 			help="Just run cleanup; all other options ignored",
-			)
-		parser.add_option('--no-patch', default=False, action="store_true",
+		)
+		parser.add_option(
+			'--no-patch', default=False, action="store_true",
 			help="Skip patching the code",
-			)
-		parser.add_option('--skip-64-bit', default=False,
+		)
+		parser.add_option(
+			'--skip-64-bit', default=False,
 			action="store_true",
 			help="Skip the 64-bit builds (do 32-bit only)"
-			)
-		parser.add_option('--get-externals', default=False,
+		)
+		parser.add_option(
+			'--get-externals', default=False,
 			action="store_true",
 			help="Get the external dependencies",
-			)
-		parser.add_option('--reuse', default=False, action="store_true",
+		)
+		parser.add_option(
+			'--reuse', default=False, action="store_true",
 			help="Re-use an existing checkout (if it exists)",
-			)
+		)
 		options, args = parser.parse_args()
 		return options
+
 
 if __name__ == '__main__':
 	TestConductor().handle_command_line()

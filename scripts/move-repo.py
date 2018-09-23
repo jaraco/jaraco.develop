@@ -7,6 +7,7 @@ import path
 
 repo = path.Path('.')
 
+
 def modified():
 	res = subprocess.check_output(['hg', 'status', '-mar']).decode('utf-8')
 	return bool(res)
@@ -32,7 +33,7 @@ def run():
 
 
 def update_hgrc():
-	hgrc = repo/'.hg/hgrc'
+	hgrc = repo / '.hg/hgrc'
 	if not hgrc.isfile():
 		return
 	text = hgrc.text()
@@ -50,7 +51,8 @@ def rename_docs():
 			subprocess.check_call(['hg', 'mv', file, file.replace('.txt', '.rst')])
 	if not modified():
 		return
-	subprocess.check_call(['hg', 'ci', '-m', 'rename docs for Github compatibility'])
+	subprocess.check_call(
+		['hg', 'ci', '-m', 'rename docs for Github compatibility'])
 
 
 def get_skeleton():

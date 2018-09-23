@@ -10,14 +10,17 @@ import six
 no_tabs_mode = "# tab-width: 4; indent-tabs-mode: nil;"
 tabs_mode = "# tab-width: 4; indent-tabs-mode: t;"
 
+
 def add_mode(mode, file):
 	with open(file, 'rb') as f:
 		content = f.read()
-	if mode in content: return
+	if mode in content:
+		return
 	newline = guess_newline(f)
 	content = mode + newline + content
 	with open(file, 'wb') as f:
 		f.write(content)
+
 
 def guess_newline(f):
 	if isinstance(f.newlines, six.string_types):
@@ -25,6 +28,7 @@ def guess_newline(f):
 	if isinstance(f.newlines, tuple):
 		return f.newlines[0]
 	return '\n'
+
 
 if sys.version_info > (3, 4):
 	def _recursive_glob(root, spec):
@@ -38,6 +42,7 @@ else:
 			for filename in fnmatch.filter(filenames, spec)
 		)
 
+
 def recursive_glob(spec):
 	"""
 	Take a single spec and use the first part as the root and the latter
@@ -47,17 +52,20 @@ def recursive_glob(spec):
 	root = root or '.'
 	return _recursive_glob(root, spec)
 
+
 def remove_tabs_mode(file):
 	with open(file, 'rb') as f:
 		lines = list(f)
 	if not lines:
 		return
 	first_line = lines[0]
-	if (first_line.startswith('#') and 'tab-width' in first_line
+	if (
+		first_line.startswith('#') and 'tab-width' in first_line
 		and 'indent-tabs-mode' in first_line):
 		lines = lines[1:]
 	with open(file, 'wb') as f:
 		f.writelines(lines)
+
 
 def set_tabs_mode_cmd():
 	"""
@@ -67,11 +75,14 @@ def set_tabs_mode_cmd():
 	parser = argparse.ArgumentParser()
 	add_no_tabs_mode = functools.partial(add_mode, no_tabs_mode)
 	add_tabs_mode = functools.partial(add_mode, tabs_mode)
-	parser.add_argument('-t', '--tabs-mode', default=add_no_tabs_mode,
+	parser.add_argument(
+		'-t', '--tabs-mode', default=add_no_tabs_mode,
 		action='store_const', const=add_tabs_mode)
-	parser.add_argument('-r', '--recursive', default=glob.glob, dest='glob',
+	parser.add_argument(
+		'-r', '--recursive', default=glob.glob, dest='glob',
 		action='store_const', const=recursive_glob)
-	parser.add_argument('-c', '--clear', action="store_const",
+	parser.add_argument(
+		'-c', '--clear', action="store_const",
 		const=remove_tabs_mode, dest='tabs_mode')
 	parser.add_argument('spec', help="The file spec to change")
 	args = parser.parse_args()

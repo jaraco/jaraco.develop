@@ -18,6 +18,7 @@ def temp_dir():
 	finally:
 		shutil.rmtree(dir)
 
+
 def get_include_dirs():
 	"""From distutils.command.build_ext:148"""
 	py_include = sysconfig.get_python_inc()
@@ -28,8 +29,11 @@ def get_include_dirs():
 		include_dirs.append(plat_py_include)
 	return include_dirs
 
+
 class FalseString(str):
-	def __nonzero__(self): return False
+	def __nonzero__(self):
+		return False
+
 
 def can_compile_extension():
 	"""
@@ -45,7 +49,8 @@ def can_compile_extension():
 		with temp_dir() as output_dir:
 			try:
 				compiler = ccompiler.new_compiler()
-				compiler.compile([file.name], output_dir=output_dir,
+				compiler.compile(
+					[file.name], output_dir=output_dir,
 					include_dirs=get_include_dirs())
 				result = True
 			except Exception as e:

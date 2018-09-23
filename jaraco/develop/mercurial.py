@@ -9,9 +9,11 @@ import jaraco.logging
 
 log = logging.getLogger(__name__)
 
+
 def get_hgrcs(base, recurse=False):
 	hg_dirs = get_hg_dirs(base, recurse)
 	return (dir / 'hgrc' for dir in hg_dirs if (dir / 'hgrc').isfile())
+
 
 def get_hg_dirs(base, recurse=False):
 	candidates = (base,)
@@ -20,6 +22,7 @@ def get_hg_dirs(base, recurse=False):
 	candidates = (dir for dir in candidates if dir.basename() != '.hg')
 	hg_dirs = (dir / '.hg' for dir in candidates if (dir / '.hg').isdir())
 	return hg_dirs
+
 
 def replace(filename, pattern, repl):
 	with open(filename, 'r') as file:
@@ -30,6 +33,7 @@ def replace(filename, pattern, repl):
 		return
 	with open(filename, 'w') as file:
 		file.write(new_content)
+
 
 def patch_hgrc():
 	"""
@@ -44,6 +48,7 @@ def patch_hgrc():
 	for hgrc in get_hgrcs(path.Path('.'), recurse=args.recurse):
 		if args.replace:
 			replace(hgrc, *args.replace)
+
 
 def hide_hg_dirs():
 	"""

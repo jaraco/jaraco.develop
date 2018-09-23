@@ -18,6 +18,7 @@ from six.moves import urllib
 def shortest(strings):
 	return next(iter(sorted(strings, key=len)))
 
+
 class LibraryManager():
 	@staticmethod
 	def zip_topdir(zf):
@@ -41,7 +42,7 @@ class LibraryManager():
 		zf.extractall(dest)
 		assert len(os.listdir(lib_loc)) > 1
 		assert 'include' in os.listdir(lib_loc)
-		custom_handler = 'handle_'+lib_loc.split('-')[0]
+		custom_handler = 'handle_' + lib_loc.split('-')[0]
 		getattr(self, custom_handler, lambda x: None)(lib_loc)
 		return lib_loc
 
@@ -64,6 +65,7 @@ class LibraryManager32(LibraryManager):
 		zlib-1.2.3.win32.zip
 		""").strip().split()
 
+
 class LibraryManager64(LibraryManager):
 	root = 'http://pecl2.php.net/downloads/php-windows-builds/php-libs/VC9/x64'
 	sources = dedent("""
@@ -78,7 +80,8 @@ class LibraryManager64(LibraryManager):
 			new_file = orig_file.replace(*replacement)
 			orig_file = os.path.join(lib_root, orig_file)
 			new_file = os.path.join(lib_root, new_file)
-			if orig_file == new_file: continue
+			if orig_file == new_file:
+				continue
 			shutil.copy(orig_file, new_file)
 
 	def handle_libiconv(self, loc):
@@ -92,7 +95,9 @@ class LibraryManager64(LibraryManager):
 		lib_root = os.path.join(loc, 'lib')
 		self.rename_libs(lib_root, ('zlib_a', 'zlib'))
 
+
 platform_bits = platform.architecture()[0][:2]
+
 
 def get_source():
 	url = 'http://codespeak.net/lxml/lxml-2.3.tgz'
@@ -106,6 +111,7 @@ def get_source():
 	tf.extractall()
 	return m.name
 
+
 def alter_source(source_dir):
 	setup = os.path.join('setup.py')
 	f = open(setup, 'r+')
@@ -116,6 +122,7 @@ def alter_source(source_dir):
 	data = data.replace('STATIC_LIBRARY_DIRS = []', SLD)
 	f.seek(0)
 	f.write(data)
+
 
 def handle_command_line():
 	global lib_manager
@@ -128,6 +135,7 @@ def handle_command_line():
 	alter_source(src)
 	cmd = 'python setup.py bdist --static'.split()
 	subprocess.check_call(cmd)
+
 
 if __name__ == '__main__':
 	handle_command_line()

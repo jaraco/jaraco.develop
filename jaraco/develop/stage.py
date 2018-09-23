@@ -1,5 +1,4 @@
 #!python
-#-*- coding: utf-8 -*-
 
 from __future__ import print_function, absolute_import
 
@@ -10,6 +9,7 @@ from optparse import OptionParser
 
 from . import vstudio
 from . import python
+
 
 class TestStage(object):
 	"""
@@ -55,6 +55,7 @@ class TestStage(object):
 			print(msg, file=sys.stderr)
 			raise RuntimeError(msg)
 
+
 class PythonTestStage(TestStage):
 	@property
 	def pcbuild_dir(self):
@@ -86,10 +87,12 @@ class PythonTestStage(TestStage):
 		env = vstudio.get_vcvars_env(*env_args)
 		cmd_args = {32: [], 64: ['-p', 'x64']}[word_size]
 		cmd = self.construct_build_command(self.project_location, cmd_args)
-		proc = subprocess.Popen(cmd, env=env, stdout=save_results,
+		proc = subprocess.Popen(
+			cmd, env=env, stdout=save_results,
 			stderr=subprocess.STDOUT)
 		proc.communicate()
-		print("result of {word_size}-bit build is {proc.returncode}"
+		print(
+			"result of {word_size}-bit build is {proc.returncode}"
 			.format(**vars()))
 		save_results.write('\nresult: {proc.returncode}'.format(**vars()))
 
@@ -101,9 +104,11 @@ class PythonTestStage(TestStage):
 		parser = OptionParser()
 		parser.add_option('-c', '--conf', default='Release')
 		parser.add_option('-p', '--platf', default='Win32')
-		parser.add_option('-r', '--rebuild', action='store_true',
+		parser.add_option(
+			'-r', '--rebuild', action='store_true',
 			default=False)
-		parser.add_option('-d', '--debug', dest='conf', action='store_const',
+		parser.add_option(
+			'-d', '--debug', dest='conf', action='store_const',
 			const='Debug')
 		options, args = parser.parse_args(args)
 
@@ -124,7 +129,8 @@ class PythonTestStage(TestStage):
 			os.path.join(self.pcbuild_dir, 'rt.bat'),
 			'-q',
 		] + list(params)
-		proc = subprocess.Popen(cmd, stdout=save_results,
+		proc = subprocess.Popen(
+			cmd, stdout=save_results,
 			stderr=subprocess.STDOUT, cwd=self.pcbuild_dir)
 		proc.wait()
 		if not proc.returncode == 0:

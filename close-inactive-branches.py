@@ -1,10 +1,12 @@
 import subprocess
 
+
 def close_branch(name, message="Closing inactive branch"):
 	cmd = ['hg', 'update', name]
 	subprocess.check_call(cmd)
 	cmd = ['hg', 'commit', '--close-branch', '-m', message]
 	subprocess.check_call(cmd)
+
 
 def get_inactive_branches():
 	cmd = ['hg', 'branches']
@@ -20,8 +22,10 @@ def get_inactive_branches():
 		yield name
 	proc.wait()
 
+
 def main():
 	map(close_branch, get_inactive_branches())
+
 
 if __name__ == '__main__':
 	main()

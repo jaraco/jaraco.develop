@@ -20,6 +20,7 @@ try:
 except ImportError:
 	import urllib2 as urllib_request
 
+
 class LinuxPlatform(object):
 	@staticmethod
 	def get_codename():
@@ -36,6 +37,7 @@ class LinuxPlatform(object):
 		stdout, stderr = proc.communicate()
 		return stdout.split()[-1]
 
+
 def get_platform_dist():
 	"""
 	Workaround for https://bugs.launchpad.net/python/+bug/196526
@@ -44,6 +46,7 @@ def get_platform_dist():
 	if platform.dist()[:2] == ('debian', 'lenny/sid'):
 		dist = ('Ubuntu', LinuxPlatform.get_release(), LinuxPlatform.get_codename())
 	return dist
+
 
 class Environment(object):
 	"""
@@ -56,14 +59,18 @@ class Environment(object):
 	@classmethod
 	def get_arg_parser(cls):
 		parser = optparse.OptionParser()
-		boolean_option = functools.partial(parser.add_option, action="store_true", default=False)
-		parser.add_option('-r', '--env-root',
+		boolean_option = functools.partial(
+			parser.add_option, action="store_true", default=False)
+		parser.add_option(
+			'-r', '--env-root',
 			help="The location where this environment will be created",
 			default='~/env',)
-		boolean_option('-e', '--use-existing',
+		boolean_option(
+			'-e', '--use-existing',
 			help="Modify an existing environment")
 		if cls.install_options:
-			parser.add_option('-i', '--install', action='append',
+			parser.add_option(
+				'-i', '--install', action='append',
 				help=', '.join(cls.install_options) + ' (multiple allowed)',
 				default=[],)
 		return parser
@@ -74,8 +81,8 @@ class Environment(object):
 
 	def get_dirs(self):
 		return dict(
-			env_root = self.env_root,
-			sources = os.path.join(self.env_root, 'src'),
+			env_root=self.env_root,
+			sources=os.path.join(self.env_root, 'src'),
 		)
 
 	@classmethod
@@ -91,6 +98,7 @@ class Environment(object):
 		deploy_log_filename = os.path.join(self.env_root, 'deploy.log')
 		print("Logging to", deploy_log_filename)
 		deploy_log = open(deploy_log_filename, 'w')
+
 		@functools.wraps(subprocess.Popen)
 		def redirected_Popen(*args, **kwargs):
 			kwargs.setdefault('stdout', deploy_log)
@@ -100,7 +108,8 @@ class Environment(object):
 
 	def check_target_does_not_exist(self):
 		if os.path.exists(self.env_root):
-			print("ROOT directory {self.env_root} already exists. Remove it"
+			print(
+				"ROOT directory {self.env_root} already exists. Remove it"
 				" or set a different target.".format(**vars()))
 			raise SystemExit(3)
 
@@ -131,7 +140,7 @@ class Environment(object):
 		url = self.mongodb_source
 		mongo_tgz_data = StringIO(urllib_request.urlopen(url).read())
 		mongo_tar = tarfile.TarFile.open(fileobj=mongo_tgz_data, mode='r:gz')
-		mongo_dest,_,_ = mongo_tar.getnames()[0].partition('/')
+		mongo_dest, _, _ = mongo_tar.getnames()[0].partition('/')
 		mongo_tar.extractall(self.env_root)
 		mongo_dest_path = os.path.join(self.env_root, mongo_dest)
 		# make a link as $ENV/mongodb for convenience
@@ -149,15 +158,22 @@ class Environment(object):
 		target = os.path.join(self.env_root, 'var', 'log')
 		os.path.isdir(target) or os.makedirs(target)
 
+
 class VirtualEnvSupport:
-	setuptools_href = 'http://pypi.python.org/packages/%(short_python_ver)s/s/setuptools/setuptools-0.6c11-py%(short_python_ver)s.egg'
+	setuptools_href = (
+		'http://pypi.python.org/packages/%(short_python_ver)s/'
+		's/setuptools/setuptools-0.6c11-py%(short_python_ver)s.egg'
+	)
 
 	def create_virtualenv(self):
 		"now that we have virtualenv, we can create the virtual environment"
-		cmd = [os.path.join(self.env_root, 'bin', 'virtualenv'), '--no-site-packages', self.env_root]
+		cmd = [
+			os.path.join(self.env_root, 'bin', 'virtualenv'),
+			'--no-site-packages', self.env_root]
 		res = self.Popen(cmd).wait()
 		if not res == 0:
-			print("Error creating virtual environment in {self.env_root}"
+			print(
+				"Error creating virtual environment in {self.env_root}"
 				.format(**vars()))
 			raise SystemExit(6)
 
@@ -167,7 +183,9 @@ class VirtualEnvSupport:
 
 	def install_virtualenv(self):
 		"install virtualenv into the new python environment"
-		cmd = [os.path.join(self.env_root, 'bin', 'easy_install'), '--prefix', self.env_root, 'virtualenv']
+		cmd = [
+			os.path.join(self.env_root, 'bin', 'easy_install'),
+			'--prefix', self.env_root, 'virtualenv']
 		res = self.Popen(cmd).wait()
 		if not res == 0:
 			print("Error installing virtualenv")
@@ -182,18 +200,20 @@ class VirtualEnvSupport:
 		url = self.setuptools_href % dict(short_python_ver=self.python_ver)
 
 		# create the libs dir and add it to the environment
-		python_libs = os.path.join(self.env_root, 'lib', self.python_name,
+		python_libs = os.path.join(
+			self.env_root, 'lib', self.python_name,
 			'site-packages')
 		os.makedirs(python_libs)
 		os.environ['PYTHONPATH'] = python_libs
 
 		# download setuptools
-		setuptools_installer_filename,_,_ = os.path.basename(url).partition('#')
+		setuptools_installer_filename, _, _ = os.path.basename(url).partition('#')
 		# we can't pass the data directly to sh because it will ignore the
 		#  --prefix option, so save it to a file instead.
-		setuptools_installer_path = os.path.join(self.env_root,
+		setuptools_installer_path = os.path.join(
+			self.env_root,
 			setuptools_installer_filename)
-		data = urllib2.urlopen(url).read()
+		data = urllib_request.urlopen(url).read()
 		open(setuptools_installer_path, 'wb').write(data)
 		# on Unix, the setuptools egg is a shell archive, and is installed by
 		#  executing the archive under sh. Install it with the --prefix option
@@ -208,8 +228,8 @@ class VirtualEnvSupport:
 
 	def check_cheeseshop(self):
 		try:
-			urllib2.urlopen(self.cheeseshop)
-		except:
+			urllib_request.urlopen(self.cheeseshop)
+		except Exception:
 			print('error: cannot reach %s' % self.cheeseshop)
 			raise SystemExit(3)
 
@@ -263,8 +283,10 @@ class PythonEnvironment(VirtualEnvSupport, Environment):
 
 	def set_default_encoding(self):
 		"set utf-8 as the default encoding for this environment"
-		site_customize = os.path.join(self.env_root, 'lib', self.python_name, 'sitecustomize.py')
-		open(site_customize, 'a').write("import sys\nsys.setdefaultencoding('utf-8')\n")
+		site_customize = os.path.join(
+			self.env_root, 'lib', self.python_name, 'sitecustomize.py')
+		open(site_customize, 'a').write(
+			"import sys\nsys.setdefaultencoding('utf-8')\n")
 
 	def check_python_version(self):
 		if not self.correct_python_version():
@@ -272,7 +294,7 @@ class PythonEnvironment(VirtualEnvSupport, Environment):
 			raise SystemExit(1)
 
 	def correct_python_version(self):
-		return sys.version_info >= (2,5)
+		return sys.version_info >= (2, 5)
 
 	@property
 	def python_name(self):
@@ -301,7 +323,7 @@ class MercurialSupport():
 		dest_path = os.path.join(self.sources, dest_name)
 		mercurial = os.path.join(self.env_root, 'bin', 'hg')
 
-		cmd = [mercurial, 'clone', path, dest_path,] + args
+		cmd = [mercurial, 'clone', path, dest_path] + args
 
 		res = self.Popen(cmd).wait()
 		if not res == 0:

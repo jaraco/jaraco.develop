@@ -1,5 +1,4 @@
-#!python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from __future__ import absolute_import
 
@@ -16,10 +15,11 @@ except ImportError:
 try:
 	import html5lib.treebuilders
 except ImportError:
-	#html5lib not available on Python 3 so suppress import errors
+	# html5lib not available on Python 3 so suppress import errors
 	pass
 
 from .patch import Patch
+
 
 class RoundupTracker(object):
 	"""
@@ -54,6 +54,7 @@ class RoundupTracker(object):
 
 	def get_latest_patch(self):
 		return next(self.get_patches())
+
 
 class PythonBugTracker(RoundupTracker):
 	def __init__(self, id):

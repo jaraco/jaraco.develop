@@ -1,5 +1,4 @@
-#!python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from __future__ import print_function
 
@@ -13,6 +12,7 @@ try:
 except ImportError:
 	import urllib2 as urllib_request
 	import urlparse as urllib_parse
+
 
 class Patch(str):
 	"""

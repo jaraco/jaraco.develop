@@ -73,18 +73,18 @@ params = dict(
 	entry_points={
 		'console_scripts': [
 			'apply-python-bug-patch=jaraco.develop.python:'
-				'apply_python_bug_patch_cmd',
+			'apply_python_bug_patch_cmd',
 			'start-selenium=jaraco.develop.selenium:'
-				'start_selenium_server',
+			'start_selenium_server',
 			'release-package = jaraco.develop.package:release',
 			'py-exc-env = jaraco.develop.environments:'
-				'PythonEnvironment.handle_command_line',
+			'PythonEnvironment.handle_command_line',
 			'make-namespace-package = jaraco.develop.namespace:'
-				'create_namespace_package_cmd',
+			'create_namespace_package_cmd',
 			'create-bitbucket-repository = jaraco.develop.bitbucket:'
-				'create_repository_cmd',
+			'create_repository_cmd',
 			'create-github-repo = jaraco.develop.github:'
-				'create_repo_cmd',
+			'create_repo_cmd',
 			'build-python = jaraco.develop.python:build_python',
 			'vs-upgrade = jaraco.develop.vstudio:upgrade_file',
 			'set-tabs-mode = jaraco.develop.indent:set_tabs_mode_cmd',
