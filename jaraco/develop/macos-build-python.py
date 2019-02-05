@@ -31,11 +31,10 @@ def build_on_macOS():
 	subprocess.run(
 		[
 			'./configure', f'--with-openssl={openssl}',
-			'--enable-framework',
 		],
 		env=env,
 	)
-	# subprocess.run('make')
+	subprocess.run('make')
 
 
 __name__ == '__main__' and build_on_macOS()
