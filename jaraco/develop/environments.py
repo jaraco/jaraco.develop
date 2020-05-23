@@ -50,7 +50,7 @@ class Environment(object):
     environment.
     """
 
-    install_options = []
+    install_options = []  # type: ignore
 
     @classmethod
     def get_arg_parser(cls):
@@ -112,7 +112,7 @@ class Environment(object):
             raise SystemExit(3)
 
     ##
-    system_prerequisites = []
+    system_prerequisites = []  # type: ignore
 
     def check_prerequisites(self):
         if self.has_prerequisites():

@@ -29,7 +29,7 @@ def build_on_macOS():
         LDFLAGS=' '.join(f'-L{lib}' for lib in libs),
     )
     subprocess.run(
-        ['./configure', f'--with-openssl={openssl}',], env=env,
+        ['./configure', f'--with-openssl={openssl}'], env=env,
     )
     subprocess.run('make')
 

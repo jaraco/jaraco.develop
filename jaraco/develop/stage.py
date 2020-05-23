@@ -38,9 +38,7 @@ class TestStage(object):
         target = os.path.join(self.location, self.project_name)
         cmd = ['svn', 'co', '-q', url, target]
         if False:
-            cmd.extend(
-                ['--depth', 'immediates',]
-            )  # for debugging
+            cmd.extend(['--depth', 'immediates'])  # for debugging
         result = subprocess.Popen(cmd).wait()
         if result != 0:
             print("Checkout failed", file=sys.stderr)
@@ -68,7 +66,7 @@ class PythonTestStage(TestStage):
         python.apply_python_bug_patch(bug_id, self.project_location)
 
     def get_externals(self, word_size):
-        script_name = {32: 'external.bat', 64: 'external-amd64.bat',}[word_size]
+        script_name = {32: 'external.bat', 64: 'external-amd64.bat'}[word_size]
         script_path = os.path.join('Tools', 'buildbot', script_name)
         proc = subprocess.Popen(
             script_path,
@@ -123,7 +121,7 @@ class PythonTestStage(TestStage):
 
     def run_test(self, save_results, *params):
         print("Running regression tests")
-        cmd = [os.path.join(self.pcbuild_dir, 'rt.bat'), '-q',] + list(params)
+        cmd = [os.path.join(self.pcbuild_dir, 'rt.bat'), '-q'] + list(params)
         proc = subprocess.Popen(
             cmd, stdout=save_results, stderr=subprocess.STDOUT, cwd=self.pcbuild_dir
         )
