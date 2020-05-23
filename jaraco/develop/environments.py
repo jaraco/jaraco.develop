@@ -14,11 +14,7 @@ import re
 import functools
 import optparse
 import platform
-
-try:
-    import urllib.request as urllib_request
-except ImportError:
-    import urllib2 as urllib_request
+import urllib.request
 
 
 class LinuxPlatform(object):
@@ -141,7 +137,7 @@ class Environment(object):
         from StringIO import StringIO
 
         url = self.mongodb_source
-        mongo_tgz_data = StringIO(urllib_request.urlopen(url).read())
+        mongo_tgz_data = StringIO(urllib.request.urlopen(url).read())
         mongo_tar = tarfile.TarFile.open(fileobj=mongo_tgz_data, mode='r:gz')
         mongo_dest, _, _ = mongo_tar.getnames()[0].partition('/')
         mongo_tar.extractall(self.env_root)
@@ -221,7 +217,7 @@ class VirtualEnvSupport:
         setuptools_installer_path = os.path.join(
             self.env_root, setuptools_installer_filename
         )
-        data = urllib_request.urlopen(url).read()
+        data = urllib.request.urlopen(url).read()
         open(setuptools_installer_path, 'wb').write(data)
         # on Unix, the setuptools egg is a shell archive, and is installed by
         #  executing the archive under sh. Install it with the --prefix option
@@ -236,7 +232,7 @@ class VirtualEnvSupport:
 
     def check_cheeseshop(self):
         try:
-            urllib_request.urlopen(self.cheeseshop)
+            urllib.request.urlopen(self.cheeseshop)
         except Exception:
             print('error: cannot reach %s' % self.cheeseshop)
             raise SystemExit(3)

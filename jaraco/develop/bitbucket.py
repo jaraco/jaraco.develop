@@ -6,17 +6,13 @@ import argparse
 import getpass
 import collections
 import pprint
-
-try:
-    import urllib.parse as urllib_parse
-except ImportError:
-    import urlparse as urllib_parse
+import urllib.parse
 
 import requests
 import keyring
 
 api_url = 'https://api.bitbucket.org/1.0/'
-make_url = functools.partial(urllib_parse.urljoin, api_url)
+make_url = functools.partial(urllib.parse.urljoin, api_url)
 
 
 def handle_error(resp):

@@ -5,13 +5,8 @@ from __future__ import print_function
 import subprocess
 import sys
 import os
-
-try:
-    import urllib.request as urllib_request
-    import urllib.parse as urllib_parse
-except ImportError:
-    import urllib2 as urllib_request
-    import urlparse as urllib_parse
+import urllib.request
+import urllib.parse
 
 
 class Patch(str):
@@ -28,8 +23,8 @@ class Patch(str):
 
     @classmethod
     def urlopen(cls, url):
-        filename = urllib_parse.unquote(os.path.basename(url))
-        return cls(urllib_request.urlopen(url).read(), filename=filename)
+        filename = urllib.parse.unquote(os.path.basename(url))
+        return cls(urllib.request.urlopen(url).read(), filename=filename)
 
     def apply(self, target):
         print(
