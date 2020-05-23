@@ -14,7 +14,6 @@ except ImportError:
 
 import requests
 import keyring
-from jaraco.text import local_format as lf
 
 api_url = 'https://api.bitbucket.org/1.0/'
 make_url = functools.partial(urllib_parse.urljoin, api_url)
@@ -22,7 +21,7 @@ make_url = functools.partial(urllib_parse.urljoin, api_url)
 
 def handle_error(resp):
 	if not resp.ok:
-		print(lf("Error occurred: {resp}"), file=sys.stderr)
+		print(f"Error occurred: {resp}", file=sys.stderr)
 		print(resp.text)
 	resp.raise_for_status()
 
@@ -43,7 +42,7 @@ def add_version(project, version, auth):
 	"""
 	project should be something like user/project
 	"""
-	url = make_url(lf('repositories/{project}/versions'))
+	url = make_url(f'repositories/{project}/versions')
 	resp = requests.post(
 		url,
 		params=dict(name=version),
