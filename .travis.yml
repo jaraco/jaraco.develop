@@ -1,32 +1,18 @@
-dist: xenial
-sudo: false
+dist: bionic
 language: python
 
 python:
 - 3.6
-- &latest_py3 3.7
-
-jobs:
-  fast_finish: true
-  include:
-  - stage: deploy
-    if: tag IS present
-    python: *latest_py3
-    before_script: skip
-    env:
-    - TWINE_USERNAME=jaraco
-    # TWINE_PASSWORD
-    - secure: lmx8BuoqQTgYTCA32L41c6JJp9QVlgz4KRf2Tocq1DTex8ABXn2sqhvQWMy1iRL4AmpEG0rtk7Qqfw7379fbAOncz0RCgVOBJ2ZmUqU1pud+OVUr6zmgbFeIPvoTF7zn1fu/io/8124P+bEkThS9HRw/K7xatJrNLZZVM5gtblh1VOhvK7xJvsYOCNPsI7JXWc19vdyni6GXtpICdH5FYNBSquGxL882H6u+eZcmyUwHMgkd/WBhr4tvpdv6rWxLeCiZuw+GgiX7bzZyOWRsXFouxl0eZ3QZ83qiC/wR/wHR/BE9klp6gO8Y7U6yUjpojzVRtYAyVhf1HQKkEFpcMxF5XNPBBG3gRH7KJjviVV1fytbk/iWbif72C+UEMr4Uhxw8XMfK412dHRkJYrdw9Tf1b+zitACFtQykzxX2GMnCG3dOT44P8GA7bgmtmGSBz2bWj17gUJHJ4Z+HpFDz+BG5M3yiSrJDzpVOd0Uu3Qv/fsT8f+j+rLctElsLUasnlMAAugZAg2VWNni2JviAd6uwIJDrq8vj+3ZypJkV7T1dVQ6Byecy28Gq7x8b72a6h8wjZf8pQ1hY1f4Z3A6CzEPED+JULiXW/UrOobEVrQvZoBDafiz4w0++rZmIJ26XvCrzevFKH53IgeiJ+vdRDgxLgMTIvTUnK9N7rkN/CB4=
-    - TOX_TESTENV_PASSENV="TWINE_USERNAME TWINE_PASSWORD"
-    script: tox -e release
+- &latest_py3 3.8
 
 cache: pip
 
 install:
-- pip install tox tox-venv
+# ensure virtualenv is upgraded to avoid issues like jaraco/path#188
+- pip install -U --upgrade-strategy=eager tox
 
 before_script:
-  # Disable IPv6. Ref travis-ci/travis-ci#8361
+  # Enable IPv6. Ref travis-ci/travis-ci#8361
   - if [ "${TRAVIS_OS_NAME}" == "linux" ]; then
       sudo sh -c 'echo 0 > /proc/sys/net/ipv6/conf/all/disable_ipv6';
     fi
