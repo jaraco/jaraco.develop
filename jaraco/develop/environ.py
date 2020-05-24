@@ -1,12 +1,6 @@
-#!python
-
-from __future__ import print_function
-
 import sys
 import subprocess
 import itertools
-
-import six
 
 from more_itertools.recipes import consume
 
@@ -49,7 +43,7 @@ def get_environment_from_batch_command(env_cmd, initial=None):
     def make_str(s):
         return s.decode()
 
-    lines = six.moves.map(make_str, lines)
+    lines = map(make_str, lines)
     # consume whatever output occurs until the tag is reached
     consume(itertools.takewhile(lambda l: tag not in l, lines))
     # define a way to handle each KEY=VALUE line

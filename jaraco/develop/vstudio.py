@@ -1,12 +1,6 @@
-#!python
-
-from __future__ import absolute_import
-
 import os
 import itertools
 import subprocess
-
-import six
 
 from .environ import get_environment_from_batch_command
 
@@ -26,7 +20,7 @@ class VisualStudio(str):
         >>> VisualStudio.find('9.0') #doctest:+SKIP
         'C:\\Program Files\\Microsoft Visual Studio 9.0'
         """
-        if isinstance(versions, six.string_types):
+        if isinstance(versions, str):
             versions = [versions]
         keys = ['PROGRAMFILES', 'PROGRAMFILES(X86)']
         search_path = [os.environ[key] for key in keys if key in os.environ]
@@ -44,7 +38,7 @@ class VisualStudio(str):
         def test_adequacy(candidate):
             return all(t(candidate) for t in tests)
 
-        path = next(iter(six.moves.filter(test_adequacy, vs_candidate_dirs)))
+        path = next(iter(filter(test_adequacy, vs_candidate_dirs)))
         return cls(path)
 
     def get_vcvars_env(self, *params):

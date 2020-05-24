@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Support for developing CPython core
 """
@@ -9,8 +7,6 @@ import sys
 import subprocess
 from optparse import OptionParser
 from argparse import ArgumentParser
-
-import six
 
 from jaraco.develop.trackers import PythonBugTracker
 from .vstudio import VisualStudio
@@ -34,10 +30,10 @@ def Results(filename):
 
 
 def find_in_path(filename, search_path):
-    if isinstance(search_path, six.string_types):
+    if isinstance(search_path, str):
         search_path = search_path.split(os.path.pathsep)
     candidates = [os.path.join(root, filename) for root in search_path]
-    matches = six.moves.filter(os.path.exists, candidates)
+    matches = filter(os.path.exists, candidates)
     return next(matches)
 
 

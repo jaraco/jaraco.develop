@@ -5,8 +5,6 @@ import functools
 import sys
 import fnmatch
 
-import six
-
 no_tabs_mode = "# tab-width: 4; indent-tabs-mode: nil;"
 tabs_mode = "# tab-width: 4; indent-tabs-mode: t;"
 
@@ -23,7 +21,7 @@ def add_mode(mode, file):
 
 
 def guess_newline(f):
-    if isinstance(f.newlines, six.string_types):
+    if isinstance(f.newlines, str):
         return f.newlines
     if isinstance(f.newlines, tuple):
         return f.newlines[0]

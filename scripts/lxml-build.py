@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 import tarfile
 import zipfile
 import posixpath
@@ -11,8 +9,7 @@ import io
 import pkg_resources
 import shutil
 from distutils import msvccompiler
-
-from six.moves import urllib
+import urllib.request
 
 
 def shortest(strings):
