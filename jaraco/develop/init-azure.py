@@ -66,7 +66,8 @@ def create_pipeline(svc, project):
 
 
 @autocommand.autocommand(__name__)
-def main(project, user=getpass.getuser()):
+def main(project, user=None):
+    user = user or getpass.getuser()
     create_project(project, user)
     create_service_endpoint(project, user)
     svc = find_endpoint_id(project)
