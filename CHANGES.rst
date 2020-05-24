@@ -1,3 +1,10 @@
+v6.0.0
+======
+
+* Require Python 3.6 or later.
+* Removed 'make-namespace-package' command associated
+  functionality in ``namespace`` module.
+
 5.0
 ===
 
