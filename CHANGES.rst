@@ -10,6 +10,7 @@ v6.0.0
   command.
 * Removed selenium code that is old and with limited utility
   except on Windows.
+* Removed all other command-line scripts.
 
 5.0
 ===
