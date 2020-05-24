@@ -8,6 +8,8 @@ v6.0.0
   to need that again.
 * Removed Github module. Use `hub <https://hub.github.com/>`_
   command.
+* Removed selenium code that is old and with limited utility
+  except on Windows.
 
 5.0
 ===
