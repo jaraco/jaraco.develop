@@ -6,6 +6,8 @@ v6.0.0
   functionality in ``namespace`` module.
 * Removed Bitbucket-related functionality. Nobody is going
   to need that again.
+* Removed Github module. Use `hub <https://hub.github.com/>`_
+  command.
 
 5.0
 ===
