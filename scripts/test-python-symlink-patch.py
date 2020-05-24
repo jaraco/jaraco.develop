@@ -1,5 +1,3 @@
-#!python
-
 """
 This script fully automates the checkout, patch, compile, test cycle
 for the Windows symlink support patch.
@@ -24,7 +22,6 @@ When it is done, it leaves four files in the user's home directory:
 It then cleans up the rest.
 """
 
-from __future__ import print_function
 from optparse import OptionParser
 
 from jaraco.develop import python

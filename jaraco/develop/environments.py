@@ -1,11 +1,7 @@
-#!python
-
 """
 Classes for managing virtual execution environments (including such
 things as a Python virtual environment).
 """
-
-from __future__ import print_function
 
 import sys
 import subprocess
