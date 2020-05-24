@@ -2,8 +2,6 @@ import os
 import glob
 import argparse
 import functools
-import sys
-import fnmatch
 
 no_tabs_mode = "# tab-width: 4; indent-tabs-mode: nil;"
 tabs_mode = "# tab-width: 4; indent-tabs-mode: t;"
@@ -28,21 +26,9 @@ def guess_newline(f):
     return '\n'
 
 
-if sys.version_info > (3, 4):
-
-    def _recursive_glob(root, spec):
-        spec = os.path.join([root, '**', spec])
-        return glob.iglob(spec, recursive=True)
-
-
-else:
-
-    def _recursive_glob(root, spec):
-        return (
-            os.path.join(base, filename)
-            for base, dirnames, filenames in os.walk(root)
-            for filename in fnmatch.filter(filenames, spec)
-        )
+def _recursive_glob(root, spec):
+    spec = os.path.join([root, '**', spec])
+    return glob.iglob(spec, recursive=True)
 
 
 def recursive_glob(spec):

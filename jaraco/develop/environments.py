@@ -261,7 +261,6 @@ class PythonEnvironment(VirtualEnvSupport, Environment):
         parser = cls.get_arg_parser()
         options, args = parser.parse_args()
         env = cls(options, *args)
-        env.check_python_version()
         env.check_prerequisites()
         env.setup_environment()
 
@@ -287,14 +286,6 @@ class PythonEnvironment(VirtualEnvSupport, Environment):
             self.env_root, 'lib', self.python_name, 'sitecustomize.py'
         )
         open(site_customize, 'a').write("import sys\nsys.setdefaultencoding('utf-8')\n")
-
-    def check_python_version(self):
-        if not self.correct_python_version():
-            print('Python 2.5 or later is required')
-            raise SystemExit(1)
-
-    def correct_python_version(self):
-        return sys.version_info >= (2, 5)
 
     @property
     def python_name(self):
