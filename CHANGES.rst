@@ -1,3 +1,8 @@
+v6.1.0
+======
+
+* Improve reliability of macOS build with reference to xz.
+
 v6.0.0
 ======
 
