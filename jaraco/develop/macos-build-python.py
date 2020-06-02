@@ -14,13 +14,16 @@ def build_on_macOS():
     """
     zlib = brew_prefix('zlib')
     openssl = brew_prefix('openssl@1.1')
+    xz = brew_prefix('xz')
     includes = [
         f'{openssl}/include',
         f'{zlib}/include',
+        f'{xz}/include',
     ]
     libs = [
         f'{openssl}/lib',
         f'{zlib}/lib',
+        f'{xz}/lib',
     ]
 
     env = dict(
