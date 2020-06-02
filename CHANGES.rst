@@ -1,3 +1,8 @@
+v6.2.0
+======
+
+* macos-build-python now checks that dependencies are installed.
+
 v6.1.0
 ======
 
