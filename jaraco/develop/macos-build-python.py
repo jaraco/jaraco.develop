@@ -16,7 +16,8 @@ def require_libs():
     cmd = ['brew', 'list']
     installed = subprocess.check_output(cmd, text=True).strip().split()
     assert set(reqs) < set(installed), "Need {missing}".format(
-        missing=set(reqs) - set(installed))
+        missing=set(reqs) - set(installed)
+    )
 
 
 def build_on_macOS():
