@@ -8,6 +8,8 @@ import os
 import subprocess
 import functools
 
+import autocommand
+
 
 @functools.lru_cache()
 def brew_prefix(name=None):
@@ -26,6 +28,7 @@ def require_libs():
     )
 
 
+@autocommand.autocommand(__name__)
 def build_on_macOS():
     """
     Build cpython in the current directory on a mac with
@@ -41,6 +44,3 @@ def build_on_macOS():
     cmd = ['./configure', f'--with-openssl={brew_prefix("openssl@1.1")}']
     subprocess.run(cmd, env=env)
     subprocess.run('make')
-
-
-__name__ == '__main__' and build_on_macOS()
