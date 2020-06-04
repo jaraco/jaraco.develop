@@ -1,3 +1,9 @@
+"""
+Build CPython according to
+`the docs <https://devguide.python.org/setup/#macos-and-os-x>`_.
+Assumes Homebrew is installed.
+"""
+
 import os
 import subprocess
 import functools
