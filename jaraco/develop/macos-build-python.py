@@ -4,8 +4,10 @@ import functools
 
 
 @functools.lru_cache()
-def brew_prefix(name):
-    cmd = ['brew', '--prefix', name]
+def brew_prefix(name=None):
+    cmd = ['brew', '--prefix']
+    if name:
+        cmd.append(name)
     return subprocess.check_output(cmd, text=True).strip()
 
 
@@ -23,18 +25,14 @@ def build_on_macOS():
     zlib and openssl installed.
     """
     require_libs()
-    deps = 'zlib', 'openssl@1.1', 'xz'
-    includes = [f'{prefix}/include' for prefix in map(brew_prefix, deps)]
-    libs = [f'{prefix}/lib' for prefix in map(brew_prefix, deps)]
+
     env = dict(
         os.environ,
-        CPPFLAGS=' '.join(f'-I{incl}' for incl in includes),
-        LDFLAGS=' '.join(f'-L{lib}' for lib in libs),
+        CPPFLAGS=f'-I{brew_prefix()}/include',
+        LDFLAGS=f'-I{brew_prefix()}/lib',
     )
-    openssl = brew_prefix('openssl@1.1')
-    subprocess.run(
-        ['./configure', f'--with-openssl={openssl}'], env=env,
-    )
+    cmd = ['./configure', f'--with-openssl={brew_prefix("openssl@1.1")}']
+    subprocess.run(cmd, env=env)
     subprocess.run('make')
 
 
