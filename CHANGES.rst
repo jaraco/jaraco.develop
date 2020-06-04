@@ -1,3 +1,8 @@
+v7.0.0
+======
+
+* Removed many crufty modules and trimmed dependencies.
+
 v6.2.0
 ======
 
