@@ -1,3 +1,8 @@
+v7.1.0
+======
+
+* Add create-github-release routine.
+
 v7.0.0
 ======
 
