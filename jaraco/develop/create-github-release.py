@@ -22,7 +22,7 @@ def load_token():
 
 @autocommand.autocommand(__name__)
 def run():
-    session.headers = dict(
+    session.headers.update(
         Accept='application/vnd.github.v3+json',
         Authorization=f'token {load_token()}',
     )
@@ -35,4 +35,6 @@ def run():
     tag = 'v' + version
     project = urllib.parse.urlparse(url).path.strip('/')
     releases = f'{project}/releases'
-    session.post(releases, json=dict(tag_name=tag, name=tag)).raise_for_status()
+    resp = session.post(releases, json=dict(tag_name=tag, name=tag))
+    resp.ok or print(resp.text)
+    resp.raise_for_status()
