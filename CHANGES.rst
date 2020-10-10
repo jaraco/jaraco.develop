@@ -1,3 +1,8 @@
+v7.2.0
+======
+
+* Add add-github-secret routine.
+
 v7.1.0
 ======
 
