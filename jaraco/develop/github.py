@@ -11,9 +11,6 @@ from requests_toolbelt import sessions
 from . import repo
 
 
-session = sessions.BaseUrlSession('https://api.github.com/repos/')
-
-
 def load_token():
     token = os.environ.get("GITHUB_TOKEN") or keyring.get_password(
         'Github', getpass.getuser()
@@ -36,6 +33,9 @@ class Key(str):
 
 
 class Repo(str):
+    def __init__(self, name):
+        self.session = get_session()
+
     @classmethod
     def detect(cls):
         return cls(repo.get_project_metadata().project)
@@ -60,6 +60,6 @@ class Repo(str):
             encrypted_value=self.encrypt(value),
             key_id=self.get_public_key().id,
         )
-        resp = session.put(secret, json=params)
+        resp = self.session.put(secret, json=params)
         resp.raise_for_status()
         return resp
