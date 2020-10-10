@@ -33,18 +33,28 @@ class Key(str):
     pass
 
 
-@functools.lru_cache
-def get_public_key():
-    data = get_session().get('actions/secrets/public-key').json()
-    key = Key(data['key'])
-    key.id = data['key_id']
-    return key
+class Repo(str):
+    @functools.lru_cache
+    def get_public_key(self):
+        data = get_session().get(f'{self}/actions/secrets/public-key').json()
+        key = Key(data['key'])
+        key.id = data['key_id']
+        return key
 
+    def encrypt(self, value):
+        pub_key = nacl.public.PublicKey(
+            self.get_public_key().encode('utf-8'), nacl.encoding.Base64Encoder()
+        )
+        box = nacl.public.SealedBox(pub_key)
+        cipher_text = box.encrypt(value.encode('utf-8'))
+        return base64.b64encode(cipher_text).decode('utf-8')
 
-def encrypt(value):
-    pub_key = nacl.public.PublicKey(
-        get_public_key().encode('utf-8'), nacl.encoding.Base64Encoder()
-    )
-    box = nacl.public.SealedBox(pub_key)
-    cipher_text = box.encrypt(value.encode('utf-8'))
-    return base64.b64encode(cipher_text).decode('utf-8')
+    def add_secret(self, name, value):
+        secret = f'{self}/actions/secrets/{name}'
+        params = dict(
+            encrypted_value=self.encrypt(value),
+            key_id=self.get_public_key().id,
+        )
+        resp = session.put(secret, json=params)
+        resp.raise_for_status()
+        return resp
