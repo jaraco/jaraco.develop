@@ -1,3 +1,8 @@
+v7.2.1
+======
+
+* Fixed bug in github.Repo handling (where authentication was missing).
+
 v7.2.0
 ======
 
