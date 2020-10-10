@@ -2,7 +2,7 @@ import sys
 import subprocess
 import urllib.parse
 
-import bunch
+import munch
 
 
 def get_project_metadata():
@@ -13,4 +13,4 @@ def get_project_metadata():
         text=True,
     ).stdout.split()
     project = urllib.parse.urlparse(url).path.strip('/')
-    return bunch.Bunch(locals())
+    return munch.Munch(locals())
