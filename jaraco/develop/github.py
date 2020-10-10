@@ -63,3 +63,9 @@ class Repo(str):
         resp = self.session.put(secret, json=params)
         resp.raise_for_status()
         return resp
+
+    def create_release(self, tag):
+        releases = f'{self}/releases'
+        resp = self.session.post(releases, json=dict(tag_name=tag, name=tag))
+        resp.raise_for_status()
+        return resp
