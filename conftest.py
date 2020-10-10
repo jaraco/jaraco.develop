@@ -1,4 +1,5 @@
-collect_ignore = [
-    'jaraco/develop/setup template.py',
-    'jaraco/develop/sphinx conf template.py',
-]
+import os
+
+
+def pytest_configure():
+    os.environ['GITHUB_TOKEN'] = 'abc'
