@@ -48,9 +48,8 @@ class Repo(str):
         return key
 
     def encrypt(self, value):
-        pub_key = nacl.public.PublicKey(
-            self.get_public_key().encode('utf-8'), nacl.encoding.Base64Encoder()
-        )
+        src = self.get_public_key().encode('utf-8')
+        pub_key = nacl.public.PublicKey(src, nacl.encoding.Base64Encoder())
         box = nacl.public.SealedBox(pub_key)
         cipher_text = box.encrypt(value.encode('utf-8'))
         return base64.b64encode(cipher_text).decode('utf-8')
