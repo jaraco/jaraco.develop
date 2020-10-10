@@ -11,30 +11,31 @@ from requests_toolbelt import sessions
 from . import repo
 
 
-def load_token():
-    token = os.environ.get("GITHUB_TOKEN") or keyring.get_password(
-        'Github', getpass.getuser()
-    )
-    assert token, "Token not available"
-    return token
-
-
-def get_session():
-    session = sessions.BaseUrlSession('https://api.github.com/repos/')
-    session.headers.update(
-        Accept='application/vnd.github.v3+json',
-        Authorization=f'token {load_token()}',
-    )
-    return session
-
-
 class Key(str):
     pass
 
 
 class Repo(str):
     def __init__(self, name):
-        self.session = get_session()
+        self.session = self.get_session()
+
+    @classmethod
+    @functools.lru_cache
+    def get_session(cls):
+        session = sessions.BaseUrlSession('https://api.github.com/repos/')
+        session.headers.update(
+            Accept='application/vnd.github.v3+json',
+            Authorization=f'token {cls.load_token()}',
+        )
+        return session
+
+    @staticmethod
+    def load_token():
+        token = os.environ.get("GITHUB_TOKEN") or keyring.get_password(
+            'Github', getpass.getuser()
+        )
+        assert token, "Token not available"
+        return token
 
     @classmethod
     def detect(cls):
@@ -42,7 +43,7 @@ class Repo(str):
 
     @functools.lru_cache
     def get_public_key(self):
-        data = get_session().get(f'{self}/actions/secrets/public-key').json()
+        data = self.session.get(f'{self}/actions/secrets/public-key').json()
         key = Key(data['key'])
         key.id = data['key_id']
         return key
