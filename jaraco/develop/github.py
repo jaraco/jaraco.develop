@@ -8,6 +8,8 @@ import nacl.public
 import nacl.encoding
 from requests_toolbelt import sessions
 
+from . import repo
+
 
 session = sessions.BaseUrlSession('https://api.github.com/repos/')
 
@@ -34,6 +36,10 @@ class Key(str):
 
 
 class Repo(str):
+    @classmethod
+    def detect(cls):
+        return cls(repo.get_project_metadata().project)
+
     @functools.lru_cache
     def get_public_key(self):
         data = get_session().get(f'{self}/actions/secrets/public-key').json()
