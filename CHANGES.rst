@@ -1,3 +1,8 @@
+v7.2.2
+======
+
+* Fix Python 3.6 compatibility.
+
 v7.2.1
 ======
 
