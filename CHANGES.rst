@@ -1,3 +1,8 @@
+v7.3.1
+======
+
+* Actually add the script.
+
 v7.3.0
 ======
 
