@@ -1,3 +1,9 @@
+v7.3.0
+======
+
+* Add ``add-github-secrets`` routine that auto-detects the secrets needed
+  and installs them.
+
 v7.2.2
 ======
 

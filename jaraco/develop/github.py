@@ -2,6 +2,9 @@ import os
 import getpass
 import base64
 import functools
+import re
+import pathlib
+import itertools
 
 import keyring
 import nacl.public
@@ -70,3 +73,20 @@ class Repo(str):
         resp = self.session.post(releases, json=dict(tag_name=tag, name=tag))
         resp.raise_for_status()
         return resp
+
+    @classmethod
+    def find_needed_secrets(cls):
+        """
+        >>> list(Repo.find_needed_secrets())
+        ['PYPI_TOKEN']
+        """
+        workflows = pathlib.Path('.github/workflows').iterdir()
+        all = itertools.chain.from_iterable(map(cls.find_secrets, workflows))
+        return itertools.filterfalse('GITHUB_TOKEN'.__eq__, all)
+
+    @staticmethod
+    def find_secrets(file):
+        return (
+            match.group(1)
+            for match in re.finditer(r'\${{\s*secrets\.(\w+)\s*}}', file.read_text())
+        )
