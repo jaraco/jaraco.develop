@@ -2,7 +2,18 @@ import autocommand
 import keyring
 import getpass
 
+import jaraco.context
+
 from . import github
+
+
+@jaraco.context.suppress(Exception)
+def _safe_getuser():
+    """
+    getuser chokes by design in some environments.
+    """
+    return getpass.getuser()
+
 
 secret_sources = {
     'PYPI_TOKEN': dict(
@@ -10,7 +21,7 @@ secret_sources = {
         service_name='https://upload.pypi.org/legacy/',
     ),
     'TIDELIFT_TOKEN': dict(
-        username=getpass.getuser(),
+        username=_safe_getuser(),
         service_name='https://api.tidelift.com/external-api/',
     ),
 }
