@@ -1,3 +1,8 @@
+v7.3.2
+======
+
+* Replace dependency on munch with jaraco.collections, preventing undeclared dependency.
+
 v7.3.1
 ======
 
