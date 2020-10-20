@@ -2,9 +2,13 @@ import sys
 import subprocess
 import urllib.parse
 
-import munch
+from jaraco.collections import ItemsAsAttributes
 
 from .py36compat import subprocess_run_text
+
+
+class Bunch(dict, ItemsAsAttributes):
+    pass
 
 
 def get_project_metadata():
@@ -14,4 +18,4 @@ def get_project_metadata():
         stdout=subprocess.PIPE,
     ).stdout.split()
     project = urllib.parse.urlparse(url).path.strip('/')
-    return munch.Munch(locals())
+    return Bunch(locals())
