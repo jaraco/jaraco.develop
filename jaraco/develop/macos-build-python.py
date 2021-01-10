@@ -21,7 +21,7 @@ def brew_prefix(name=None):
 
 def require_libs():
     reqs = 'gdbm', 'openssl@1.1', 'xz'
-    cmd = ['brew', 'list']
+    cmd = ['brew', 'list', '--formula']
     installed = subprocess.check_output(cmd, text=True).strip().split()
     assert set(reqs) < set(installed), "Need {missing}".format(
         missing=set(reqs) - set(installed)

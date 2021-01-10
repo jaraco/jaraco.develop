@@ -1,3 +1,8 @@
+v7.3.3
+======
+
+* #1: Use ``brew list --formula`` to avoid Homebrew error.
+
 v7.3.2
 ======
 
