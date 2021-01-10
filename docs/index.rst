@@ -1,5 +1,5 @@
-Welcome to jaraco.develop documentation!
-========================================
+Welcome to |project| documentation!
+===================================
 
 .. toctree::
    :maxdepth: 1
