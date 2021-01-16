@@ -1,3 +1,8 @@
+v7.4.0
+======
+
+* Add script to remove namespace.
+
 v7.3.3
 ======
 
