@@ -15,13 +15,15 @@ def next_version():
 def add_changelog():
     next_ver = next_version()
     underline = '=' * (len(next_ver) + 1)
-    content = textwrap.dedent(f"""
+    content = textwrap.dedent(
+        f"""
         v{next_ver}
         {underline}
 
         Switched to PEP 420 for ``jaraco`` namespace.
 
-        """).lstrip()
+        """
+    ).lstrip()
     changes = pathlib.Path('CHANGES.rst')
     content += changes.read_text()
     changes.write_text(content)
@@ -30,12 +32,15 @@ def add_changelog():
 def run():
     add_changelog()
     pathlib.Path('jaraco/__init__.py').unlink()
-    subprocess.run([
-        'git',
-        'commit',
-        '-a',
-        '-m', 'Switch to PEP 420 namespace package',
-    ])
+    subprocess.run(
+        [
+            'git',
+            'commit',
+            '-a',
+            '-m',
+            'Switch to PEP 420 namespace package',
+        ]
+    )
 
 
 __name__ == '__main__' and run()
