@@ -1,7 +1,12 @@
+v7.6.0
+======
+
+* Prefer ``pep517`` for loading project metadata.
+
 v7.5.0
 ======
 
-Switched to PEP 420 for ``jaraco`` namespace.
+* Switched to PEP 420 for ``jaraco`` namespace.
 
 v7.4.0
 ======

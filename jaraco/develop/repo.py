@@ -1,10 +1,7 @@
-import sys
-import subprocess
 import urllib.parse
 
+import pep517.meta
 from jaraco.collections import ItemsAsAttributes
-
-from .py36compat import subprocess_run_text
 
 
 class Bunch(dict, ItemsAsAttributes):
@@ -12,10 +9,8 @@ class Bunch(dict, ItemsAsAttributes):
 
 
 def get_project_metadata():
-    url, version = subprocess_run_text(
-        [sys.executable, 'setup.py', '--url', '--version'],
-        check=True,
-        stdout=subprocess.PIPE,
-    ).stdout.split()
+    dist = pep517.meta.load('.')
+    url = dist.metadata['Home-page']
+    version = dist.version
     project = urllib.parse.urlparse(url).path.strip('/')
     return Bunch(locals())
