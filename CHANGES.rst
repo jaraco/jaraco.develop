@@ -1,3 +1,8 @@
+v7.7.0
+======
+
+* Added support for installing Wolfram|Alpha API key.
+
 v7.6.0
 ======
 

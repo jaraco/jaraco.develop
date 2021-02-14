@@ -24,6 +24,10 @@ secret_sources = {
         username=_safe_getuser(),
         service_name='https://api.tidelift.com/external-api/',
     ),
+    'WOLFRAMALPHA_API_KEY': dict(
+        username=_safe_getuser(),
+        service_name='https://api.wolframalpha.com/',
+    ),
 }
 
 
