@@ -1,3 +1,8 @@
+v7.8.0
+======
+
+* Enable building of debug Python.
+
 v7.7.0
 ======
 

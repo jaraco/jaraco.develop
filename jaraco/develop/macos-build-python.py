@@ -28,7 +28,7 @@ def require_libs():
 
 
 @autocommand.autocommand(__name__)
-def build_on_macOS():
+def build_on_macOS(debug=False):
     """
     Build cpython in the current directory on a mac with
     zlib and openssl installed.
@@ -41,5 +41,6 @@ def build_on_macOS():
         LDFLAGS=f'-I{brew_prefix()}/lib',
     )
     cmd = ['./configure', f'--with-openssl={brew_prefix("openssl@1.1")}']
+    cmd += ['--with-pydebug'] * debug
     subprocess.run(cmd, env=env)
     subprocess.run('make')
