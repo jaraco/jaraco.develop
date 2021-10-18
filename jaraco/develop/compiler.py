@@ -3,7 +3,7 @@ import contextlib
 import shutil
 import mimetypes
 
-from distutils import ccompiler, sysconfig
+from setuptools._distutils import ccompiler, sysconfig
 from jaraco.ui.editor import EditableFile
 
 
