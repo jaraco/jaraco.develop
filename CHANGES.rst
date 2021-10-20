@@ -1,3 +1,8 @@
+v7.9.0
+======
+
+* Add ``print-meta`` command.
+
 v7.8.0
 ======
 
