@@ -38,7 +38,7 @@ def build_on_macOS(debug=False):
     env = dict(
         os.environ,
         CPPFLAGS=f'-I{brew_prefix()}/include',
-        LDFLAGS=f'-I{brew_prefix()}/lib',
+        LDFLAGS=f'-L{brew_prefix()}/lib',
     )
     cmd = ['./configure', f'--with-openssl={brew_prefix("openssl@1.1")}']
     cmd += ['--with-pydebug'] * debug

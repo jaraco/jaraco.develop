@@ -1,3 +1,8 @@
+v7.9.1
+======
+
+* bpo-46975: Fix error in LDFLAGS building Python on macOS.
+
 v7.9.0
 ======
 
