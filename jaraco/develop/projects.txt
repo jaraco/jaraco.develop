@@ -33,7 +33,7 @@ python/importlib_resources
 jaraco.collections
 pypa/setuptools
 openpack
-xlxcessive
+xlsxcessive
 path
 paradocx
 cssutils
