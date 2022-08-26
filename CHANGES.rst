@@ -1,3 +1,8 @@
+v7.10.0
+======
+
+* Added ``update-projects`` script.
+
 v7.9.1
 ======
 
