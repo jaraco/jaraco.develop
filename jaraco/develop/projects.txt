@@ -44,3 +44,4 @@ pip-run
 inflect
 keyring
 jaraco.logging
+wolframalpha
