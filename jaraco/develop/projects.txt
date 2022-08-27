@@ -43,3 +43,4 @@ configparser
 pip-run
 inflect
 keyring
+jaraco.logging
