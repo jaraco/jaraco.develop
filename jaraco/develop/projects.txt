@@ -88,7 +88,5 @@ keyrings.gauth
 backports.pdb
 googlevoice
 backports.datetime_timestamp
-jaraco.openid
 freedompop
 backports.unittest_mock
-jaraco.institutions
