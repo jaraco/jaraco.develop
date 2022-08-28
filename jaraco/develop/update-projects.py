@@ -1,30 +1,17 @@
 import contextlib
 import subprocess
-import posixpath
-import importlib.resources as res
 
 import path
 import autocommand
 from more_itertools import consume
 
-from . import github
-
-
-def resolve(name):
-    return f'{github.username()}/' * ('/' not in name) + name
-
-
-def checkout(project, target: path.Path = path.Path()):
-    url = f'gh://{resolve(project)}'
-    cmd = ['git', 'clone', '-C', target, url]
-    subprocess.check_call(cmd)
-    return target / posixpath.basename(project)
+from . import git
 
 
 @contextlib.contextmanager
 def temp_checkout(project):
     with path.TempDir() as dir:
-        repo = checkout(project, dir)
+        repo = git.checkout(project, dir)
         with repo:
             yield
 
@@ -42,6 +29,4 @@ def update_project(name):
 
 @autocommand.autocommand(__name__)
 def main():
-    source = res.files('jaraco.develop').joinpath('projects.txt')
-    projects = source.read_text().split()
-    consume(map(update_project, projects))
+    consume(map(update_project, git.projects()))
