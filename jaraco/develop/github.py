@@ -35,7 +35,7 @@ class Repo(str):
     @staticmethod
     def load_token():
         token = os.environ.get("GITHUB_TOKEN") or keyring.get_password(
-            'Github', getpass.getuser()
+            'Github', username(),
         )
         assert token, "Token not available"
         return token
@@ -90,3 +90,7 @@ class Repo(str):
             match.group(1)
             for match in re.finditer(r'\${{\s*secrets\.(\w+)\s*}}', file.read_text())
         )
+
+
+def username():
+    return os.environ.get('GITHUB_USERNAME', getpass.getuser())

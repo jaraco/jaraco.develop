@@ -1,5 +1,3 @@
-import os
-import getpass
 import contextlib
 import subprocess
 import posixpath
@@ -9,13 +7,11 @@ import path
 import autocommand
 from more_itertools import consume
 
-
-def username():
-    return os.environ.get('GITHUB_USERNAME', getpass.getuser())
+from . import github
 
 
 def resolve(name):
-    return f'{username()}/' * ('/' not in name) + name
+    return f'{github.username()}/' * ('/' not in name) + name
 
 
 def checkout(project, target: path.Path = path.Path()):
