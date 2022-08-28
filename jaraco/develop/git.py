@@ -21,3 +21,7 @@ def checkout(project, target: path.Path = path.Path()):
 def projects():
     source = res.files('jaraco.develop').joinpath('projects.txt')
     return source.read_text().split()
+
+
+def exists(project, target):
+    return target.joinpath(posixpath.basename(resolve(project))).isdir()
