@@ -35,7 +35,8 @@ class Repo(str):
     @staticmethod
     def load_token():
         token = os.environ.get("GITHUB_TOKEN") or keyring.get_password(
-            'Github', username(),
+            'Github',
+            username(),
         )
         assert token, "Token not available"
         return token
