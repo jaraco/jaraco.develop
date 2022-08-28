@@ -1,10 +1,10 @@
 v7.11.0
-======
+=======
 
 * Added ``checkout-all`` script.
 
 v7.10.0
-======
+=======
 
 * Added ``update-projects`` script.
 
