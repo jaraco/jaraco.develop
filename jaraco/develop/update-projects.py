@@ -1,5 +1,6 @@
 import contextlib
 import subprocess
+import posixpath
 import importlib.resources as res
 
 import path
@@ -11,21 +12,24 @@ def resolve(name):
     return 'jaraco/' * ('/' not in name) + name
 
 
+def checkout(project, target: path.Path = path.Path()):
+    url = f'gh://{resolve(project)}'
+    cmd = ['git', 'clone', '-C', target, url]
+    subprocess.check_call(cmd)
+    return target / posixpath.basename(project)
+
+
 @contextlib.contextmanager
-def checkout(project):
-    url = f'gh://{project}'
+def temp_checkout(project):
     with path.TempDir() as dir:
-        repo = dir / 'repo'
-        repo.mkdir()
-        subprocess.check_call(['git', 'clone', url, repo])
+        repo = checkout(project, dir)
         with repo:
             yield
 
 
 def update_project(name):
-    resolved = resolve(name)
     print('\nupdating', name)
-    with checkout(resolved):
+    with temp_checkout(name):
         proc = subprocess.Popen(['git', 'pull', 'gh://jaraco/skeleton'])
         code = proc.wait()
         if code:
