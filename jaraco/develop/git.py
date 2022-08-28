@@ -13,7 +13,7 @@ def resolve(name):
 
 def checkout(project, target: path.Path = path.Path()):
     url = f'gh://{resolve(project)}'
-    cmd = ['git', 'clone', '-C', target, url]
+    cmd = ['git', '-C', target, 'clone', url]
     subprocess.check_call(cmd)
     return target / posixpath.basename(project)
 
