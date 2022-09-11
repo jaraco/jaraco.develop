@@ -90,3 +90,8 @@ googlevoice
 backports.datetime_timestamp
 freedompop
 backports.unittest_mock
+jaraco.github.io
+compilers
+jaraco.pghfreethought
+multipy-tox
+skeleton
