@@ -145,11 +145,26 @@ def target_for_root(project, root: path.Path = path.Path()):
     return root / prefix
 
 
+def configure_fork(project, repo):
+    if 'fork' not in project.tags:
+        return
+    cmd = ['gh', 'repo', 'fork', '--remote']
+    subprocess.check_call(cmd, cwd=repo)
+    cmd = ['git', 'config', '--local', 'branch.main.remote', 'upstream']
+    subprocess.check_call(cmd, cwd=repo)
+    cmd = ['git', 'remote', 'get-url', 'origin']
+    origin = subprocess.check_output(cmd, cwd=repo)
+    cmd = ['git', 'remote', 'set-url', '--push', 'upstream', origin]
+    subprocess.check_output(cmd, cwd=repo)
+
+
 def checkout(project, target: path.Path = path.Path()):
     url = resolve(project)
     cmd = ['git', '-C', target, 'clone', url]
     subprocess.check_call(cmd)
-    return target / posixpath.basename(project)
+    repo = target / posixpath.basename(project)
+    configure_fork(project, repo)
+    return repo
 
 
 def projects():

@@ -95,19 +95,19 @@ compilers
 jaraco.pghfreethought
 multipy-tox
 skeleton
-/martinvonz/jj
+/martinvonz/jj [fork]
 /pypa/distutils
 /cherrypy/cherrypy
 /cherrypy/cheroot
-/python/cpython
-/python/bedevere
-/python/devguide
-/xonsh/xonsh
-/jsonpickle/jsonpickle
-/StefanScherer/windows-docker-machine
-/pypa/pep517
+/python/cpython [fork]
+/python/bedevere [fork]
+/python/devguide [fork]
+/xonsh/xonsh [fork]
+/jsonpickle/jsonpickle [fork]
+/StefanScherer/windows-docker-machine [fork]
+/pypa/pep517 [fork]
 /pypa/twine
-/pypa/setuptools_scm
-/pypa/packaging
-/pypa/get-pip
-/pypa/pip
+/pypa/setuptools_scm [fork]
+/pypa/packaging [fork]
+/pypa/get-pip [fork]
+/pypa/pip [fork]
