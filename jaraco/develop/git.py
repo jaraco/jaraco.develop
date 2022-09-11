@@ -86,9 +86,12 @@ class URL(str):
     def resolved(self):
         return URL(self.scheme.resolve(self))
 
+    @property
+    def applied(self):
+        return URL(self.scheme.apply(self))
+
     def join(self, path):
-        joined = urllib.parse.urljoin(self.resolved, path)
-        return URL(self.scheme.apply(joined))
+        return URL(urllib.parse.urljoin(self.resolved, path)).applied
 
     @property
     def path(self):
@@ -96,11 +99,19 @@ class URL(str):
 
 
 def resolve(name):
-    return f'{github.username()}/' * ('/' not in name) + name
+    """
+    >>> projects = list(map(resolve, projects()))
+    >>> 'gh://jaraco/keyrings.firefox' in projects
+    True
+    >>> 'gh://pmxbot/pmxbot.nsfw' in projects
+    True
+    """
+    default = URL(f'https://github.com/{github.username()}/')
+    return default.join(name)
 
 
 def checkout(project, target: path.Path = path.Path()):
-    url = f'gh://{resolve(project)}'
+    url = resolve(project)
     cmd = ['git', '-C', target, 'clone', url]
     subprocess.check_call(cmd)
     return target / posixpath.basename(project)
