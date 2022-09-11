@@ -1,3 +1,4 @@
+import pathlib
 import functools
 import subprocess
 import posixpath
@@ -110,6 +111,15 @@ def resolve(name):
     return default.join(name)
 
 
+def target_for_root(project, root: path.Path = path.Path()):
+    """
+    Append the prefix of the resolved project name to the target
+    and ensure it exists.
+    """
+    _, prefix, *_ = pathlib.PosixPath(resolve(project).path).parts
+    return root / prefix
+
+
 def checkout(project, target: path.Path = path.Path()):
     url = resolve(project)
     cmd = ['git', '-C', target, 'clone', url]
@@ -124,3 +134,11 @@ def projects():
 
 def exists(project, target):
     return target.joinpath(posixpath.basename(resolve(project))).isdir()
+
+
+def checkout_missing(project, root):
+    target = target_for_root(project, root)
+    if exists(project, target):
+        return
+    target.mkdir_p()
+    checkout(project, target)
