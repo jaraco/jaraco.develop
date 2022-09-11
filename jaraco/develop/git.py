@@ -1,3 +1,5 @@
+import re
+import types
 import pathlib
 import functools
 import subprocess
@@ -99,6 +101,29 @@ class URL(str):
         return urllib.parse.urlparse(self.resolved).path
 
 
+class Project(str):
+    """
+    >>> p = Project.parse('foo-project [tag1] [tag2]')
+    >>> p
+    'foo-project'
+    >>> p.tags
+    ['tag1', 'tag2']
+    """
+    pattern = re.compile(r'(?P<name>\S+)\s*(?P<rest>.*)$')
+
+    def __new__(self, value, **kwargs):
+        return super().__new__(self, value)
+
+    def __init__(self, value, **kwargs):
+        vars(self).update(kwargs)
+
+    @classmethod
+    def parse(cls, line):
+        match = types.SimpleNamespace(**cls.pattern.match(line).groupdict())
+        tags = list(re.findall(r'\[(.*?)\]', match.rest))
+        return cls(match.name, tags=tags)
+
+
 def resolve(name):
     """
     >>> projects = list(map(resolve, projects()))
@@ -129,7 +154,7 @@ def checkout(project, target: path.Path = path.Path()):
 
 def projects():
     source = res.files('jaraco.develop').joinpath('projects.txt')
-    return source.read_text().split()
+    return set(map(Project.parse, source.read_text().splitlines()))
 
 
 def exists(project, target):
