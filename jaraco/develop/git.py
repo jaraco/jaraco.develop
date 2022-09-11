@@ -25,14 +25,21 @@ class URLScheme:
     'unknown://foo/bar'
     >>> null_scheme.apply('unknown://foo/bar')
     'unknown://foo/bar'
+
+    >>> scheme = URLScheme.lookup('https://github.com/foo/bar')
+    >>> scheme
+    URLScheme('gh://', 'https://github.com/')
     """
 
     def __init__(self, prefix, value):
         vars(self).update(locals())
         del self.self
 
+    def __repr__(self):
+        return f'{self.__class__.__name__}({self.prefix!r}, {self.value!r})'
+
     def matches(self, url):
-        return url.startswith(self.prefix)
+        return url.startswith(self.prefix) or url.startswith(self.value)
 
     @classmethod
     def parse(cls, line):
