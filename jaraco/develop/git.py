@@ -109,6 +109,7 @@ class Project(str):
     >>> p.tags
     ['tag1', 'tag2']
     """
+
     pattern = re.compile(r'(?P<name>\S+)\s*(?P<rest>.*)$')
 
     def __new__(self, value, **kwargs):
