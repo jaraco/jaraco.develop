@@ -1,3 +1,9 @@
+v7.12.0
+=======
+
+* "checkout all" script now checks out more projects and lays them
+  out according to organization.
+
 v7.11.0
 =======
 
