@@ -111,3 +111,4 @@ skeleton
 /pypa/packaging [fork]
 /pypa/get-pip [fork]
 /pypa/pip [fork]
+moneydance
