@@ -1,3 +1,9 @@
+v7.13.1
+=======
+
+* Declare requirement on Python 3.9.
+* Fixed test failures in CI.
+
 v7.13.0
 =======
 
@@ -8,6 +14,7 @@ v7.12.0
 
 * "checkout all" script now checks out more projects and lays them
   out according to organization.
+* Require Python 3.9 or later.
 
 v7.11.0
 =======
