@@ -1,3 +1,8 @@
+v7.13.0
+=======
+
+* Added performance optimizations on ``update-projects``.
+
 v7.12.0
 =======
 
