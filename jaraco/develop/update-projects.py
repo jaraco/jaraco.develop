@@ -12,7 +12,7 @@ from . import git
 @contextlib.contextmanager
 def temp_checkout(project):
     with path.TempDir() as dir:
-        repo = git.checkout(project, dir, depth=1)
+        repo = git.checkout(project, dir, depth=50)
         with repo:
             yield
 
@@ -24,6 +24,8 @@ def is_skeleton():
 
 def update_project(name):
     if name == 'skeleton':
+        return
+    if 'fork' in name.tags:
         return
     print('\nupdating', name)
     with temp_checkout(name):
