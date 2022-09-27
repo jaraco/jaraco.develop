@@ -19,7 +19,7 @@ def temp_checkout(project):
 
 @jaraco.context.suppress(FileNotFoundError)
 def is_skeleton():
-    return 'badge/skeleton' in path.Path('README.txt').read_text()
+    return 'badge/skeleton' in path.Path('README.rst').read_text()
 
 
 def update_project(name):
