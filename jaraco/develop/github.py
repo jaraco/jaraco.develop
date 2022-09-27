@@ -94,4 +94,4 @@ class Repo(str):
 
 
 def username():
-    return os.environ.get('GITHUB_USERNAME', getpass.getuser())
+    return os.environ.get('GITHUB_USERNAME') or getpass.getuser()
