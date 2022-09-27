@@ -12,7 +12,7 @@ from . import git
 @contextlib.contextmanager
 def temp_checkout(project):
     with path.TempDir() as dir:
-        repo = git.checkout(project, dir)
+        repo = git.checkout(project, dir, depth=1)
         with repo:
             yield
 

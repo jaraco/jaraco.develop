@@ -8,6 +8,7 @@ import urllib.parse
 import importlib.resources as res
 
 import path
+from more_itertools import flatten
 
 from . import github
 
@@ -159,9 +160,10 @@ def configure_fork(project, repo):
     subprocess.check_output(cmd, cwd=repo)
 
 
-def checkout(project, target: path.Path = path.Path()):
+def checkout(project, target: path.Path = path.Path(), **kwargs):
+    args = list(flatten((f'--{name}', str(value)) for name, value in kwargs.items()))
     url = resolve(project)
-    cmd = ['git', '-C', target, 'clone', url]
+    cmd = ['git', '-C', target, 'clone', url] + args
     subprocess.check_call(cmd)
     repo = target / posixpath.basename(project)
     configure_fork(project, repo)
