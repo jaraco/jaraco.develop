@@ -31,7 +31,7 @@ def update_project(name):
     with temp_checkout(name):
         if not is_skeleton():
             return
-        proc = subprocess.Popen(['git', 'pull', 'gh://jaraco/skeleton'])
+        proc = subprocess.Popen(['git', 'pull', 'gh://jaraco/skeleton', '--no-edit'])
         code = proc.wait()
         if code:
             subprocess.check_call(['git', 'mergetool'])

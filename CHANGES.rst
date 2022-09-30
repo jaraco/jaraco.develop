@@ -1,3 +1,8 @@
+v7.14.0
+=======
+
+* ``update-projects`` no longer prompts to edit the commit message.
+
 v7.13.1
 =======
 
