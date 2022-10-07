@@ -155,7 +155,7 @@ def configure_fork(project, repo):
     cmd = ['git', 'config', '--local', 'branch.main.remote', 'upstream']
     subprocess.check_call(cmd, cwd=repo)
     cmd = ['git', 'remote', 'get-url', 'origin']
-    origin = subprocess.check_output(cmd, cwd=repo)
+    origin = subprocess.check_output(cmd, cwd=repo).strip()
     cmd = ['git', 'remote', 'set-url', '--push', 'upstream', origin]
     subprocess.check_output(cmd, cwd=repo)
 
