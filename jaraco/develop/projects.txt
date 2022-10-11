@@ -114,3 +114,4 @@ skeleton
 moneydance
 /MestreLion/git-tools
 /pypa/build [fork]
+/MisterWil/abodepy [fork]
