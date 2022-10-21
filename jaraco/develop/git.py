@@ -1,12 +1,13 @@
-import re
-import types
-import pathlib
 import functools
-import subprocess
+import os
+import pathlib
 import posixpath
+import re
+import subprocess
+import types
 import urllib.parse
-import importlib.resources as res
 
+import requests
 import path
 from more_itertools import flatten
 
@@ -171,8 +172,11 @@ def checkout(project, target: path.Path = path.Path(), **kwargs):
 
 
 def projects():
-    source = res.files('jaraco.develop').joinpath('projects.txt')
-    return set(map(Project.parse, source.read_text().splitlines()))
+    """
+    Load projects from PROJECTS_LIST_URL.
+    """
+    text = requests.get(os.environ['PROJECTS_LIST_URL']).text
+    return set(map(Project.parse, text.splitlines()))
 
 
 def exists(project, target):

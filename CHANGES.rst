@@ -1,3 +1,9 @@
+v7.15.0
+=======
+
+* Projects are now loaded from ``PROJECTS_LIST_URL`` instead of
+  from am embedded text file.
+
 v7.14.0
 =======
 
