@@ -34,7 +34,7 @@ def update_project(name):
         proc = subprocess.Popen(['git', 'pull', 'gh://jaraco/skeleton', '--no-edit'])
         code = proc.wait()
         if code:
-            subprocess.check_call(['git', 'mergetool'])
+            subprocess.check_call(['git', 'mergetool', '-t', 'known-merge'])
             subprocess.check_call(['git', 'commit', '--no-edit'])
         subprocess.check_call(['git', 'push'])
 
