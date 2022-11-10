@@ -1,3 +1,8 @@
+v7.16.0
+=======
+
+* Added 'merge' tool toward automatically resolving skeleton changes.
+
 v7.15.0
 =======
 
