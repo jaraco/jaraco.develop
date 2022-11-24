@@ -1,3 +1,8 @@
+v7.16.1
+=======
+
+* Actually add the merge module, missed in prior release.
+
 v7.16.0
 =======
 
