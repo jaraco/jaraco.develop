@@ -1,5 +1,7 @@
 import re
 import textwrap
+import contextlib
+import itertools
 from pathlib import Path
 
 import autocommand
@@ -43,14 +45,16 @@ class Conflict:
     end
     """
 
-    def __init__(self, match):
+    def __init__(self, match, path):
         self.match = match
+        self.path = path
 
     def __getattr__(self, name):
         return self.match.groupdict()[name]
 
     @classmethod
-    def find(cls, text):
+    def find(cls, path):
+        text = path.read_text()
         matches = re.finditer(
             r'^(?P<left_desc><<<<<<<.*?\n)'
             r'(?P<left>(.|\n)*?)'
@@ -60,23 +64,35 @@ class Conflict:
             text,
             re.MULTILINE,
         )
-        return map(cls, matches)
+        return map(cls, matches, itertools.repeat(path))
 
     def replace(self, repl, orig):
         return orig.replace(self.match.group(0), repl)
 
 
-def resolve(conflict):
-    if 'skeleton' not in conflict.right:
-        raise ValueError("Unable to resolve")
+def resolve_skeleton(conflict):
+    assert 'skeleton' in conflict.right
     name = re.search('name = (.*)', Path('setup.cfg').read_text()).group(1)
     return conflict.right.replace('skeleton', name)
 
 
+def resolve_shebang(conflict):
+    assert conflict.left.startswith('#!')
+    assert conflict.left.count('\n') < 5
+    return conflict.right
+
+
+def resolve(conflict):
+    for resolver in (resolve_skeleton, resolve_shebang):
+        with contextlib.suppress(Exception):
+            return resolver(conflict)
+    raise ValueError("Unable to resolve")
+
+
 @autocommand.autocommand(__name__)
 def merge(base: Path, local: Path, remote: Path, merge: Path):
-    orig = merge.read_text()
-    conflicts = Conflict.find(orig)
+    conflicts = Conflict.find(merge)
+    res = merge.read_text()
     for conflict in conflicts:
-        orig = conflict.replace(resolve(conflict), orig)
-    merge.write_text(orig)
+        res = conflict.replace(resolve(conflict), res)
+    merge.write_text(res)
