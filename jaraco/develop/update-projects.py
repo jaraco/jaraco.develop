@@ -42,6 +42,11 @@ def update_project(name):
         subprocess.check_call(['git', 'push'])
 
 
+class KeywordFilter(str):
+    def __call__(self, other):
+        return self in other
+
+
 @autocommand.autocommand(__name__)
-def main():
-    consume(map(update_project, git.projects()))
+def main(keyword: KeywordFilter = None):
+    consume(map(update_project, filter(keyword, git.projects())))
