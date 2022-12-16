@@ -1,3 +1,9 @@
+v7.17.0
+=======
+
+* ``update-projects`` now accepts keyword arguments.
+* Added another conflict resolver to ``merge`` module.
+
 v7.16.1
 =======
 
