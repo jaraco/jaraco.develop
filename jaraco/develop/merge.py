@@ -45,16 +45,19 @@ class Conflict:
     end
     """
 
-    def __init__(self, match, path):
+    def __init__(self, match, **kw):
         self.match = match
-        self.path = path
+        vars(self).update(kw)
 
     def __getattr__(self, name):
         return self.match.groupdict()[name]
 
     @classmethod
-    def find(cls, path):
-        text = path.read_text()
+    def read(cls, path):
+        return cls.find(path.read_text(), path=path)
+
+    @classmethod
+    def find(cls, text, **kw):
         matches = re.finditer(
             r'^(?P<left_desc><<<<<<<.*?\n)'
             r'(?P<left>(.|\n)*?)'
@@ -64,7 +67,7 @@ class Conflict:
             text,
             re.MULTILINE,
         )
-        return map(cls, matches, itertools.repeat(path))
+        return (cls(match, **kw) for match in matches)
 
     def replace(self, repl, orig):
         return orig.replace(self.match.group(0), repl)
@@ -91,7 +94,7 @@ def resolve(conflict):
 
 @autocommand.autocommand(__name__)
 def merge(base: Path, local: Path, remote: Path, merge: Path):
-    conflicts = Conflict.find(merge)
+    conflicts = Conflict.read(merge)
     res = merge.read_text()
     for conflict in conflicts:
         res = conflict.replace(resolve(conflict), res)
