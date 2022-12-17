@@ -1,7 +1,6 @@
 import re
 import textwrap
 import contextlib
-import itertools
 from pathlib import Path
 
 import autocommand
