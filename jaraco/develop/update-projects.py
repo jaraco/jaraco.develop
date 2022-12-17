@@ -48,5 +48,5 @@ class KeywordFilter(str):
 
 
 @autocommand.autocommand(__name__)
-def main(keyword: KeywordFilter = None):
+def main(keyword: KeywordFilter = None):  # type: ignore
     consume(map(update_project, filter(keyword, git.projects())))
