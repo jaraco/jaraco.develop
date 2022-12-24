@@ -23,9 +23,7 @@ def is_skeleton():
 
 
 def update_project(name):
-    if name == 'skeleton':
-        return
-    if 'fork' in name.tags:
+    if set(name.tags) & {'fork', 'base'}:
         return
     print('\nupdating', name)
     with temp_checkout(name):
