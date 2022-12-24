@@ -1,3 +1,10 @@
+v7.18.0
+=======
+
+* ``update-projects`` now accepts a ``tag`` argument.
+* ``update-projects`` now allows overriding the base from
+  which to update.
+
 v7.17.0
 =======
 
