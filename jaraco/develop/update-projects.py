@@ -45,6 +45,11 @@ class KeywordFilter(str):
         return self in other
 
 
+class TagFilter(str):
+    def __call__(self, other):
+        return self in other.tags
+
+
 @autocommand.autocommand(__name__)
-def main(keyword: KeywordFilter = None):  # type: ignore
-    consume(map(update_project, filter(keyword, git.projects())))
+def main(keyword: KeywordFilter = None, tag: TagFilter = None):  # type: ignore
+    consume(map(update_project, filter(tag, filter(keyword, git.projects()))))
