@@ -1,5 +1,6 @@
 import contextlib
 import subprocess
+import functools
 
 import path
 import autocommand
@@ -22,14 +23,14 @@ def is_skeleton():
     return 'badge/skeleton' in path.Path('README.rst').read_text()
 
 
-def update_project(name):
+def update_project(name, base):
     if set(name.tags) & {'fork', 'base'}:
         return
     print('\nupdating', name)
     with temp_checkout(name):
         if not is_skeleton():
             return
-        proc = subprocess.Popen(['git', 'pull', 'gh://jaraco/skeleton', '--no-edit'])
+        proc = subprocess.Popen(['git', 'pull', base, '--no-edit'])
         code = proc.wait()
         if code:
             try:
@@ -51,5 +52,10 @@ class TagFilter(str):
 
 
 @autocommand.autocommand(__name__)
-def main(keyword: KeywordFilter = None, tag: TagFilter = None):  # type: ignore
-    consume(map(update_project, filter(tag, filter(keyword, git.projects()))))
+def main(
+    keyword: KeywordFilter = None,  # type: ignore
+    tag: TagFilter = None,  # type: ignore
+    base='gh://jaraco/skeleton',
+):
+    update = functools.partial(update_project, base=base)
+    consume(map(update, filter(tag, filter(keyword, git.projects()))))
