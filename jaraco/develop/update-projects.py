@@ -1,3 +1,14 @@
+"""
+Mechanized merging of an upstream repo across all projects.
+
+Relies on 'known-merge' tool, which must be configured with
+git thus:
+
+[mergetool "known-merge"]
+cmd = py -m jaraco.develop.merge "$BASE" "$LOCAL" "$REMOTE" "$MERGED"
+trustExitCode = true
+"""
+
 import contextlib
 import subprocess
 import functools
