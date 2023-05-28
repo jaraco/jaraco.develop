@@ -1,3 +1,10 @@
+v7.19.0
+=======
+
+* Replaced the "skeleton" merge resolver with a "project"
+  merge resolver, based on the changes planned for
+  jaraco/skeleton#70.
+
 v7.18.0
 =======
 

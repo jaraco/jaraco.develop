@@ -72,10 +72,16 @@ class Conflict:
         return orig.replace(self.match.group(0), repl)
 
 
-def resolve_skeleton(conflict):
-    assert 'skeleton' in conflict.right
-    name = re.search('name = (.*)', Path('setup.cfg').read_text()).group(1)
-    return conflict.right.replace('skeleton', name)
+def resolve_project(conflict):
+    """
+    If the text "PROJECT" appears in the conflict on the right,
+    assume the whole conflict is about downstream customization
+    and prefer the downstream (left).
+
+    See jaraco/skeleton#70 for more context.
+    """
+    assert 'PROJECT' in conflict.right
+    return conflict.left
 
 
 def resolve_shebang(conflict):
@@ -85,7 +91,7 @@ def resolve_shebang(conflict):
 
 
 def resolve(conflict):
-    for resolver in (resolve_skeleton, resolve_shebang):
+    for resolver in (resolve_project, resolve_shebang):
         with contextlib.suppress(Exception):
             return resolver(conflict)
     raise ValueError("Unable to resolve")
