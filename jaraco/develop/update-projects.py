@@ -12,6 +12,7 @@ trustExitCode = true
 import contextlib
 import subprocess
 import functools
+import shutil
 
 import path
 import autocommand
@@ -34,6 +35,15 @@ def is_skeleton():
     return 'badge/skeleton' in path.Path('README.rst').read_text()
 
 
+def handle_rename(old_name, new_name):
+    status = subprocess.check_output(['git', 'status', '--porcelain'], text=True)
+    if f'UD {old_name}' not in status:
+        return
+    shutil.copyfile(old_name, new_name)
+    subprocess.check_call(['git', 'rm', old_name])
+    subprocess.check_call(['git', 'add', new_name])
+
+
 def update_project(name, base):
     if set(name.tags) & {'fork', 'base'}:
         return
@@ -44,6 +54,7 @@ def update_project(name, base):
         proc = subprocess.Popen(['git', 'pull', base, '--no-edit'])
         code = proc.wait()
         if code:
+            handle_rename('CHANGES.rst', 'NEWS.rst')
             try:
                 subprocess.check_call(['git', 'mergetool', '-t', 'known-merge'])
             except subprocess.CalledProcessError:
