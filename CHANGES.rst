@@ -1,3 +1,10 @@
+v7.20.0
+=======
+
+* Added ``towncrier`` module for invoking towncrier with
+  a version calculated based on towncrier news fragments
+  in service of jaraco/skeleton#83.
+
 v7.19.0
 =======
 

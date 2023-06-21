@@ -1,8 +1,11 @@
 import collections
 import pathlib
+import subprocess
+import sys
 
-
+import autocommand
 from jaraco.vcs import repo
+from jaraco.versioning import semver
 
 
 _release_bumps = collections.defaultdict(
@@ -44,3 +47,16 @@ def get_version():
     '...'
     """
     return repo().get_next_version(release_kind())
+
+
+@autocommand.autocommand(__name__)
+def run(command, *args):
+    cmd = (
+        sys.executable,
+        '-m',
+        'towncrier',
+        command,
+        '--version',
+        semver(get_version()),
+    ) + args
+    subprocess.check_call(cmd)
