@@ -1,3 +1,9 @@
+v7.21.0
+=======
+
+* Added ``towncrier.check_changes`` from ``setuptools``'
+  ``finalize``.
+
 v7.20.0
 =======
 

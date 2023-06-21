@@ -29,16 +29,34 @@ def _release_bump(file):
     return _release_bumps[type_]
 
 
+def news_fragments():
+    except_ = 'README.rst', '.gitignore'
+    path = pathlib.Path('newsfragments')
+    names = (file for file in path.iterdir() if file.name not in except_)
+    return names if path.exists() else ()
+
+
 def release_kind():
     """
     Determine which release to make based on the files in the
     changelog.
     """
-    path = pathlib.Path('newsfragments')
-    fragments = path.iterdir() if path.exists() else ()
-    bumps = map(_release_bump, fragments)
+    bumps = map(_release_bump, news_fragments())
     # use min here as 'major' < 'minor' < 'patch'
     return min(bumps, default='patch')
+
+
+def check_changes():
+    """
+    Verify that all of the news fragments have the appropriate names.
+    """
+    unrecognized = [
+        str(file)
+        for file in news_fragments()
+        if not any(f".{key}" in file.suffixes for key in _release_bumps)
+    ]
+    if unrecognized:
+        raise ValueError(f"Some news fragments have invalid names: {unrecognized}")
 
 
 def get_version():
