@@ -1,3 +1,8 @@
+v7.22.0
+=======
+
+* Added ``rst-header-replace`` script.
+
 v7.21.0
 =======
 
