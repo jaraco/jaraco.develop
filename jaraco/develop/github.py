@@ -89,7 +89,9 @@ class Repo(str):
     def find_secrets(file):
         return (
             match.group(1)
-            for match in re.finditer(r'\${{\s*secrets\.(\w+)\s*}}', file.read_text())
+            for match in re.finditer(
+                r'\${{\s*secrets\.(\w+)\s*}}', file.read_text(encoding='utf-8')
+            )
         )
 
 
