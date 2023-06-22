@@ -1,3 +1,8 @@
+v7.22.1
+=======
+
+* Fixed bug in argument handling of ``towncrier``.
+
 v7.22.0
 =======
 

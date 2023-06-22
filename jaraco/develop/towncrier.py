@@ -3,7 +3,6 @@ import pathlib
 import subprocess
 import sys
 
-import autocommand
 from jaraco.vcs import repo
 from jaraco.versioning import semver
 
@@ -67,7 +66,6 @@ def get_version():
     return repo().get_next_version(release_kind())
 
 
-@autocommand.autocommand(__name__)
 def run(command, *args):
     cmd = (
         sys.executable,
@@ -78,3 +76,7 @@ def run(command, *args):
         semver(get_version()),
     ) + args
     subprocess.check_call(cmd)
+
+
+if __name__ == '__main__':
+    run(*sys.argv[1:])
