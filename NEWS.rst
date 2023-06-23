@@ -1,3 +1,13 @@
+v7.23.0
+=======
+
+Features
+--------
+
+- Add ``finalize`` command.
+- Require Python 3.8 or later.
+
+
 v7.22.1
 =======
 
