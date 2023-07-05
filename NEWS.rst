@@ -1,3 +1,12 @@
+v7.24.0
+=======
+
+Features
+--------
+
+- Add optional branch parameter to update-projects.
+
+
 v7.23.0
 =======
 
