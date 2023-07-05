@@ -44,14 +44,15 @@ def handle_rename(old_name, new_name):
     subprocess.check_call(['git', 'add', new_name])
 
 
-def update_project(name, base):
+def update_project(name, base, branch=None):
     if set(name.tags) & {'fork', 'base'}:
         return
     print('\nupdating', name)
     with temp_checkout(name):
         if not is_skeleton():
             return
-        proc = subprocess.Popen(['git', 'pull', base, '--no-edit'])
+        cmd = ['git', 'pull', base, branch, '--no-edit']
+        proc = subprocess.Popen(list(filter(None, cmd)))
         code = proc.wait()
         if code:
             handle_rename('CHANGES.rst', 'NEWS.rst')
@@ -78,6 +79,7 @@ def main(
     keyword: KeywordFilter = None,  # type: ignore
     tag: TagFilter = None,  # type: ignore
     base='gh://jaraco/skeleton',
+    branch=None,
 ):
-    update = functools.partial(update_project, base=base)
+    update = functools.partial(update_project, base=base, branch=branch)
     consume(map(update, filter(tag, filter(keyword, git.projects()))))
