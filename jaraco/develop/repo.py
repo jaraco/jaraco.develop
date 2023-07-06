@@ -1,6 +1,6 @@
 import urllib.parse
 
-import pep517.meta
+from build.util import project_wheel_metadata as load_metadata
 from jaraco.collections import ItemsAsAttributes
 
 
@@ -9,8 +9,8 @@ class Bunch(dict, ItemsAsAttributes):
 
 
 def get_project_metadata():
-    dist = pep517.meta.load('.')
-    url = dist.metadata['Home-page']
-    version = dist.version
+    _md = load_metadata('.')
+    url = _md['Home-page']
+    version = _md['Version']
     project = urllib.parse.urlparse(url).path.strip('/')
     return Bunch(locals())

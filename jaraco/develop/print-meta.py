@@ -1,9 +1,8 @@
 import autocommand
-from pep517 import meta
+from build.util import project_wheel_metadata
 
 
 @autocommand.autocommand(__name__)
 def main(path='.', field='Requires-Dist'):
-    md = meta.load(path).metadata
-    for spec in md.get_all(field):
+    for spec in project_wheel_metadata(path).get_all(field):
         print(spec)
