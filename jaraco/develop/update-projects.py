@@ -13,6 +13,7 @@ import contextlib
 import subprocess
 import functools
 import shutil
+import itertools
 
 import path
 import autocommand
@@ -82,4 +83,7 @@ def main(
     branch=None,
 ):
     update = functools.partial(update_project, base=base, branch=branch)
-    consume(map(update, filter(tag, filter(keyword, git.projects()))))
+    counter = itertools.count()
+    updates = map(update, filter(tag, filter(keyword, git.projects())))
+    consume(zip(counter, updates))
+    print(f"Updated {next(counter)} projects.")
