@@ -1,3 +1,12 @@
+v8.0.0
+======
+
+Deprecations and Removals
+-------------------------
+
+- Replace ``pep517`` with ``build``. ``repo.get_project_metadata`` no longer includes the ``dist``.
+
+
 v7.25.0
 =======
 
