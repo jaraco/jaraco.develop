@@ -1,3 +1,12 @@
+v7.25.0
+=======
+
+Features
+--------
+
+- Added counter to update-projects.
+
+
 v7.24.0
 =======
 

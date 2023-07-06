@@ -1,1 +1,0 @@
-Added counter to update-projects.
