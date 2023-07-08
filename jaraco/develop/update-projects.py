@@ -13,11 +13,9 @@ import contextlib
 import subprocess
 import functools
 import shutil
-import itertools
 
 import path
 import autocommand
-from more_itertools import consume
 import subprocess_tee
 
 from . import git
@@ -57,6 +55,7 @@ def update_project(name, base, branch=None):
                 subprocess.check_call(['git', 'mergetool'])
             subprocess.check_call(['git', 'commit', '--no-edit'])
         subprocess.check_call(['git', 'push'])
+        return subprocess.check_output('git rev-parse --short HEAD'.split()).strip()
 
 
 class KeywordFilter(str):
@@ -77,7 +76,6 @@ def main(
     branch=None,
 ):
     update = functools.partial(update_project, base=base, branch=branch)
-    counter = itertools.count()
     updates = map(update, filter(tag, filter(keyword, git.projects())))
-    consume(zip(counter, updates))
-    print(f"Updated {next(counter)} projects.")
+    total = list(filter(None, updates))
+    print(f"Updated {total} projects.")
