@@ -1,3 +1,12 @@
+v8.1.0
+======
+
+Features
+--------
+
+- Improved handling of unrelated histories and correctly reporting projects updated in update-projects.
+
+
 v8.0.0
 ======
 
