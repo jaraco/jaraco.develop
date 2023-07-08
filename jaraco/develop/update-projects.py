@@ -55,7 +55,7 @@ def update_project(name, base, branch=None):
                 subprocess.check_call(['git', 'mergetool'])
             subprocess.check_call(['git', 'commit', '--no-edit'])
         subprocess.check_call(['git', 'push'])
-        return subprocess.check_output('git rev-parse --short HEAD'.split()).strip()
+        return name
 
 
 class KeywordFilter(str):
@@ -77,5 +77,5 @@ def main(
 ):
     update = functools.partial(update_project, base=base, branch=branch)
     updates = map(update, filter(tag, filter(keyword, git.projects())))
-    total = list(filter(None, updates))
+    total = len(list(filter(None, updates)))
     print(f"Updated {total} projects.")

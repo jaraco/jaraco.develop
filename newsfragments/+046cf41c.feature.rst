@@ -1,0 +1,1 @@
+Improved handling of unrelated histories and correctly reporting projects updated in update-projects.
