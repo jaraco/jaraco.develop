@@ -17,8 +17,8 @@ import itertools
 
 import path
 import autocommand
-import jaraco.context
 from more_itertools import consume
+import subprocess_tee
 
 from . import git
 
@@ -29,11 +29,6 @@ def temp_checkout(project):
         repo = git.checkout(project, dir, depth=50)
         with repo:
             yield
-
-
-@jaraco.context.suppress(FileNotFoundError)
-def is_skeleton():
-    return 'badge/skeleton' in path.Path('README.rst').read_text()
 
 
 def handle_rename(old_name, new_name):
@@ -50,12 +45,11 @@ def update_project(name, base, branch=None):
         return
     print('\nupdating', name)
     with temp_checkout(name):
-        if not is_skeleton():
-            return
         cmd = ['git', 'pull', base, branch, '--no-edit']
-        proc = subprocess.Popen(list(filter(None, cmd)))
-        code = proc.wait()
-        if code:
+        proc = subprocess_tee.run(list(filter(None, cmd)))
+        if proc.returncode:
+            if 'unrelated histories' in proc.stderr:
+                return
             handle_rename('CHANGES.rst', 'NEWS.rst')
             try:
                 subprocess.check_call(['git', 'mergetool', '-t', 'known-merge'])
