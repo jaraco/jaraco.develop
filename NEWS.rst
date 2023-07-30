@@ -1,3 +1,12 @@
+v8.2.0
+======
+
+Features
+--------
+
+- During finalize, create the newsfragments directory if it doesn't exist.
+
+
 v8.1.0
 ======
 
