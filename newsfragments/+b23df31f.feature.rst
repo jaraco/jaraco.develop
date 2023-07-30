@@ -1,0 +1,1 @@
+During finalize, create the newsfragments directory if it doesn't exist.
