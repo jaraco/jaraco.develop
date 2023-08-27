@@ -1,1 +1,0 @@
-Adding script for syncing a backport (configparser, singledispatch) to a CPython branch.

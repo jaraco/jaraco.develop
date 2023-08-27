@@ -1,3 +1,12 @@
+v8.3.0
+======
+
+Features
+--------
+
+- Adding script for syncing a backport (configparser, singledispatch) to a CPython branch.
+
+
 v8.2.0
 ======
 
