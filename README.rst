@@ -20,3 +20,11 @@
 
 .. image:: https://img.shields.io/badge/skeleton-2023-informational
    :target: https://blog.jaraco.com/skeleton
+
+This package includes a collection of libraries and scripts used by `jaraco <https://www.jaraco.com>`_ and many of the `projects maintained by jaraco <https://pypi.org/user/jaraco>`_.
+
+It includes facilities for managing scores of repositories with SCM tools like Git, working with Read the Docs, determining release versions from pertinent changes, synchronizing related histories, automatically resolving known merge conflicts, and more.
+
+Many of the modules in this package are executable using ``runpy`` (e.g. ``python -m jaraco.develop.macos-build-python``).
+
+Although this package is built on assumptions about jaraco's workflow, these routines are provided here for shared use across those projects, transparency of operations, and for potential re-use. Contributions and feedback are welcome.
