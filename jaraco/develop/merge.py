@@ -1,3 +1,7 @@
+"""
+Facilities for parsing and resolving common merge conflicts.
+"""
+
 import re
 import textwrap
 import contextlib
