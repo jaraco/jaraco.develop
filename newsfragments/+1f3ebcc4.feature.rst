@@ -1,0 +1,1 @@
+Add 'projects-run' script for running a command across all of the projects.

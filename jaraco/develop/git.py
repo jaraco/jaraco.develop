@@ -1,3 +1,4 @@
+import contextlib
 import functools
 import os
 import pathlib
@@ -161,10 +162,24 @@ def configure_fork(project, repo):
     subprocess.check_output(cmd, cwd=repo)
 
 
+def make_args(**kwargs):
+    """
+    Create a list of args to git out of kwargs.
+
+    >>> make_args(depth=50, quiet=True)
+    ['--depth', '50', '--quiet']
+    """
+    return list(
+        flatten(
+            (f'--{name}',) + (str(value),) * (value is not True)
+            for name, value in kwargs.items()
+        )
+    )
+
+
 def checkout(project, target: path.Path = path.Path(), **kwargs):
-    args = list(flatten((f'--{name}', str(value)) for name, value in kwargs.items()))
     url = resolve(project)
-    cmd = ['git', '-C', target, 'clone', url] + args
+    cmd = ['git', '-C', target, 'clone', url] + make_args(**kwargs)
     subprocess.check_call(cmd)
     repo = target / posixpath.basename(project)
     configure_fork(project, repo)
@@ -189,3 +204,11 @@ def checkout_missing(project, root):
         return
     target.mkdir_p()
     checkout(project, target)
+
+
+@contextlib.contextmanager
+def temp_checkout(project, **kwargs):
+    with path.TempDir() as dir:
+        repo = checkout(project, dir, depth=50, **kwargs)
+        with repo:
+            yield
