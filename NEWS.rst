@@ -1,3 +1,12 @@
+v8.4.0
+======
+
+Features
+--------
+
+- Add 'projects-run' script for running a command across all of the projects.
+
+
 v8.3.0
 ======
 
