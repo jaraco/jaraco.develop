@@ -29,7 +29,7 @@ def handle_rename(old_name, new_name):
     subprocess.check_call(['git', 'add', new_name])
 
 
-def update_project(name, base, branch=None):
+def update_project(name, base, branch=None, dry_run=False):
     if set(name.tags) & {'fork', 'base'}:
         return
     print('\nupdating', name)
@@ -45,7 +45,7 @@ def update_project(name, base, branch=None):
             except subprocess.CalledProcessError:
                 subprocess.check_call(['git', 'mergetool'])
             subprocess.check_call(['git', 'commit', '--no-edit'])
-        subprocess.check_call(['git', 'push'])
+        dry_run or subprocess.check_call(['git', 'push'])
         return name
 
 
@@ -55,8 +55,11 @@ def main(
     tag: filters.Tag = None,  # type: ignore
     base='gh://jaraco/skeleton',
     branch=None,
+    dry_run=False,
 ):
-    update = functools.partial(update_project, base=base, branch=branch)
+    update = functools.partial(
+        update_project, base=base, branch=branch, dry_run=dry_run
+    )
     updates = map(update, filter(tag, filter(keyword, git.projects())))
     total = len(list(filter(None, updates)))
     print(f"Updated {total} projects.")
