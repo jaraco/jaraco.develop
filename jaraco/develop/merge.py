@@ -76,16 +76,18 @@ class Conflict:
         return orig.replace(self.match.group(0), repl)
 
 
-def resolve_project(conflict):
+def resolve_placeholders(conflict):
     """
     If the text "PROJECT" appears in the conflict on the right,
-    assume the whole conflict is about downstream customization
-    and prefer the downstream (left).
+    prefer upstream (right) but re-substitute the placeholders.
 
-    See jaraco/skeleton#70 for more context.
+    See jaraco/skeleton#70 and jaraco/jaraco.develop#5 for
+    more context.
     """
     assert 'PROJECT' in conflict.right
-    return conflict.left
+    from . import repo
+
+    return repo.sub_placeholders(conflict.right)
 
 
 def resolve_shebang(conflict):
@@ -95,7 +97,7 @@ def resolve_shebang(conflict):
 
 
 def resolve(conflict):
-    for resolver in (resolve_project, resolve_shebang):
+    for resolver in (resolve_placeholders, resolve_shebang):
         with contextlib.suppress(Exception):
             return resolver(conflict)
     raise ValueError("Unable to resolve")

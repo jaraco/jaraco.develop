@@ -1,0 +1,1 @@
+Update merge resolver to re-substitute placeholders to honor upstream changes.
