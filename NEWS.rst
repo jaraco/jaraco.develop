@@ -1,3 +1,12 @@
+v8.5.0
+======
+
+Features
+--------
+
+- Update merge resolver to re-substitute placeholders to honor upstream changes.
+
+
 v8.4.0
 ======
 
