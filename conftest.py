@@ -27,3 +27,14 @@ def published_projects(monkeypatch):
         'PROJECTS_LIST_URL',
         'https://www.dropbox.com/s/g16c8w9i7lg9dqn/projects.txt?dl=1',
     )
+
+
+@pytest.fixture(autouse=True)
+def workaround_pypy_4021(monkeypatch):
+    import importlib
+    import platform
+
+    if platform.python_implementation() != 'PyPy':
+        return
+    ssl = importlib.import_module('_cffi_ssl._stdssl')
+    monkeypatch.setattr(ssl, 'print', lambda *args: None, raising=False)
