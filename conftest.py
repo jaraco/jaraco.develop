@@ -25,7 +25,7 @@ def git_url_substitutions(fake_process):
 def published_projects(monkeypatch):
     monkeypatch.setenv(
         'PROJECTS_LIST_URL',
-        'https://www.dropbox.com/s/g16c8w9i7lg9dqn/projects.txt?dl=1',
+        'https://raw.githubusercontent.com/jaraco/dotfiles/main/projects.txt',
     )
 
 
