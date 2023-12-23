@@ -1,3 +1,12 @@
+v8.6.0
+======
+
+Features
+--------
+
+- In merge, ensure that an uncommented RTD badge isn't lost when resolving placeholders.
+
+
 v8.5.0
 ======
 
