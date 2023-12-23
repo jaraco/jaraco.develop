@@ -1,0 +1,1 @@
+In merge, ensure that an uncommented RTD badge isn't lost when resolving placeholders.

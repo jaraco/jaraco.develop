@@ -7,6 +7,7 @@ import textwrap
 import contextlib
 from pathlib import Path
 
+from jaraco.functools import identity
 import autocommand
 
 
@@ -87,7 +88,35 @@ def resolve_placeholders(conflict):
     assert 'PROJECT' in conflict.right
     from . import repo
 
-    return repo.sub_placeholders(conflict.right)
+    return _retain_rtd(conflict.left)(repo.sub_placeholders(conflict.right))
+
+
+def _retain_rtd(left):
+    """
+    Retain the RTD enablement.
+
+    If RTD was enabled (uncommented) in left, return a function that
+    will enable it on the right. Otherwise, return a pass-through function.
+
+    >>> _retain_rtd('''.. image:: https://readthedocs.org/...''')
+    <function _enable_rtd at ...>
+    >>> _retain_rtd('''.. .. image:: https://readthedocs.org/...''')
+    <function identity at ...>
+    """
+    enabled = re.search(r'^\.\. image.*readthedocs', left, flags=re.MULTILINE)
+    return _enable_rtd if enabled else identity
+
+
+def _enable_rtd(text):
+    """
+    Given text with a commented RTD badge, uncomment it.
+
+    >>> print(_enable_rtd('''.. .. image:: https://readthedocs.org/...
+    ... ..    :target: https://PROJECT_RTD.readthedocs.io/...'''))
+    .. image:: https://readthedocs.org/...
+       :target: https://PROJECT_RTD.readthedocs.io/...
+    """
+    return re.sub(r'^\.\. ', '', text, flags=re.MULTILINE)
 
 
 def resolve_shebang(conflict):
