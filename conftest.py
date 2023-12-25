@@ -40,14 +40,3 @@ def published_projects(monkeypatch, tmp_path):
     projects.write_text('\n'.join(sample_projects), encoding='utf-8')
     url_path = urllib.request.pathname2url(str(projects))
     monkeypatch.setenv('PROJECTS_LIST_URL', f'file://{url_path}')
-
-
-@pytest.fixture(autouse=True)
-def workaround_pypy_4021(monkeypatch):
-    import importlib
-    import platform
-
-    if platform.python_implementation() != 'PyPy':
-        return
-    ssl = importlib.import_module('_cffi_ssl._stdssl')
-    monkeypatch.setattr(ssl, 'print', lambda *args: None, raising=False)
