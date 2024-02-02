@@ -12,6 +12,7 @@ def get_project_metadata():
     version = _md['Version']
     project = urllib.parse.urlparse(url).path.strip('/')
     name = _md['Name']
+    summary = _md.get('Summary')
     return types.SimpleNamespace(**locals())
 
 
