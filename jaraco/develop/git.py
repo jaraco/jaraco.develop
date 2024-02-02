@@ -128,8 +128,8 @@ class Project(str):
         match = types.SimpleNamespace(**cls.pattern.match(line).groupdict())
         tags = list(re.findall(r'\[(.*?)\]', rest := match.rest.rstrip()))
         topics_assigned = re.match(r'[^\(\)]*\((.+)\)$', rest)
-        topics = topics_assigned and filter(None, topics_assigned.group(1).split(','))
-        return cls(match.name, tags=tags, topics=list(map(str.strip, topics or ())))
+        topics = topics_assigned and map(str.strip, topics_assigned.group(1).split(','))
+        return cls(match.name, tags=tags, topics=list(filter(None, topics or ())))
 
     @property
     def rtd_slug(self):
