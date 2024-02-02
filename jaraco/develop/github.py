@@ -133,6 +133,27 @@ class Repo(str):
         resp.raise_for_status()
         return resp
 
+    def get_topics(self):
+        """
+        Get topics for the repository.
+
+        >>> Repo('jaraco/irc').get_topics()
+        ['irc', 'python']
+        """
+        resp = self.session.get(self + '/topics')
+        resp.raise_for_status()
+        return resp.json()['names']
+
+    def set_topics(self, *topics):
+        """Completely replace the existing topics with only the given ones."""
+        resp = self.session.put(self + '/topics', json=dict(names=topics))
+        resp.raise_for_status()
+        return resp
+
+    def add_topics(self, *topics):
+        """Add new topics to the repository, without removing existing ones."""
+        return self.set_topics(*self.get_topics(), *topics)
+
 
 def username():
     return os.environ.get('GITHUB_USERNAME') or getpass.getuser()
