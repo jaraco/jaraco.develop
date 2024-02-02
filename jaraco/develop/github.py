@@ -146,7 +146,8 @@ class Repo(str):
 
     def set_topics(self, *topics):
         """Completely replace the existing topics with only the given ones."""
-        resp = self.session.put(self + '/topics', json=dict(names=topics))
+        names = list(map(str.lower, (topic.replace(' ', '-') for topic in topics)))
+        resp = self.session.put(self + '/topics', json=dict(names=names))
         resp.raise_for_status()
         return resp
 
