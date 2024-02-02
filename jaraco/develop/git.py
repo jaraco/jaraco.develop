@@ -106,11 +106,13 @@ class URL(str):
 
 class Project(str):
     """
-    >>> p = Project.parse('foo-project [tag1] [tag2]')
+    >>> p = Project.parse('foo-project [tag1] [tag2] (zero defect, coherent software)')
     >>> p
     'foo-project'
     >>> p.tags
     ['tag1', 'tag2']
+    >>> p.topics
+    ['zero defect', 'coherent software']
     """
 
     pattern = re.compile(r'(?P<name>\S+)\s*(?P<rest>.*)$')
@@ -124,8 +126,11 @@ class Project(str):
     @classmethod
     def parse(cls, line):
         match = types.SimpleNamespace(**cls.pattern.match(line).groupdict())
-        tags = list(re.findall(r'\[(.*?)\]', match.rest))
-        return cls(match.name, tags=tags)
+        tags = list(re.findall(r'\[(.*?)\]', rest := match.rest.rstrip()))
+        topics_assigned = re.match(r'[^\(\)]*\((.+)\)$', rest)
+        topics = topics_assigned and filter(None, topics_assigned.group(1).split(','))
+        return cls(match.name, tags=tags, topics=list(map(str.strip, topics or ())))
+
 
 
 def resolve(name):
