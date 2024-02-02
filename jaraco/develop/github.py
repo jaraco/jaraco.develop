@@ -24,6 +24,10 @@ class Repo(str):
     def __init__(self, name):
         self.session = self.get_session()
 
+    @property
+    def url(self):
+        return 'https://github.com/' + self
+
     @classmethod
     @functools.lru_cache()
     def get_session(cls):
