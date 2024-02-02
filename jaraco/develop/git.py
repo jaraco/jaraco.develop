@@ -12,8 +12,6 @@ import requests
 import path
 from more_itertools import flatten
 
-from . import github
-
 
 class URLScheme:
     """
@@ -148,6 +146,7 @@ def resolve(name):
     >>> 'gh://pmxbot/pmxbot.nsfw' in projects
     True
     """
+    from . import github
     default = URL(f'https://github.com/{github.username()}/')
     return default.join(name)
 
