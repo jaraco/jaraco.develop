@@ -94,6 +94,45 @@ class Repo(str):
             )
         )
 
+    def get_metadata(self):
+        """
+        Get repository metadata.
+
+        https://docs.github.com/en/rest/repos/repos?apiVersion=2022-11-28#get-a-repository
+
+        >>> Repo('jaraco/pip-run').get_metadata()['description']
+        'pip-run - dynamic dependency loader for Python'
+        """
+        resp = self.session.get(self)
+        resp.raise_for_status()
+        return resp.json()
+
+    def update_metadata(self, **kwargs):
+        """
+        Update repository metadata (without overwriting existing keys).
+
+        Some useful metadata keys:
+        - name (str)
+        - description (str)
+        - homepage (str)
+        - visibility ("public" or "private")
+        - has_issues (bool)
+        - default_branch (str)
+        - archived (bool)
+        - allow_forking (bool)
+
+        See docs for all of them: https://docs.github.com/en/rest/repos/repos?apiVersion=2022-11-28#update-a-repository--parameters
+
+        >>> Repo('jaraco/dead-parrot').update(
+        ...     description="It's no more",
+        ...     homepage='https://youtu.be/4vuW6tQ0218',
+        ... )
+        <Response [200]>
+        """
+        resp = self.session.patch(self, json=kwargs)
+        resp.raise_for_status()
+        return resp
+
 
 def username():
     return os.environ.get('GITHUB_USERNAME') or getpass.getuser()
