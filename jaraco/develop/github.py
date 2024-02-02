@@ -4,6 +4,7 @@ import base64
 import functools
 import re
 import pathlib
+import posixpath
 import itertools
 
 import keyring
@@ -11,6 +12,7 @@ import nacl.public
 import nacl.encoding
 from requests_toolbelt import sessions
 
+from . import git
 from . import repo
 
 
@@ -42,8 +44,14 @@ class Repo(str):
         return token
 
     @classmethod
-    def detect(cls):
-        return cls(repo.get_project_metadata().project)
+    def from_project(cls, project, *, upstream=False):
+        if 'fork' in project.tags and not upstream:
+            return cls(posixpath.sep.join((username(), posixpath.basename(project))))
+        return cls(git.resolve(project).path[1:])
+
+    @classmethod
+    def detect(cls, *, upstream=False):
+        return cls.from_project(repo.get_project_metadata().project, upstream=upstream)
 
     @functools.lru_cache()
     def get_public_key(self):
