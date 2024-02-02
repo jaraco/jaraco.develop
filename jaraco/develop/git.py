@@ -213,7 +213,8 @@ def checkout_missing(project, root):
 
 @contextlib.contextmanager
 def temp_checkout(project, **kwargs):
+    kwargs.setdefault("depth", 50)
     with path.TempDir() as dir:
-        repo = checkout(project, dir, depth=50, **kwargs)
+        repo = checkout(project, dir, **kwargs)
         with repo:
             yield
