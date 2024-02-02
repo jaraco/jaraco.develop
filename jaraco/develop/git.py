@@ -131,6 +131,13 @@ class Project(str):
         topics = topics_assigned and filter(None, topics_assigned.group(1).split(','))
         return cls(match.name, tags=tags, topics=list(map(str.strip, topics or ())))
 
+    @property
+    def rtd_slug(self):
+        return self.replace('.', '').replace('_', '-')
+
+    @property
+    def rtd_url(self):
+        return f'https://{self.rtd_slug}.readthedocs.io/'
 
 
 def resolve(name):

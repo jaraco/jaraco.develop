@@ -15,6 +15,12 @@ def session():
     return session
 
 
+def rtd_exists(project):
+    return session().head(f'projects/{project.rtd_slug}/').ok
+
+
 def enable_pr_build(project):
-    slug = project.replace('.', '').replace('_', '-')
-    session().patch(f'projects/{slug}/', data=dict(external_builds_enabled=True))
+    session().patch(
+        f'projects/{project.rtd_slug}/',
+        data=dict(external_builds_enabled=True),
+    )
