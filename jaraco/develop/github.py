@@ -136,7 +136,7 @@ class Repo(str):
 
         See docs for all of them: https://docs.github.com/en/rest/repos/repos?apiVersion=2022-11-28#update-a-repository--parameters
 
-        >>> Repo('jaraco/dead-parrot').update_metadata(
+        >>> Repo('jaraco/dead-parrot').update_metadata(  # doctest: +SKIP
         ...     description="It's no more",
         ...     homepage='https://youtu.be/4vuW6tQ0218',
         ... )
