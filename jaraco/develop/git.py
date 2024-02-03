@@ -118,12 +118,11 @@ class Project(str):
     cache = {}
 
     def __new__(cls, value, **kwargs):
+        # Down-cast to a string early.
+        value = sys.intern(str(value))
         try:
             return cls.cache[value]
         except KeyError:
-            # Down-cast to a string early.
-            value = str(value)
-            sys.intern(value)  # :)
             new = super().__new__(cls, value)
             cls.cache[new] = new
             return new
