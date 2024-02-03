@@ -5,6 +5,7 @@ import pathlib
 import posixpath
 import re
 import subprocess
+import sys
 import types
 import urllib.parse
 
@@ -114,9 +115,18 @@ class Project(str):
     """
 
     pattern = re.compile(r'(?P<name>\S+)\s*(?P<rest>.*)$')
+    cache = {}
 
-    def __new__(self, value, **kwargs):
-        return super().__new__(self, value)
+    def __new__(cls, value, **kwargs):
+        try:
+            return cls.cache[value]
+        except KeyError:
+            # Down-cast to a string early.
+            value = str(value)
+            sys.intern(value)  # :)
+            new = super().__new__(cls, value)
+            cls.cache[new] = new
+            return new
 
     def __init__(self, value, **kwargs):
         vars(self).update({'tags': [], 'topics': [], **kwargs})
