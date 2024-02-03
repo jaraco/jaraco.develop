@@ -139,6 +139,14 @@ class Project(str):
         topics = topics_assigned and map(str.strip, topics_assigned.group(1).split(','))
         return cls(match.name, tags=tags, topics=list(filter(None, topics or ())))
 
+    @classmethod
+    def from_path(self, path):
+        from . import github
+        local = f'{github.username()}{posixpath.sep}'
+        if path.startswith(local):
+            return self(path.removeprefix(local))
+        return self(posixpath.sep + path.removeprefix(posixpath.sep))
+
     @property
     def rtd_slug(self):
         return self.replace('.', '').replace('_', '-')

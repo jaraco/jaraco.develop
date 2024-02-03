@@ -55,7 +55,7 @@ class Repo(str):
 
     @classmethod
     def detect(cls, *, upstream=False):
-        project = git.Project(repo.get_project_metadata().project)
+        project = git.Project.from_path(repo.get_project_metadata().project)
         return cls.from_project(project, upstream=upstream)
 
     @functools.lru_cache()
