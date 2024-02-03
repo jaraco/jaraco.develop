@@ -161,6 +161,16 @@ def resolve(name):
     return default.join(name)
 
 
+def resolve_repo_name(name):
+    """
+    >>> resolve_repo_name('keyring')
+    'jaraco/keyring'
+    >>> resolve_repo_name('/pypa/setuptools')
+    'pypa/setuptools'
+    """
+    return resolve(name).path.removeprefix(posixpath.sep)
+
+
 def target_for_root(project, root: path.Path = path.Path()):
     """
     Append the prefix of the resolved project name to the target

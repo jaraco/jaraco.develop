@@ -51,11 +51,12 @@ class Repo(str):
     def from_project(cls, project, *, upstream=False):
         if 'fork' in project.tags and not upstream:
             return cls(posixpath.sep.join((username(), posixpath.basename(project))))
-        return cls(git.resolve(project).path[1:])
+        return cls(git.resolve_repo_name(project))
 
     @classmethod
     def detect(cls, *, upstream=False):
-        return cls.from_project(repo.get_project_metadata().project, upstream=upstream)
+        project = git.Project(repo.get_project_metadata().project)
+        return cls.from_project(project, upstream=upstream)
 
     @functools.lru_cache()
     def get_public_key(self):
@@ -135,7 +136,7 @@ class Repo(str):
 
         See docs for all of them: https://docs.github.com/en/rest/repos/repos?apiVersion=2022-11-28#update-a-repository--parameters
 
-        >>> Repo('jaraco/dead-parrot').update(
+        >>> Repo('jaraco/dead-parrot').update_metadata(
         ...     description="It's no more",
         ...     homepage='https://youtu.be/4vuW6tQ0218',
         ... )
