@@ -26,7 +26,7 @@ class Repo(str):
 
     @property
     def url(self):
-        return 'https://github.com/' + self
+        return f'https://github.com/{self}'
 
     @classmethod
     @functools.lru_cache()
@@ -152,14 +152,14 @@ class Repo(str):
         >>> Repo('jaraco/irc').get_topics()
         ['irc', 'python']
         """
-        resp = self.session.get(self + '/topics')
+        resp = self.session.get(f'{self}/topics')
         resp.raise_for_status()
         return resp.json()['names']
 
     def set_topics(self, *topics):
         """Completely replace the existing topics with only the given ones."""
         names = list(map(str.lower, (topic.replace(' ', '-') for topic in topics)))
-        resp = self.session.put(self + '/topics', json=dict(names=names))
+        resp = self.session.put(f'{self}/topics', json=dict(names=names))
         resp.raise_for_status()
         return resp
 
