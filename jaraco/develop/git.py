@@ -119,7 +119,7 @@ class Project(str):
         return super().__new__(self, value)
 
     def __init__(self, value, **kwargs):
-        vars(self).update(kwargs)
+        vars(self).update({'tags': [], 'topics': [], **kwargs})
 
     @classmethod
     def parse(cls, line):
