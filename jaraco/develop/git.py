@@ -16,7 +16,6 @@ from more_itertools import flatten
 
 class URLScheme:
     """
-    >>> getfixture('git_url_substitutions')
     >>> scheme = URLScheme.lookup('gh://foo/bar')
     >>> scheme.resolve('gh://foo/bar')
     'https://github.com/foo/bar'
