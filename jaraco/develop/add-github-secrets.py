@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import autocommand
 import keyring
 import getpass
@@ -32,7 +34,8 @@ secret_sources = {
 
 
 @autocommand.autocommand(__name__)
-def run(project: github.Repo = github.Repo.detect()):
+def run(project: github.Repo | None = None):
+    project = project or github.Repo.detect()
     for name in project.find_needed_secrets():
         source = secret_sources[name]
         value = keyring.get_password(**source)
