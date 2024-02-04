@@ -148,7 +148,7 @@ class Project(str):
 
     @property
     def rtd_slug(self):
-        return self.replace('.', '').replace('_', '-')
+        return posixpath.basename(self).replace('.', '').replace('_', '-')
 
     @property
     def rtd_url(self):
