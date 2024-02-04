@@ -140,6 +140,12 @@ class Project(str):
 
     @classmethod
     def from_path(self, path):
+        """
+        >>> Project.from_path('pypa/setuptools')
+        '/pypa/setuptools'
+        >>> Project.from_path('jaraco/jaraco.functools')
+        'jaraco.functools'
+        """
         from . import github
         local = f'{github.username()}/'
         if path.startswith(local):
@@ -148,10 +154,22 @@ class Project(str):
 
     @property
     def rtd_slug(self):
+        """
+        >>> Project('jaraco.functools').rtd_slug
+        'jaracofunctools'
+        >>> Project('/pypa/setuptools_scm').rtd_slug
+        'setuptools-scm'
+        """
         return posixpath.basename(self).replace('.', '').replace('_', '-')
 
     @property
     def rtd_url(self):
+        """
+        >>> Project('jaraco.functools').rtd_url
+        'https://jaracofunctools.readthedocs.io/'
+        >>> Project('/pypa/setuptools_scm').rtd_url
+        'https://setuptools-scm.readthedocs.io/'
+        """
         return f'https://{self.rtd_slug}.readthedocs.io/'
 
 
