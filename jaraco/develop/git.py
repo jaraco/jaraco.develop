@@ -1,3 +1,4 @@
+from __future__ import annotations
 import contextlib
 import functools
 import os
@@ -114,7 +115,7 @@ class Project(str):
     """
 
     pattern = re.compile(r'(?P<name>\S+)\s*(?P<rest>.*)$')
-    cache = {}
+    cache: dict[str, Project] = {}
 
     def __new__(cls, value, **kwargs):
         # Down-cast to a string early.
