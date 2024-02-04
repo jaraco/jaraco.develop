@@ -141,10 +141,10 @@ class Project(str):
     @classmethod
     def from_path(self, path):
         from . import github
-        local = f'{github.username()}{posixpath.sep}'
+        local = f'{github.username()}/'
         if path.startswith(local):
             return self(path.removeprefix(local))
-        return self(posixpath.sep + path.removeprefix(posixpath.sep))
+        return self(f'/{path.removeprefix("/")}')
 
     @property
     def rtd_slug(self):
