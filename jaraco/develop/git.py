@@ -150,6 +150,11 @@ def target_for_root(project, root: path.Path = path.Path()):
 
 
 def configure_fork(project, repo):
+    # special case for calendra - make sure not to fetch tags from upstream.
+    if project == 'calendra':
+        cmd = 'git config remote.upstream.tagOpt --no-tags'.split()
+        subprocess.check_output(cmd, cwd=repo)
+
     if 'fork' not in project.tags:
         return
     cmd = ['gh', 'repo', 'fork', '--remote']
