@@ -4,7 +4,7 @@ import keyring
 from requests_toolbelt import sessions
 
 
-url = 'https://api.readthedocs.org/'
+url = 'https://readthedocs.org/'
 
 
 @functools.lru_cache()
