@@ -9,7 +9,7 @@ def pytest_configure():
     os.environ['GITHUB_TOKEN'] = 'abc'
 
 
-@pytest.fixture
+@pytest.fixture(autouse=True)
 def git_url_substitutions(fake_process):
     cmd = ['git', 'config', '--get-regexp', r'url\..*\.insteadof']
     stdout = textwrap.dedent(
