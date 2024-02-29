@@ -1,3 +1,12 @@
+v8.7.0
+======
+
+Features
+--------
+
+- Added support for file:// URL for projects list.
+
+
 v8.6.0
 ======
 
