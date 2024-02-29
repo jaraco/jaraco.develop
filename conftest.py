@@ -1,5 +1,5 @@
 import os
-import textwrap
+import subprocess
 import urllib.request
 
 import pytest
@@ -9,17 +9,18 @@ def pytest_configure():
     os.environ['GITHUB_TOKEN'] = 'abc'
 
 
-@pytest.fixture
-def git_url_substitutions(fake_process):
-    cmd = ['git', 'config', '--get-regexp', r'url\..*\.insteadof']
-    stdout = textwrap.dedent(
-        """
-        url.https://github.com/.insteadof gh://
-        url.https://gist.github.com/.insteadof gist://
-        """.lstrip()
-    )
-
-    fake_process.register(cmd, stdout=stdout)
+@pytest.fixture(autouse=True)
+def git_url_substitutions(tmp_home_dir):
+    """
+    Configure Git to have substitutions for gh:// and gist://
+    """
+    subs = {
+        'gh': 'https://github.com/',
+        'gist': 'https://gist.github.com/',
+    }
+    for scheme, url in subs.items():
+        cmd = ['git', 'config', '--global', f'url.{url}.insteadof', f'{scheme}://']
+        subprocess.check_call(cmd)
 
 
 @pytest.fixture(autouse=True)
