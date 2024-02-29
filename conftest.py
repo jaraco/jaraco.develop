@@ -1,5 +1,6 @@
 import os
 import textwrap
+import urllib.request
 
 import pytest
 
@@ -36,10 +37,8 @@ def published_projects(monkeypatch, tmp_path):
         'keyrings.firefox',
     ]
     projects.write_text('\n'.join(sample_projects), encoding='utf-8')
-    monkeypatch.setenv(
-        'PROJECTS_LIST_URL',
-        f'file://{projects}',
-    )
+    url_path = urllib.request.pathname2url(str(projects))
+    monkeypatch.setenv('PROJECTS_LIST_URL', f'file://{url_path}')
 
 
 @pytest.fixture(autouse=True)
