@@ -192,13 +192,21 @@ def checkout(project, target: path.Path = path.Path(), **kwargs):
     return repo
 
 
+@functools.lru_cache()
+def _session():
+    """
+    Return a requests session capable of opening files.
+    """
+    session = requests.Session()
+    session.mount('file://', requests_file.FileAdapter())
+    return session
+
+
 def projects():
     """
     Load projects from PROJECTS_LIST_URL.
     """
-    session = requests.Session()
-    session.mount('file://', requests_file.FileAdapter())
-    text = session.get(os.environ['PROJECTS_LIST_URL']).text
+    text = _session().get(os.environ['PROJECTS_LIST_URL']).text
     return set(map(Project.parse, text.splitlines()))
 
 
