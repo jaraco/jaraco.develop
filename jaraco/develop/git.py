@@ -9,6 +9,7 @@ import types
 import urllib.parse
 
 import requests
+import requests_file
 import path
 from more_itertools import flatten
 
@@ -195,7 +196,9 @@ def projects():
     """
     Load projects from PROJECTS_LIST_URL.
     """
-    text = requests.get(os.environ['PROJECTS_LIST_URL']).text
+    session = requests.Session()
+    session.mount('file://', requests_file.FileAdapter())
+    text = session.get(os.environ['PROJECTS_LIST_URL']).text
     return set(map(Project.parse, text.splitlines()))
 
 
