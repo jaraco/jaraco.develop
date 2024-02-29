@@ -64,7 +64,7 @@ class URLScheme:
     @functools.lru_cache()
     def load(cls):
         cmd = ['git', 'config', '--get-regexp', r'url\..*\.insteadof']
-        lines = subprocess.check_output(cmd, text=True)
+        lines = subprocess.check_output(cmd, text=True, encoding='utf-8')
         return set(map(cls.parse, lines.splitlines()))
 
     @classmethod
