@@ -22,10 +22,23 @@ def git_url_substitutions(fake_process):
 
 
 @pytest.fixture(autouse=True)
-def published_projects(monkeypatch):
+def published_projects(monkeypatch, tmp_path):
+    """
+    Generate a project list and set the environment variable.
+    """
+    projects = tmp_path / 'projects.txt'
+    sample_projects = [
+        '/pmxbot/pmxbot.nsfw',
+        '/pypa/setuptools [lifted]',
+        '/python/cpython [fork]',
+        'jaraco.develop',
+        'keyring [lifted]',
+        'keyrings.firefox',
+    ]
+    projects.write_text('\n'.join(sample_projects), encoding='utf-8')
     monkeypatch.setenv(
         'PROJECTS_LIST_URL',
-        'https://raw.githubusercontent.com/jaraco/dotfiles/main/projects.txt',
+        f'file://{projects}',
     )
 
 
