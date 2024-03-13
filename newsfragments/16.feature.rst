@@ -1,1 +1,0 @@
-Updated Python build routine for macOS to support OpenSSL 3.

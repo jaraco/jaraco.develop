@@ -1,3 +1,12 @@
+v8.8.0
+======
+
+Features
+--------
+
+- Updated Python build routine for macOS to support OpenSSL 3. (#16)
+
+
 v8.7.0
 ======
 
