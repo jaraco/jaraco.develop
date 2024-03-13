@@ -37,8 +37,8 @@ def build_on_macOS(debug=False):
 
     env = dict(
         os.environ,
-        CPPFLAGS=f'-I{brew_prefix()}/include',
-        LDFLAGS=f'-L{brew_prefix()}/lib',
+        GDBM_CFLAGS=f'-I{brew_prefix('gdbm')}/include',
+        GDBM_LIBS=f'-L{brew_prefix('gdbm')}/lib -lgdbm',
     )
     cmd = ['./configure']
     cmd += ['--with-pydebug'] * debug
