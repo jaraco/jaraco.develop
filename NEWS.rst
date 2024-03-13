@@ -1,3 +1,12 @@
+v8.8.1
+======
+
+Bugfixes
+--------
+
+- Fix command syntax in make.
+
+
 v8.8.0
 ======
 
