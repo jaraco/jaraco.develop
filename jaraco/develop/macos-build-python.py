@@ -43,4 +43,4 @@ def build_on_macOS(debug=False):
     cmd = ['./configure']
     cmd += ['--with-pydebug'] * debug
     subprocess.run(cmd, env=env)
-    subprocess.run('make')
+    subprocess.run('make -j')
