@@ -31,7 +31,7 @@ def get_include_dirs():
 
 
 class FalseString(str):
-    def __nonzero__(self):
+    def __bool__(self):
         return False
 
 
