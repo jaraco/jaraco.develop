@@ -1,3 +1,12 @@
+v8.9.0
+======
+
+Features
+--------
+
+- In projects-run, implemented selection and exclusion logic for tags and keywords.
+
+
 v8.8.1
 ======
 
