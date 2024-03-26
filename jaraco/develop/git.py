@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import contextlib
 import functools
 import os
@@ -112,9 +114,12 @@ class Project(str):
     'foo-project'
     >>> p.tags
     ['tag1', 'tag2']
+    >>> p.spec
+    'foo-project [tag1] [tag2]'
     """
 
     pattern = re.compile(r'(?P<name>\S+)\s*(?P<rest>.*)$')
+    tags: list[str] = []
 
     def __new__(self, value, **kwargs):
         return super().__new__(self, value)
@@ -127,6 +132,10 @@ class Project(str):
         match = types.SimpleNamespace(**cls.pattern.match(line).groupdict())
         tags = list(re.findall(r'\[(.*?)\]', match.rest))
         return cls(match.name, tags=tags)
+
+    @property
+    def spec(self):
+        return self + ''.join(map(' [{}]'.format, self.tags))
 
 
 def resolve(name):
@@ -183,7 +192,7 @@ def make_args(**kwargs):
     )
 
 
-def checkout(project, target: path.Path = path.Path(), **kwargs):
+def checkout(project: Project, target: path.Path = path.Path(), **kwargs):
     url = resolve(project)
     cmd = ['git', '-C', target, 'clone', url] + make_args(**kwargs)
     subprocess.check_call(cmd)
@@ -200,6 +209,12 @@ def _session():
     session = requests.Session()
     session.mount('file://', requests_file.FileAdapter())
     return session
+
+
+def projects_repo():
+    url = URL(os.environ['PROJECTS_LIST_URL'])
+    project_path, inner_path = url.path.split('/main/')
+    return Project(project_path), pathlib.Path(inner_path)
 
 
 def projects():
