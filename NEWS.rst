@@ -1,3 +1,12 @@
+v8.10.0
+=======
+
+Features
+--------
+
+- Add routine to add a project.
+
+
 v8.9.1
 ======
 
