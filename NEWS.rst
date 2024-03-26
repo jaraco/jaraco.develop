@@ -1,3 +1,12 @@
+v8.10.1
+=======
+
+Bugfixes
+--------
+
+- Fix late-add bug in add-project where item was chosen and not attribute.
+
+
 v8.10.0
 =======
 

@@ -1,1 +1,0 @@
-Fix late-add bug in add-project where item was chosen and not attribute.
