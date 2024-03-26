@@ -120,17 +120,10 @@ class Project(str):
 
     pattern = re.compile(r'(?P<name>\S+)\s*(?P<rest>.*)$')
     tags: list[str] = []
-    cache: dict[str, Project] = {}
 
+    @functools.lru_cache
     def __new__(cls, value, **kwargs):
-        # Down-cast to a string early.
-        value = sys.intern(str(value))
-        try:
-            return cls.cache[value]
-        except KeyError:
-            new = super().__new__(cls, value)
-            cls.cache[new] = new
-            return new
+        return super().__new__(cls, value)
 
     def __init__(self, value, **kwargs):
         vars(self).update({'topics': [], **kwargs})
