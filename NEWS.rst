@@ -1,3 +1,57 @@
+v8.10.0
+=======
+
+Features
+--------
+
+- Add routine to add a project.
+
+
+v8.9.1
+======
+
+Bugfixes
+--------
+
+- In projects-run, flush stdout.
+
+
+v8.9.0
+======
+
+Features
+--------
+
+- In projects-run, implemented selection and exclusion logic for tags and keywords.
+
+
+v8.8.1
+======
+
+Bugfixes
+--------
+
+- Fix command syntax in make.
+
+
+v8.8.0
+======
+
+Features
+--------
+
+- Updated Python build routine for macOS to support OpenSSL 3. (#16)
+
+
+v8.7.0
+======
+
+Features
+--------
+
+- Added support for file:// URL for projects list.
+
+
 v8.6.0
 ======
 

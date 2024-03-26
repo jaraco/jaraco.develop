@@ -20,7 +20,7 @@ def brew_prefix(name=None):
 
 
 def require_libs():
-    reqs = 'gdbm', 'openssl@1.1', 'xz'
+    reqs = 'gdbm', 'openssl@3', 'xz'
     cmd = ['brew', 'list', '--formula']
     installed = subprocess.check_output(cmd, text=True).strip().split()
     missing = set(reqs) - set(installed)
@@ -37,10 +37,10 @@ def build_on_macOS(debug=False):
 
     env = dict(
         os.environ,
-        CPPFLAGS=f'-I{brew_prefix()}/include',
-        LDFLAGS=f'-L{brew_prefix()}/lib',
+        GDBM_CFLAGS=f"-I{brew_prefix('gdbm')}/include",
+        GDBM_LIBS=f"-L{brew_prefix('gdbm')}/lib -lgdbm",
     )
-    cmd = ['./configure', f'--with-openssl={brew_prefix("openssl@1.1")}']
+    cmd = ['./configure']
     cmd += ['--with-pydebug'] * debug
     subprocess.run(cmd, env=env)
-    subprocess.run('make')
+    subprocess.run(['make', '-j'])

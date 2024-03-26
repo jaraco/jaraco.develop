@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 import contextlib
 import functools
 import os
@@ -11,6 +12,7 @@ import types
 import urllib.parse
 
 import requests
+import requests_file
 import path
 from more_itertools import flatten
 
@@ -62,7 +64,7 @@ class URLScheme:
     @functools.lru_cache()
     def load(cls):
         cmd = ['git', 'config', '--get-regexp', r'url\..*\.insteadof']
-        lines = subprocess.check_output(cmd, text=True)
+        lines = subprocess.check_output(cmd, text=True, encoding='utf-8')
         return set(map(cls.parse, lines.splitlines()))
 
     @classmethod
@@ -110,11 +112,14 @@ class Project(str):
     'foo-project'
     >>> p.tags
     ['tag1', 'tag2']
+    >>> p.spec
+    'foo-project [tag1] [tag2]'
     >>> p.topics
     ['zero defect', 'coherent software']
     """
 
     pattern = re.compile(r'(?P<name>\S+)\s*(?P<rest>.*)$')
+    tags: list[str] = []
     cache: dict[str, Project] = {}
 
     def __new__(cls, value, **kwargs):
@@ -128,7 +133,7 @@ class Project(str):
             return new
 
     def __init__(self, value, **kwargs):
-        vars(self).update({'tags': [], 'topics': [], **kwargs})
+        vars(self).update({'topics': [], **kwargs})
 
     @classmethod
     def parse(cls, line):
@@ -172,6 +177,10 @@ class Project(str):
         """
         return f'https://{self.rtd_slug}.readthedocs.io/'
 
+    @property
+    def spec(self):
+        return self + ''.join(map(' [{}]'.format, self.tags))
+
 
 def resolve(name):
     """
@@ -206,6 +215,11 @@ def target_for_root(project, root: path.Path = path.Path()):
 
 
 def configure_fork(project, repo):
+    # special case for calendra - make sure not to fetch tags from upstream.
+    if project == 'calendra':
+        cmd = 'git config remote.upstream.tagOpt --no-tags'.split()
+        subprocess.check_output(cmd, cwd=repo)
+
     if 'fork' not in project.tags:
         return
     cmd = ['gh', 'repo', 'fork', '--remote']
@@ -233,7 +247,7 @@ def make_args(**kwargs):
     )
 
 
-def checkout(project, target: path.Path = path.Path(), **kwargs):
+def checkout(project: Project, target: path.Path = path.Path(), **kwargs):
     url = resolve(project)
     cmd = ['git', '-C', target, 'clone', url] + make_args(**kwargs)
     subprocess.check_call(cmd)
@@ -242,11 +256,27 @@ def checkout(project, target: path.Path = path.Path(), **kwargs):
     return repo
 
 
+@functools.lru_cache()
+def _session():
+    """
+    Return a requests session capable of opening files.
+    """
+    session = requests.Session()
+    session.mount('file://', requests_file.FileAdapter())
+    return session
+
+
+def projects_repo():
+    url = URL(os.environ['PROJECTS_LIST_URL'])
+    project_path, inner_path = url.path.split('/main/')
+    return Project(project_path), pathlib.Path(inner_path)
+
+
 def projects():
     """
     Load projects from PROJECTS_LIST_URL.
     """
-    text = requests.get(os.environ['PROJECTS_LIST_URL']).text
+    text = _session().get(os.environ['PROJECTS_LIST_URL']).text
     return set(map(Project.parse, text.splitlines()))
 
 
