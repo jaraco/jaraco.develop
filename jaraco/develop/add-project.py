@@ -25,7 +25,7 @@ def main(name: str, target: path.Path = path.Path()):
         projects = set(map(git.Project.parse, path.read_text().splitlines()))
         projects.add(project)
         specs = map(
-            operator.itemgetter('spec'), sorted(projects, key=jaraco.text.FoldedCase)
+            operator.attrgetter('spec'), sorted(projects, key=jaraco.text.FoldedCase)
         )
         path.write_text(''.join(add_newlines(specs)))
         subprocess.check_call(['git', 'commit', '-a', '-m', f'Adding {name}'])
