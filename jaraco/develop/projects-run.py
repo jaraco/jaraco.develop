@@ -19,5 +19,5 @@ def main(
     for project in filter(tag, filter(keyword, git.projects())):
         print(project)
         with git.temp_checkout(project, quiet=True):
-            subprocess.Popen(args)
+            subprocess.Popen(args).wait()
         print()
