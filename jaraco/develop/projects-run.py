@@ -37,7 +37,7 @@ def main(
     args=None,
 ):
     for project in filter(selectors, git.projects()):
-        print(project)
+        print(project, flush=True)
         with git.temp_checkout(project, quiet=True):
             subprocess.Popen(args).wait()
-        print()
+        print(flush=True)
