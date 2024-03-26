@@ -1,3 +1,12 @@
+v8.9.1
+======
+
+Bugfixes
+--------
+
+- In projects-run, flush stdout.
+
+
 v8.9.0
 ======
 
