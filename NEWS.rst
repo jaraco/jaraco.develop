@@ -1,3 +1,12 @@
+v8.11.0
+=======
+
+Features
+--------
+
+- Restore Python 3.8 compatibility.
+
+
 v8.10.1
 =======
 
