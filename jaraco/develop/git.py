@@ -16,6 +16,7 @@ import path
 from more_itertools import flatten
 
 from . import github
+from .compat.py38 import removesuffix, removeprefix
 
 
 class URLScheme:
@@ -53,7 +54,7 @@ class URLScheme:
     @classmethod
     def parse(cls, line):
         key, scheme = line.split()
-        url = key.removeprefix('url.').removesuffix('.insteadof')
+        url = removesuffix(removeprefix(key, 'url.'), '.insteadof')
         return cls(scheme, url)
 
     def resolve(self, url):

@@ -20,11 +20,13 @@ import operator
 
 import more_itertools
 
+from .compat.py38 import removeprefix
+
 
 class Selectable:
     @property
     def indicator(self):
-        return self.removeprefix('not ')
+        return removeprefix(self, 'not ')
 
     @property
     def mode(self):
