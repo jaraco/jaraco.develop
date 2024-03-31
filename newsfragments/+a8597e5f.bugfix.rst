@@ -1,0 +1,1 @@
+Succeed even if git returns no substitutions.
