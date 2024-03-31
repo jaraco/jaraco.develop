@@ -1,3 +1,12 @@
+v8.11.1
+=======
+
+Bugfixes
+--------
+
+- Succeed even if git returns no substitutions.
+
+
 v8.11.0
 =======
 
