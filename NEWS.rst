@@ -1,3 +1,12 @@
+v8.12.0
+=======
+
+Features
+--------
+
+- Add command for migrating config to pyproject.toml.
+
+
 v8.11.1
 =======
 
