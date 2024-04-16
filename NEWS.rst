@@ -1,3 +1,12 @@
+v8.12.1
+=======
+
+Bugfixes
+--------
+
+- Fix typo in migrate-config.
+
+
 v8.12.0
 =======
 
