@@ -40,7 +40,7 @@ def tweak(config):
         config,
         flags=re.MULTILINE,
     )
-    config = re.sub(r'^\t# local', '\n\t# local', config, flags=re.MULTILINE)
+    config = re.sub(r'^\t# (local|tidelift)', r'\n\t# \1', config, flags=re.MULTILINE)
     return config
 
 
