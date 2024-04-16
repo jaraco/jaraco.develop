@@ -45,7 +45,7 @@ def tweak(config):
 
 
 def bump_setuptools(build_system):
-    return build_system.replace('setuptool>=56', 'setuptools>=61.2')
+    return build_system.replace('setuptools>=56', 'setuptools>=61.2')
 
 
 @autocommand.autocommand(__name__)
