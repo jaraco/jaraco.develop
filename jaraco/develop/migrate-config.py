@@ -20,8 +20,9 @@ def tweak(config):
     """
     Tweak the syntax some for easier merging with skeleton.
     """
+    # convert single-line authors/maintainers to multiline
     config = re.sub(
-        r'^(authors|maintainers) = \[(.*?)\]',
+        r'^(authors|maintainers) = \[(\{.*?\})\]',
         r'\1 = [\n\t\2,\n]',
         config,
         flags=re.MULTILINE | re.DOTALL,
