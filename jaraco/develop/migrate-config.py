@@ -33,8 +33,7 @@ def tweak(config):
     config = re.sub(r'^    ', '\t', config, flags=re.MULTILINE)
     homepage = re.search('Homepage = ".*"', config).group(0)
     config = re.sub(r'^urls =.*?\n', '', config, flags=re.MULTILINE)
-    homepage_scn = f'[project.urls]\n{homepage}\n\n'
-    config = re.sub(r'(\[project\.scripts\])', homepage_scn + r'\1', config)
+    config += f'\n[project.urls]\n{homepage}\n'
     config = re.sub(
         r'(\n\[tool\.setuptools\]\ninclude-package-data = true\n)',
         '',
