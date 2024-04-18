@@ -3,12 +3,12 @@ import urllib.parse
 import types
 import functools
 
-from build.util import project_wheel_metadata as load_metadata
+from jaraco.packaging import metadata
 
 
 def get_project_metadata():
-    _md = load_metadata('.')
-    url = _md['Home-page']
+    _md = metadata.load('.')
+    url = metadata.hunt_down_url(_md)
     version = _md['Version']
     project = urllib.parse.urlparse(url).path.strip('/')
     name = _md['Name']
