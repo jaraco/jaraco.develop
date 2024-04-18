@@ -1,3 +1,12 @@
+v8.12.2
+=======
+
+Bugfixes
+--------
+
+- Fix bug where migrate-config would replace an already multiline contributor with extra space.
+
+
 v8.12.1
 =======
 

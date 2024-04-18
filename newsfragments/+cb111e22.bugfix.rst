@@ -1,1 +1,0 @@
-Fix bug where migrate-config would replace an already multiline contributor with extra space.
