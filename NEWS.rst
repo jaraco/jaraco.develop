@@ -1,3 +1,19 @@
+v8.13.0
+=======
+
+Features
+--------
+
+- Rely on jaraco.packaging.metadata.hunt_down_url to resolve the homepage.
+
+
+Bugfixes
+--------
+
+- Fix bug where migrate-config would fail to include a homepage.
+- Inject the URLs agead of project.optional-dependencies, but only if there's not already a homepage indicated.
+
+
 v8.12.2
 =======
 

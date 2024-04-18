@@ -1,1 +1,0 @@
-Fix bug where migrate-config would fail to include a homepage.

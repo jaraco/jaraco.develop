@@ -1,1 +1,0 @@
-Rely on jaraco.packaging.metadata.hunt_down_url to resolve the homepage.

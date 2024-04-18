@@ -1,1 +1,0 @@
-Inject the URLs agead of project.optional-dependencies, but only if there's not already a homepage indicated.
