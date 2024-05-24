@@ -1,3 +1,12 @@
+v8.14.0
+=======
+
+Features
+--------
+
+- When configuring a fork, configure the default repo as the upstream repo (for PRs, etc).
+
+
 v8.13.0
 =======
 

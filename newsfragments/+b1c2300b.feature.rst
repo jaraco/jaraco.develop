@@ -1,1 +1,0 @@
-When configuring a fork, configure the default repo as the upstream repo (for PRs, etc).
