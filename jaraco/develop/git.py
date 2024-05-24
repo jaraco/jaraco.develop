@@ -178,6 +178,8 @@ def configure_fork(project, repo):
     origin = subprocess.check_output(cmd, cwd=repo).strip()
     cmd = ['git', 'remote', 'set-url', '--push', 'upstream', origin]
     subprocess.check_output(cmd, cwd=repo)
+    cmd = ['gh', 'repo', 'set-default', project]
+    subprocess.check_call(cmd, cwd=repo)
 
 
 def make_args(**kwargs):
