@@ -1,3 +1,12 @@
+v8.14.1
+=======
+
+Bugfixes
+--------
+
+- Correct failure in configure_fork.
+
+
 v8.14.0
 =======
 
