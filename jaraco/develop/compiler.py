@@ -1,9 +1,10 @@
-import tempfile
 import contextlib
-import shutil
 import mimetypes
+import shutil
+import tempfile
 
 from setuptools._distutils import ccompiler, sysconfig
+
 from jaraco.ui.editor import EditableFile
 
 

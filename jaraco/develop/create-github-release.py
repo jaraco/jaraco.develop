@@ -1,7 +1,6 @@
 import autocommand
 
-from . import github
-from . import repo
+from . import github, repo
 
 
 @autocommand.autocommand(__name__)

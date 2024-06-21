@@ -3,7 +3,6 @@ import functools
 import keyring
 from requests_toolbelt import sessions
 
-
 url = 'https://readthedocs.org/'
 
 

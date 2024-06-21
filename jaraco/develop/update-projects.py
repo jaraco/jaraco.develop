@@ -9,15 +9,14 @@ cmd = py -m jaraco.develop.merge "$BASE" "$LOCAL" "$REMOTE" "$MERGED"
 trustExitCode = true
 """
 
-import subprocess
 import functools
 import shutil
+import subprocess
 
 import autocommand
 import subprocess_tee
 
-from . import filters
-from . import git
+from . import filters, git
 
 
 def handle_rename(old_name, new_name):

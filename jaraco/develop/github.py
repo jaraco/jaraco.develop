@@ -1,14 +1,14 @@
-import os
-import getpass
 import base64
 import functools
-import re
-import pathlib
+import getpass
 import itertools
+import os
+import pathlib
+import re
 
 import keyring
-import nacl.public
 import nacl.encoding
+import nacl.public
 from requests_toolbelt import sessions
 
 from . import repo

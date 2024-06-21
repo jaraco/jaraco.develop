@@ -1,6 +1,7 @@
+import functools
+
 import autocommand
 import path
-import functools
 from more_itertools import consume
 
 from . import git

@@ -7,9 +7,7 @@ import subprocess
 
 import autocommand
 
-from . import filters
-from . import git
-
+from . import filters, git
 
 parser = argparse.ArgumentParser()
 parser.add_argument(

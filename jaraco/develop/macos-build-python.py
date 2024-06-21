@@ -4,9 +4,9 @@ Build CPython according to
 Assumes Homebrew is installed.
 """
 
+import functools
 import os
 import subprocess
-import functools
 
 import autocommand
 

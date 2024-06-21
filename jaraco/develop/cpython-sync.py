@@ -4,13 +4,12 @@ Sync files from an upstream CPython release.
 
 import json
 import pathlib
-import subprocess
 import re
+import subprocess
 
 import autocommand
 import packaging.version
 from requests_toolbelt import sessions
-
 
 gh_content = sessions.BaseUrlSession(
     'https://raw.githubusercontent.com/python/cpython/'

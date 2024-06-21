@@ -1,9 +1,9 @@
-import subprocess
-import json
 import getpass
+import json
+import subprocess
 
-import keyring
 import autocommand
+import keyring
 
 
 def create_project(project, user):

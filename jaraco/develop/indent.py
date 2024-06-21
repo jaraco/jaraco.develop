@@ -1,7 +1,7 @@
-import os
-import glob
 import argparse
 import functools
+import glob
+import os
 import re
 
 no_tabs_mode = "# tab-width: 4; indent-tabs-mode: nil;"

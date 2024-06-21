@@ -1,6 +1,7 @@
+import getpass
+
 import autocommand
 import keyring
-import getpass
 
 import jaraco.context
 

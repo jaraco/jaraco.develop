@@ -3,10 +3,11 @@ Add a repo to a list of projects maintained in GitHub.
 """
 
 import operator
-import path
 import subprocess
 
 import autocommand
+import path
+
 import jaraco.text
 
 from . import git

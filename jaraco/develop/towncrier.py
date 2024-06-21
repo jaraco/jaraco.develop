@@ -6,7 +6,6 @@ import sys
 from jaraco.vcs import repo
 from jaraco.versioning import semver
 
-
 _release_bumps = collections.defaultdict(
     feature='minor',
     bugfix='patch',

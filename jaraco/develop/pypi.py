@@ -1,7 +1,6 @@
 import getpass
 import xmlrpc.client
 
-
 url = 'https://pypi.python.org/pypi'
 
 

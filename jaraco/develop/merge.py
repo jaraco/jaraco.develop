@@ -2,14 +2,14 @@
 Facilities for parsing and resolving common merge conflicts.
 """
 
+import contextlib
 import re
 import textwrap
-import contextlib
 from pathlib import Path
 
-from jaraco.functools import identity
 import autocommand
 
+from jaraco.functools import identity
 
 sample_conflict = textwrap.dedent(
     """

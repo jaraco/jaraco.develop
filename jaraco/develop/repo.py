@@ -1,7 +1,7 @@
-import re
-import urllib.parse
-import types
 import functools
+import re
+import types
+import urllib.parse
 
 from jaraco.packaging import metadata
 

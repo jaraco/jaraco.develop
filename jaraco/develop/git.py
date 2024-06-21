@@ -10,13 +10,13 @@ import subprocess
 import types
 import urllib.parse
 
+import path
 import requests
 import requests_file
-import path
 from more_itertools import flatten
 
 from . import github
-from .compat.py38 import removesuffix, removeprefix
+from .compat.py38 import removeprefix, removesuffix
 
 
 class URLScheme:
