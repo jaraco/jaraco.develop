@@ -1,0 +1,1 @@
+Add support for resolving metadata even when pyproject.toml is in conflict.

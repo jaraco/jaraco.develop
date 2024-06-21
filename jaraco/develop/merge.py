@@ -3,13 +3,19 @@ Facilities for parsing and resolving common merge conflicts.
 """
 
 import contextlib
+import os
 import re
+import shutil
+import tempfile
 import textwrap
+import unittest.mock
 from pathlib import Path
 
 import autocommand
 
+import jaraco.packaging.metadata
 from jaraco.functools import identity
+
 
 sample_conflict = textwrap.dedent(
     """
@@ -57,8 +63,8 @@ class Conflict:
         return self.match.groupdict()[name]
 
     @classmethod
-    def read(cls, path):
-        return cls.find(path.read_text(), path=path)
+    def read(cls, merge, **kw):
+        return cls.find(merge.read_text(), merge=merge, **kw)
 
     @classmethod
     def find(cls, text, **kw):
@@ -82,13 +88,48 @@ def resolve_placeholders(conflict):
     If the text "PROJECT" appears in the conflict on the right,
     prefer upstream (right) but re-substitute the placeholders.
 
-    See jaraco/skeleton#70 and jaraco/jaraco.develop#5 for
-    more context.
+    For more context, see:
+    - jaraco/skeleton#70
+    - jaraco/jaraco.develop#5
+    - jaraco/jaraco.develop#19
     """
     assert 'PROJECT' in conflict.right
     from . import repo
 
-    return _retain_rtd(conflict.left)(repo.sub_placeholders(conflict.right))
+    return _retain_rtd(conflict.left)(
+        repo.sub_placeholders(conflict.right, metadata=load_metadata(conflict))
+    )
+
+
+def load_metadata(conflict):
+    """
+    Load metadata for the current project.
+
+    If it has a conflict in the pyproject.toml, use the 'local' copy
+    to load the metadata. See #19 for rationale.
+    """
+    with conflict_safe_project(conflict) as dir:
+        return jaraco.packaging.metadata.load(dir)
+
+
+@contextlib.contextmanager
+def conflict_safe_project(conflict):
+    if conflict.merge.name != 'pyproject.toml':
+        yield '.'
+        return
+
+    with tempfile.TemporaryDirectory() as dir, pretend_version():
+        path = Path(dir)
+        shutil.copy(conflict.local, path / 'pyproject.toml')
+
+        yield dir
+
+
+@contextlib.contextmanager
+def pretend_version():
+    subs = dict(SETUPTOOLS_SCM_PRETEND_VERSION="0")
+    with unittest.mock.patch.dict(os.environ, subs):
+        yield
 
 
 def _retain_rtd(left):
@@ -134,7 +175,7 @@ def resolve(conflict):
 
 @autocommand.autocommand(__name__)
 def merge(base: Path, local: Path, remote: Path, merge: Path):
-    conflicts = Conflict.read(merge)
+    conflicts = Conflict.read(**locals())
     res = merge.read_text()
     for conflict in conflicts:
         res = conflict.replace(resolve(conflict), res)

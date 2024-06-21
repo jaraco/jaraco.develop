@@ -3,27 +3,31 @@ import re
 import types
 import urllib.parse
 
-from jaraco.packaging import metadata
+import jaraco.packaging.metadata
 
 
 def get_project_metadata():
-    _md = metadata.load('.')
-    url = metadata.hunt_down_url(_md)
-    version = _md['Version']
+    return process(jaraco.packaging.metadata.load('.'))
+
+
+def process(metadata):
+    url = jaraco.packaging.metadata.hunt_down_url(metadata)
+    version = metadata['Version']
     project = urllib.parse.urlparse(url).path.strip('/')
-    name = _md['Name']
+    name = metadata['Name']
     return types.SimpleNamespace(**locals())
 
 
 def substitute_name(match, metadata):
+    subs = process(metadata)
     lookup = dict(
-        PROJECT_PATH=metadata.project,
-        PROJECT=metadata.name,
-        PROJECT_RTD=metadata.name.replace('.', '').lower(),
+        PROJECT_PATH=subs.project,
+        PROJECT=subs.name,
+        PROJECT_RTD=subs.name.replace('.', '').lower(),
     )
     return lookup[match.group(0)]
 
 
-def sub_placeholders(input):
-    replacer = functools.partial(substitute_name, metadata=get_project_metadata())
+def sub_placeholders(input, metadata):
+    replacer = functools.partial(substitute_name, metadata=metadata)
     return re.sub(r'PROJECT\w+', replacer, input)
