@@ -64,7 +64,7 @@ class URLScheme:
         return url.replace(self.value, self.prefix)
 
     @classmethod
-    @functools.lru_cache()
+    @functools.lru_cache
     def load(cls):
         cmd = ['git', 'config', '--get-regexp', r'url\..*\.insteadof']
         lines = subprocess.run(
@@ -206,7 +206,7 @@ def checkout(project: Project, target: path.Path = path.Path(), **kwargs):
     return repo
 
 
-@functools.lru_cache()
+@functools.lru_cache
 def _session():
     """
     Return a requests session capable of opening files.

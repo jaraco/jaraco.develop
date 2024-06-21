@@ -6,7 +6,7 @@ from requests_toolbelt import sessions
 url = 'https://readthedocs.org/'
 
 
-@functools.lru_cache()
+@functools.lru_cache
 def session():
     auth = 'Token ' + keyring.get_password(url, 'token')
     session = sessions.BaseUrlSession(url + 'api/v3/')

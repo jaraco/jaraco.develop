@@ -23,7 +23,7 @@ class Repo(str):
         self.session = self.get_session()
 
     @classmethod
-    @functools.lru_cache()
+    @functools.lru_cache
     def get_session(cls):
         session = sessions.BaseUrlSession('https://api.github.com/repos/')
         session.headers.update(
@@ -45,7 +45,7 @@ class Repo(str):
     def detect(cls):
         return cls(repo.get_project_metadata().project)
 
-    @functools.lru_cache()
+    @functools.lru_cache
     def get_public_key(self):
         data = self.session.get(f'{self}/actions/secrets/public-key').json()
         key = Key(data['key'])

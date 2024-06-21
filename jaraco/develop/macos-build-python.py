@@ -11,7 +11,7 @@ import subprocess
 import autocommand
 
 
-@functools.lru_cache()
+@functools.lru_cache
 def brew_prefix(name=None):
     cmd = ['brew', '--prefix']
     if name:
