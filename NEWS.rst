@@ -1,3 +1,12 @@
+v8.15.0
+=======
+
+Features
+--------
+
+- Add support for resolving metadata even when pyproject.toml is in conflict. (#19)
+
+
 v8.14.1
 =======
 
