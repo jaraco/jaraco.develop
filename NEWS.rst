@@ -1,3 +1,12 @@
+v8.15.1
+=======
+
+Bugfixes
+--------
+
+- Use more modern 'is_dir' incantation.
+
+
 v8.15.0
 =======
 
