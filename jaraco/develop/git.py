@@ -231,6 +231,15 @@ def projects():
 
 
 def exists(project, target):
+    """
+    >>> target = getfixture('tmp_path')
+    >>> exists('foo', target)
+    False
+
+    >>> target = path.Path(getfixture('tmp_path'))
+    >>> exists('foo', target)
+    False
+    """
     return target.joinpath(posixpath.basename(resolve(project))).is_dir()
 
 
