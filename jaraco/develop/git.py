@@ -231,7 +231,7 @@ def projects():
 
 
 def exists(project, target):
-    return target.joinpath(posixpath.basename(resolve(project))).isdir()
+    return target.joinpath(posixpath.basename(resolve(project))).is_dir()
 
 
 def checkout_missing(project, root):
