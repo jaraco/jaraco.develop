@@ -2,40 +2,37 @@
 Routine to run a command across all projects.
 """
 
-import argparse
+import functools
 import subprocess
+from typing import List, cast
 
-import autocommand
+import typer
+from jaraco.ui.main import main
+from typing_extensions import Annotated
 
 from . import filters, git
 
-parser = argparse.ArgumentParser()
-parser.add_argument(
-    '--keyword',
-    '-k',
-    dest='selectors',
-    type=filters.Keyword,
-    default=filters.Selectors(),
-    action='append',
-)
-parser.add_argument(
-    '--tag',
-    '-t',
-    dest='selectors',
-    type=filters.Tag,
-    default=filters.Selectors(),
-    action='append',
-)
-parser.add_argument('args', nargs='*')
 
-
-@autocommand.autocommand(__name__, parser=parser)
-def main(
-    selectors: filters.Selectors,
-    args=None,
+@functools.partial(
+    main,
+    app=typer.Typer(
+        context_settings=dict(allow_extra_args=True, ignore_unknown_options=True)
+    ),
+)
+def run(
+    tag: Annotated[
+        List[filters.Tag], typer.Option('--tag', '-t', parser=filters.Tag)
+    ] = [],
+    keyword: Annotated[
+        List[filters.Keyword],
+        typer.Option('--keyword', '-k', parser=filters.Keyword),
+    ] = [],
+    args: typer.Context = typer.Option(None),
 ):
+    cmd = cast(List[str], args.args)
+    selectors = filters.Selectors(tag + keyword)
     for project in filter(selectors, git.projects()):
         print(project, flush=True)
         with git.temp_checkout(project, quiet=True):
-            subprocess.Popen(args).wait()
+            subprocess.Popen(cmd).wait()
         print(flush=True)

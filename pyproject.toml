@@ -21,7 +21,6 @@ dependencies = [
 	"jaraco.ui >= 2.4",
 	"jaraco.context",
 	"keyring",
-	"autocommand",
 	"requests-toolbelt",
 	"PyNaCl",
 	"packaging",
