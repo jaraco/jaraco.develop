@@ -12,9 +12,12 @@ trustExitCode = true
 import functools
 import shutil
 import subprocess
+from typing import Optional
 
-import autocommand
 import subprocess_tee
+import typer
+from jaraco.ui.main import main
+from typing_extensions import Annotated
 
 from . import filters, git
 
@@ -48,10 +51,12 @@ def update_project(name, base, branch=None, dry_run=False):
         return name
 
 
-@autocommand.autocommand(__name__)
-def main(
-    keyword: filters.Keyword = None,  # type: ignore
-    tag: filters.Tag = None,  # type: ignore
+@main
+def run(
+    keyword: Annotated[
+        Optional[filters.Keyword], typer.Option(parser=filters.Keyword)
+    ] = None,
+    tag: Annotated[Optional[filters.Tag], typer.Option(parser=filters.Tag)] = None,
     base='gh://jaraco/skeleton',
     branch=None,
     dry_run=False,

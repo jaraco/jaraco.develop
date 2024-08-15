@@ -7,8 +7,8 @@ import pathlib
 import re
 import subprocess
 
-import autocommand
 import packaging.version
+from jaraco.ui.main import main
 from requests_toolbelt import sessions
 
 gh_content = sessions.BaseUrlSession(
@@ -44,7 +44,7 @@ def is_stable(tag):
     return not by_tag(tag).is_stable
 
 
-@autocommand.autocommand(__name__)
+@main
 def run(pre=False):
     tags = gh_api.get('tags').json()
     filtered = tags if pre else filter(is_stable, tags)

@@ -1,13 +1,13 @@
 import functools
 
-import autocommand
 import path
+from jaraco.ui.main import main
 from more_itertools import consume
 
 from . import git
 
 
-@autocommand.autocommand(__name__)
-def main(target: path.Path = path.Path()):
+@main
+def run(target: path.Path = path.Path()):
     checkout = functools.partial(git.checkout_missing, root=target)
     consume(map(checkout, git.projects()))

@@ -11,10 +11,9 @@ import textwrap
 import unittest.mock
 from pathlib import Path
 
-import autocommand
-
 import jaraco.packaging.metadata
 from jaraco.functools import identity
+from jaraco.ui.main import main
 
 
 sample_conflict = textwrap.dedent(
@@ -173,7 +172,7 @@ def resolve(conflict):
     raise ValueError("Unable to resolve")
 
 
-@autocommand.autocommand(__name__)
+@main
 def merge(base: Path, local: Path, remote: Path, merge: Path):
     conflicts = Conflict.read(**locals())
     res = merge.read_text()
