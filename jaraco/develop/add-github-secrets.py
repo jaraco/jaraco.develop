@@ -1,9 +1,10 @@
 import getpass
 
-import autocommand
-import keyring
-
 import jaraco.context
+import keyring
+import typer
+from jaraco.ui.main import main
+from typing_extensions import Annotated
 
 from . import github
 
@@ -32,8 +33,12 @@ secret_sources = {
 }
 
 
-@autocommand.autocommand(__name__)
-def run(project: github.Repo = github.Repo.detect()):
+@main
+def run(
+    project: Annotated[
+        github.Repo, typer.Option(parser=github.Repo)
+    ] = github.Repo.detect(),
+):
     for name in project.find_needed_secrets():
         source = secret_sources[name]
         value = keyring.get_password(**source)

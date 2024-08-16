@@ -2,8 +2,8 @@ import pathlib
 import re
 import subprocess
 
-import autocommand
 from ini2toml.api import Translator
+from jaraco.ui.main import main
 
 
 def split_build_system(pyproject):
@@ -52,7 +52,7 @@ def bump_setuptools(build_system):
     return build_system.replace('setuptools>=56', 'setuptools>=61.2')
 
 
-@autocommand.autocommand(__name__)
+@main
 def run():
     pyproject = pathlib.Path('pyproject.toml')
     config = Translator().translate(pathlib.Path('setup.cfg').read_text(), 'setup.cfg')

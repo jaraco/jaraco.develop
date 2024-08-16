@@ -1,12 +1,12 @@
 import pathlib
 import subprocess
 
-import autocommand
+from jaraco.ui.main import main
 
 from . import towncrier
 
 
-@autocommand.autocommand(__name__)
+@main
 def finalize():
     ver = towncrier.semver(towncrier.get_version())
     # workaround for twisted/towncrier#538

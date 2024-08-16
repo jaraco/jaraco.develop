@@ -1,7 +1,7 @@
 import re
 import sys
 
-import autocommand
+from jaraco.ui.main import main
 
 
 def replace_len(char):
@@ -12,7 +12,7 @@ def replace_len(char):
     return replacer
 
 
-@autocommand.autocommand(__name__)
+@main
 def run(before, after):
     assert len(before) == 1
     assert len(after) == 1

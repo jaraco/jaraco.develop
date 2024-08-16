@@ -8,7 +8,7 @@ import functools
 import os
 import subprocess
 
-import autocommand
+from jaraco.ui.main import main
 
 
 @functools.lru_cache
@@ -27,7 +27,7 @@ def require_libs():
     assert not missing, f"Need {missing}"
 
 
-@autocommand.autocommand(__name__)
+@main
 def build_on_macOS(debug=False):
     """
     Build cpython in the current directory on a mac with

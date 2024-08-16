@@ -2,8 +2,8 @@ import getpass
 import json
 import subprocess
 
-import autocommand
 import keyring
+from jaraco.ui.main import main
 
 
 def create_project(project, user):
@@ -65,8 +65,8 @@ def create_pipeline(svc, project):
     subprocess.run(cmd)
 
 
-@autocommand.autocommand(__name__)
-def main(project, user=None):
+@main
+def run(project, user=None):
     user = user or getpass.getuser()
     create_project(project, user)
     create_service_endpoint(project, user)
