@@ -7,8 +7,8 @@ from . import github
 
 @main
 def run(
-    name,
-    value,
+    name: str,
+    value: str,
     project: Annotated[
         github.Repo, typer.Option(parser=github.Repo)
     ] = github.Repo.detect(),
