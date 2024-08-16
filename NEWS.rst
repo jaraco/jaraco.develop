@@ -1,3 +1,12 @@
+v8.16.0
+=======
+
+Features
+--------
+
+- Migrated from autocommand to typer for CLI handling. (#21)
+
+
 v8.15.1
 =======
 
