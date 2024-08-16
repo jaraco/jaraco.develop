@@ -27,9 +27,10 @@ def run(
         List[filters.Keyword],
         typer.Option('--keyword', '-k', parser=filters.Keyword),
     ] = [],
-    args: typer.Context = typer.Option(None),
+    *,
+    ctx: typer.Context,
 ):
-    cmd = cast(List[str], args.args)
+    cmd = cast(List[str], ctx.args)
     selectors = filters.Selectors(tag + keyword)
     for project in filter(selectors, git.projects()):
         print(project, flush=True)
