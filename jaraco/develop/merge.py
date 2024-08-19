@@ -15,7 +15,6 @@ import jaraco.packaging.metadata
 from jaraco.functools import identity
 from jaraco.ui.main import main
 
-
 sample_conflict = textwrap.dedent(
     """
     start

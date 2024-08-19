@@ -6,6 +6,7 @@ import operator
 import subprocess
 
 import path
+
 import jaraco.text
 from jaraco.ui.main import main
 

@@ -1,10 +1,11 @@
 import getpass
 
-import jaraco.context
 import keyring
 import typer
-from jaraco.ui.main import main
 from typing_extensions import Annotated
+
+import jaraco.context
+from jaraco.ui.main import main
 
 from . import github
 

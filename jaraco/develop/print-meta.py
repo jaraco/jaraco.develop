@@ -1,4 +1,4 @@
-from typing import cast, Any, List
+from typing import Any, List, cast
 
 from build.util import project_wheel_metadata
 from jaraco.ui.main import main

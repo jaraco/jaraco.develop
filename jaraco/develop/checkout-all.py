@@ -1,8 +1,9 @@
 import functools
 
 import path
-from jaraco.ui.main import main
 from more_itertools import consume
+
+from jaraco.ui.main import main
 
 from . import git
 
