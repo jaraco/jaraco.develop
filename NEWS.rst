@@ -1,3 +1,12 @@
+v8.16.2
+=======
+
+Bugfixes
+--------
+
+- Fix issue in create-github-release with typer usage. (#23)
+
+
 v8.16.1
 =======
 
