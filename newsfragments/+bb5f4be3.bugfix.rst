@@ -1,0 +1,1 @@
+Add type annotations for base, branch, dry_run, and restore short options to tag and keyword.

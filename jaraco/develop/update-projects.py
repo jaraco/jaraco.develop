@@ -55,12 +55,15 @@ def update_project(name, base, branch=None, dry_run=False):
 @main
 def run(
     keyword: Annotated[
-        Optional[filters.Keyword], typer.Option(parser=filters.Keyword)
+        Optional[filters.Keyword],
+        typer.Option('-k', '--keyword', parser=filters.Keyword),
     ] = None,
-    tag: Annotated[Optional[filters.Tag], typer.Option(parser=filters.Tag)] = None,
-    base='gh://jaraco/skeleton',
-    branch=None,
-    dry_run=False,
+    tag: Annotated[
+        Optional[filters.Tag], typer.Option('-t', '--tag', parser=filters.Tag)
+    ] = None,
+    base: str = 'gh://jaraco/skeleton',
+    branch: Optional[str] = None,
+    dry_run: bool = False,
 ):
     update = functools.partial(
         update_project, base=base, branch=branch, dry_run=dry_run
