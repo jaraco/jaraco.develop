@@ -1,3 +1,12 @@
+v8.16.1
+=======
+
+Bugfixes
+--------
+
+- Add type annotations for base, branch, dry_run, and restore short options to tag and keyword.
+
+
 v8.16.0
 =======
 
