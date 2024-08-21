@@ -3,7 +3,7 @@ import mimetypes
 import shutil
 import tempfile
 
-from setuptools._distutils import ccompiler, sysconfig
+from setuptools._distutils import ccompiler, sysconfig  # type: ignore[import-untyped]
 
 from jaraco.ui.editor import EditableFile
 

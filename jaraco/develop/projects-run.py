@@ -4,7 +4,7 @@ Routine to run a command across all projects.
 
 import functools
 import subprocess
-from typing import List, cast
+from typing import List
 
 import typer
 from typing_extensions import Annotated
@@ -31,10 +31,9 @@ def run(
     *,
     ctx: typer.Context,
 ):
-    cmd = cast(List[str], ctx.args)
     selectors = filters.Selectors(tag + keyword)
     for project in filter(selectors, git.projects()):
         print(project, flush=True)
         with git.temp_checkout(project, quiet=True):
-            subprocess.Popen(cmd).wait()
+            subprocess.Popen(ctx.args).wait()
         print(flush=True)
