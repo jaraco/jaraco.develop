@@ -84,7 +84,7 @@ class Repo(str):
         >>> list(Repo.find_needed_secrets())
         ['PYPI_TOKEN']
         """
-        workflows = pathlib.Path('.github/workflows').iterdir()
+        workflows = list(pathlib.Path('.github/workflows').iterdir())
         found = itertools.chain.from_iterable(map(cls.find_secrets, workflows))
         inferred = itertools.chain.from_iterable(map(cls.infer_secrets, workflows))
         needed = itertools.chain(found, inferred)
@@ -92,9 +92,8 @@ class Repo(str):
 
     @staticmethod
     def infer_secrets(file):
-        return ['PYPI_TOKEN'] * 'uses: coherent-oss/system' in file.read_text(
-            encoding='utf-8'
-        )
+        is_coherent = 'uses: coherent-oss/system' in file.read_text(encoding='utf-8')
+        return ['PYPI_TOKEN'] * is_coherent
 
     @staticmethod
     def find_secrets(file):
