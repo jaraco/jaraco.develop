@@ -1,3 +1,12 @@
+v8.17.1
+=======
+
+Bugfixes
+--------
+
+- Make sure workflows isn't consumed before passing to infer_secrets.
+
+
 v8.17.0
 =======
 
