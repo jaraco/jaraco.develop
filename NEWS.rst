@@ -1,3 +1,12 @@
+v8.17.0
+=======
+
+Features
+--------
+
+- Add support for adding secrets in coherent projects.
+
+
 v8.16.2
 =======
 

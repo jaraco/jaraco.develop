@@ -1,1 +1,0 @@
-Add support for adding secrets in coherent projects.
