@@ -9,6 +9,8 @@ import re
 import keyring
 import nacl.encoding
 import nacl.public
+from jaraco.functools import apply
+from more_itertools import unique_everseen
 from requests_toolbelt import sessions
 
 from . import repo
@@ -76,14 +78,23 @@ class Repo(str):
         return resp
 
     @classmethod
+    @apply(unique_everseen)
     def find_needed_secrets(cls):
         """
         >>> list(Repo.find_needed_secrets())
         ['PYPI_TOKEN']
         """
         workflows = pathlib.Path('.github/workflows').iterdir()
-        all = itertools.chain.from_iterable(map(cls.find_secrets, workflows))
-        return itertools.filterfalse('GITHUB_TOKEN'.__eq__, all)
+        found = itertools.chain.from_iterable(map(cls.find_secrets, workflows))
+        inferred = itertools.chain.from_iterable(map(cls.infer_secrets, workflows))
+        needed = itertools.chain(found, inferred)
+        return itertools.filterfalse('GITHUB_TOKEN'.__eq__, needed)
+
+    @staticmethod
+    def infer_secrets(file):
+        return ['PYPI_TOKEN'] * 'uses: coherent-oss/system' in file.read_text(
+            encoding='utf-8'
+        )
 
     @staticmethod
     def find_secrets(file):
