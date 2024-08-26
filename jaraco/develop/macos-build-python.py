@@ -28,7 +28,7 @@ def require_libs():
 
 
 @main
-def build_on_macOS(debug=False):
+def build_on_macOS(debug: bool = False):
     """
     Build cpython in the current directory on a mac with
     zlib and openssl installed.

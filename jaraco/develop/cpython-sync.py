@@ -46,7 +46,7 @@ def is_stable(tag):
 
 
 @main
-def run(pre=False):
+def run(pre: bool = False):
     tags = gh_api.get('tags').json()
     filtered = tags if pre else filter(is_stable, tags)
     tag = max(filtered, key=by_tag)
