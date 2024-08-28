@@ -23,7 +23,7 @@ def add_newlines(lines):
 @main
 def run(
     name: str,
-    target: Annotated[path.Path, typer.Option(parser=path.Path)] = path.Path(),
+    target: Annotated[path.Path, typer.Argument(parser=path.Path)] = path.Path(),
 ):
     repo, path = git.projects_repo()
     project = git.Project.parse(name)
