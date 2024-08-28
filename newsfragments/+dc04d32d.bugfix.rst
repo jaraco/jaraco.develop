@@ -1,1 +1,0 @@
-Fix usage when soliciting a path.Path, which typer doesn't support.

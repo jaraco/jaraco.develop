@@ -1,3 +1,12 @@
+v8.17.3
+=======
+
+Bugfixes
+--------
+
+- Fix usage when soliciting a path.Path, which typer doesn't support.
+
+
 v8.17.2
 =======
 
