@@ -4,8 +4,10 @@ Add a repo to a list of projects maintained in GitHub.
 
 import operator
 import subprocess
+from typing_extensions import Annotated
 
 import path
+import typer
 
 import jaraco.text
 from jaraco.ui.main import main
@@ -19,7 +21,10 @@ def add_newlines(lines):
 
 
 @main
-def run(name: str, target: path.Path = path.Path()):
+def run(
+    name: str,
+    target: Annotated[path.Path, typer.Option(parser=path.Path)] = path.Path(),
+):
     repo, path = git.projects_repo()
     project = git.Project.parse(name)
     with git.temp_checkout(repo, quiet=True):
