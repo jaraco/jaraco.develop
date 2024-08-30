@@ -1,3 +1,12 @@
+v8.17.4
+=======
+
+Bugfixes
+--------
+
+- Allow the short parameter for target.
+
+
 v8.17.3
 =======
 
