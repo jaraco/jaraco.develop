@@ -12,5 +12,5 @@ def finalize():
     # workaround for twisted/towncrier#538
     pathlib.Path('newsfragments').mkdir(exist_ok=True)
     towncrier.run('build', '--yes')
-    subprocess.check_call(['git', 'commit', '-a', '-m' 'Finalize'])
+    subprocess.check_call(['git', 'commit', '-a', '-mFinalize'])
     subprocess.check_call(['git', 'tag', '-a', '-m', '', ver])
