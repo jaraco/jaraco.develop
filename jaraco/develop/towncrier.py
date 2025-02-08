@@ -30,8 +30,7 @@ def _release_bump(file):
 def news_fragments():
     except_ = 'README.rst', '.gitignore'
     path = pathlib.Path('newsfragments')
-    names = (file for file in path.iterdir() if file.name not in except_)
-    return names if path.exists() else ()
+    return (file for file in path.glob('*') if file.name not in except_)
 
 
 def release_kind():
