@@ -1,3 +1,12 @@
+v8.17.5
+=======
+
+Bugfixes
+--------
+
+- Prefer glob for finding files in a possibly-non-existent directory. (#26)
+
+
 v8.17.4
 =======
 
