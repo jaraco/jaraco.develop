@@ -1,3 +1,12 @@
+v8.17.6
+=======
+
+Bugfixes
+--------
+
+- Fix Windows handling in target_for_root. (#28)
+
+
 v8.17.5
 =======
 
