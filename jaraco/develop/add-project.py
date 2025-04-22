@@ -4,7 +4,7 @@ Add a repo to a list of projects maintained in GitHub.
 
 import operator
 import subprocess
-from typing_extensions import Annotated
+from typing import Annotated
 
 import path
 import typer

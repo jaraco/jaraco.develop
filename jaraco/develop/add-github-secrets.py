@@ -1,8 +1,8 @@
 import getpass
+from typing import Annotated
 
 import keyring
 import typer
-from typing_extensions import Annotated
 
 import jaraco.context
 from jaraco.ui.main import main

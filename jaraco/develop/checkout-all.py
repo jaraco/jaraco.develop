@@ -1,10 +1,9 @@
 import functools
-from typing_extensions import Annotated
+from typing import Annotated
 
 import path
 import typer
 from more_itertools import consume
-
 
 from jaraco.ui.main import main
 

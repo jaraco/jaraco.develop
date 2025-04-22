@@ -9,14 +9,15 @@ cmd = py -m jaraco.develop.merge "$BASE" "$LOCAL" "$REMOTE" "$MERGED"
 trustExitCode = true
 """
 
+from __future__ import annotations
+
 import functools
 import shutil
 import subprocess
-from typing import Optional
+from typing import Annotated
 
 import subprocess_tee
 import typer
-from typing_extensions import Annotated
 
 from jaraco.ui.main import main
 
@@ -55,14 +56,14 @@ def update_project(name, base, branch=None, dry_run=False):
 @main
 def run(
     keyword: Annotated[
-        Optional[filters.Keyword],
+        filters.Keyword | None,
         typer.Option('-k', '--keyword', parser=filters.Keyword),
     ] = None,
     tag: Annotated[
-        Optional[filters.Tag], typer.Option('-t', '--tag', parser=filters.Tag)
+        filters.Tag | None, typer.Option('-t', '--tag', parser=filters.Tag)
     ] = None,
     base: str = 'gh://jaraco/skeleton',
-    branch: Optional[str] = None,
+    branch: str | None = None,
     dry_run: bool = False,
 ):
     update = functools.partial(

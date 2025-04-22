@@ -4,10 +4,9 @@ Routine to run a command across all projects.
 
 import functools
 import subprocess
-from typing import List
+from typing import Annotated
 
 import typer
-from typing_extensions import Annotated
 
 from jaraco.ui.main import main
 
@@ -22,10 +21,10 @@ from . import filters, git
 )
 def run(
     tag: Annotated[
-        List[filters.Tag], typer.Option('--tag', '-t', parser=filters.Tag)
+        list[filters.Tag], typer.Option('--tag', '-t', parser=filters.Tag)
     ] = [],
     keyword: Annotated[
-        List[filters.Keyword],
+        list[filters.Keyword],
         typer.Option('--keyword', '-k', parser=filters.Keyword),
     ] = [],
     *,
