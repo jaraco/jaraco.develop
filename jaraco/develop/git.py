@@ -157,8 +157,13 @@ def target_for_root(project, root: path.Path = path.Path()):
     """
     Append the prefix of the resolved project name to the target
     and ensure it exists.
+
+    >>> target_for_root(Project('foo-project'), pathlib.PurePosixPath('.'))
+    PurePosixPath('jaraco')
+    >>> target_for_root(Project('/bing/baz'), pathlib.PurePosixPath('/tmp'))
+    PurePosixPath('/tmp/bing')
     """
-    _, prefix, *_ = pathlib.PosixPath(resolve(project).path).parts
+    _, prefix, *_ = pathlib.PurePosixPath(resolve(project).path).parts
     return root / prefix
 
 

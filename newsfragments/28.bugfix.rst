@@ -1,0 +1,1 @@
+Fix Windows handling in target_for_root.
