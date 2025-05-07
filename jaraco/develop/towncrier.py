@@ -9,7 +9,7 @@ from jaraco.versioning import semver
 _release_bumps = collections.defaultdict(
     feature='minor',
     bugfix='patch',
-    doc='minor',
+    doc='patch',
     removal='major',
     misc='patch',
 )

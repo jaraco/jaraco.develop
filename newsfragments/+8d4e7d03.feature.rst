@@ -1,0 +1,1 @@
+Change the release type of ``doc`` fragments to ``patch`` in ``towncrier``.
