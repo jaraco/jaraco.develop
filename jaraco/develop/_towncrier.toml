@@ -1,0 +1,29 @@
+[tool.towncrier]
+title_format = "{version}"
+
+# Custom "deprecation" behaviour, references:
+# - https://github.com/jaraco/skeleton/issues/169
+# - https://github.com/twisted/towncrier/issues/704
+
+# Unfortunately default sections need to be redefined when customising:
+# https://towncrier.readthedocs.io/en/latest/configuration.html#custom-fragment-types
+
+[tool.towncrier.fragment.removal]
+name = "Removals and Breaking Changes"
+
+[tool.towncrier.fragment.feature]
+name = "Features"
+
+[tool.towncrier.fragment.deprecation]
+name = "Deprecations"
+
+[tool.towncrier.fragment.bugfix]
+name = "Bugfixes and Minor Changes"
+
+[tool.towncrier.fragment.doc]
+name = "Improved Documentation"
+showcontent = false
+
+[tool.towncrier.fragment.misc]
+name = "Miscellaneous and Internal Changes"
+showcontent = false

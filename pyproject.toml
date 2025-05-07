@@ -49,6 +49,7 @@ test = [
 	# local
 	"types-requests",
 	"pytest-home",
+	"towncrier",
 ]
 
 doc = [
