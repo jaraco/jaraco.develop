@@ -1,3 +1,12 @@
+v8.18.0
+=======
+
+Features
+--------
+
+- Change the release type of ``doc`` fragments to ``patch`` in ``towncrier``. (#29)
+
+
 v8.17.6
 =======
 
