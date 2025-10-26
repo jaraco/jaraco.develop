@@ -1,4 +1,5 @@
 import collections
+import importlib.resources
 import pathlib
 import subprocess
 import sys
@@ -6,12 +7,15 @@ import sys
 from jaraco.vcs import repo
 from jaraco.versioning import semver
 
+_pkg = __package__ or "jaraco.develop"
+
 _release_bumps = collections.defaultdict(
     feature='minor',
     bugfix='patch',
     doc='patch',
     removal='major',
     misc='patch',
+    deprecation='minor',
 )
 """
 Map the towncrier default fragment types to semver bumps.
@@ -65,15 +69,21 @@ def get_version():
 
 
 def run(command, *args):
-    cmd = (
-        sys.executable,
-        '-m',
-        'towncrier',
-        command,
-        '--version',
-        semver(get_version()),
-    ) + args
-    subprocess.check_call(cmd)
+    config = importlib.resources.files(_pkg).joinpath("_towncrier.toml")
+    with importlib.resources.as_file(config) as config_file:
+        cmd = (
+            sys.executable,
+            '-m',
+            'towncrier',
+            command,
+            '--config',
+            config_file,
+            '--dir',
+            '.',  # for some reason `towncrier` attempts to infer from config_file
+            '--version',
+            semver(get_version()),
+        ) + args
+        subprocess.check_call(cmd)
 
 
 if __name__ == '__main__':
