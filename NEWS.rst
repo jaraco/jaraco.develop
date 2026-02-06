@@ -1,3 +1,12 @@
+v8.19.1
+=======
+
+Bugfixes
+--------
+
+- Fixed linter errors.
+
+
 v8.19.0
 =======
 
