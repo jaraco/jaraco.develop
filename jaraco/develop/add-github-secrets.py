@@ -23,10 +23,6 @@ secret_sources = {
         username='__token__',
         service_name='https://upload.pypi.org/legacy/',
     ),
-    'TIDELIFT_TOKEN': dict(
-        username=_safe_getuser(),
-        service_name='https://api.tidelift.com/external-api/',
-    ),
     'WOLFRAMALPHA_API_KEY': dict(
         username=_safe_getuser(),
         service_name='https://api.wolframalpha.com/',
