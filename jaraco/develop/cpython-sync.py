@@ -8,9 +8,8 @@ import re
 import subprocess
 
 import packaging.version
-from requests_toolbelt import sessions
-
 from jaraco.ui.main import main
+from requests_toolbelt import sessions
 
 gh_content = sessions.BaseUrlSession(
     'https://raw.githubusercontent.com/python/cpython/'

@@ -3,9 +3,8 @@ import mimetypes
 import shutil
 import tempfile
 
-from setuptools._distutils import ccompiler, sysconfig
-
 from jaraco.ui.editor import EditableFile
+from setuptools._distutils import ccompiler, sysconfig
 
 
 @contextlib.contextmanager

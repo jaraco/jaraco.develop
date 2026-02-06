@@ -18,7 +18,6 @@ from typing import Annotated
 
 import subprocess_tee
 import typer
-
 from jaraco.ui.main import main
 
 from . import filters, git

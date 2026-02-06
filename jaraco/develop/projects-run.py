@@ -7,7 +7,6 @@ import subprocess
 from typing import Annotated
 
 import typer
-
 from jaraco.ui.main import main
 
 from . import filters, git

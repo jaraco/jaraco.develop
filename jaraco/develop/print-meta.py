@@ -1,7 +1,6 @@
 from typing import Any, cast
 
 from build.util import project_wheel_metadata
-
 from jaraco.ui.main import main
 
 

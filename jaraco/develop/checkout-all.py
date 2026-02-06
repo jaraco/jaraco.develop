@@ -3,9 +3,8 @@ from typing import Annotated
 
 import path
 import typer
-from more_itertools import consume
-
 from jaraco.ui.main import main
+from more_itertools import consume
 
 from . import git
 

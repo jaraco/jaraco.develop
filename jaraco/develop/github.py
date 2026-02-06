@@ -9,10 +9,9 @@ import re
 import keyring
 import nacl.encoding
 import nacl.public
+from jaraco.functools import apply
 from more_itertools import unique_everseen
 from requests_toolbelt import sessions
-
-from jaraco.functools import apply
 
 from . import repo
 

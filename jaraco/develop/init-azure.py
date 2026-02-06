@@ -3,7 +3,6 @@ import json
 import subprocess
 
 import keyring
-
 from jaraco.ui.main import main
 
 

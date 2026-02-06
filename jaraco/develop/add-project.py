@@ -6,10 +6,9 @@ import operator
 import subprocess
 from typing import Annotated
 
+import jaraco.text
 import path
 import typer
-
-import jaraco.text
 from jaraco.ui.main import main
 
 from . import git
