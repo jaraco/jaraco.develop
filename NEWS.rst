@@ -1,3 +1,13 @@
+v8.19.0
+=======
+
+Features
+--------
+
+- Remove support for TIDELIFT_TOKEN, no longer relevant.
+- When finding needed secrets, exclude CODECOV_TOKEN.
+
+
 v8.18.0
 =======
 
