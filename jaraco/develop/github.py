@@ -89,7 +89,8 @@ class Repo(str):
         found = itertools.chain.from_iterable(map(cls.find_secrets, workflows))
         inferred = itertools.chain.from_iterable(map(cls.infer_secrets, workflows))
         needed = itertools.chain(found, inferred)
-        return itertools.filterfalse('GITHUB_TOKEN'.__eq__, needed)
+        exclusions = ['GITHUB_TOKEN', 'CODECOV_TOKEN']
+        return itertools.filterfalse(exclusions.__contains__, needed)
 
     @staticmethod
     def infer_secrets(file):
