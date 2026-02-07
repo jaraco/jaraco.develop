@@ -1,3 +1,12 @@
+v8.19.2
+=======
+
+Bugfixes
+--------
+
+- Fixed issue due to build. (#31)
+
+
 v8.19.1
 =======
 
