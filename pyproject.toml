@@ -40,6 +40,9 @@ dependencies = [
 	"jaraco.packaging >= 10",
 	"typer",
 	"typing-extensions",
+
+	# workaround for pypa/build#978
+	"build < 1.3",
 ]
 dynamic = ["version"]
 
