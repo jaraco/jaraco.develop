@@ -1,0 +1,1 @@
+Secrets read from keyring are now wrapped in ``secrets.Secret``, whose repr elides the value, keeping credentials out of rendered tracebacks and other repr-based output.

@@ -1,14 +1,15 @@
 import functools
 
-import keyring
 from requests_toolbelt import sessions
+
+from . import secrets
 
 url = 'https://readthedocs.org/'
 
 
 @functools.lru_cache
 def session():
-    auth = 'Token ' + keyring.get_password(url, 'token')
+    auth = secrets.Secret('Token ' + secrets.get_password(url, 'token'))
     session = sessions.BaseUrlSession(url + 'api/v3/')
     session.headers = dict(Authorization=auth)
     return session
