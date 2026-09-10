@@ -37,7 +37,7 @@ def recursive_glob(spec):
     Take a single spec and use the first part as the root and the latter
     part as the spec.
     """
-    root, sep, spec = spec.rpartition(os.pathsep)
+    root, _, spec = spec.rpartition(os.pathsep)
     root = root or '.'
     return _recursive_glob(root, spec)
 

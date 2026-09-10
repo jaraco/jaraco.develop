@@ -20,7 +20,7 @@ def create_project(project, user):
         '--visibility',
         'public',
     ]
-    subprocess.run(cmd)
+    subprocess.run(cmd, check=True)
 
 
 def create_service_endpoint(project, user):
@@ -39,7 +39,7 @@ def create_service_endpoint(project, user):
         '--project',
         project,
     ]
-    subprocess.run(cmd, env=env)
+    subprocess.run(cmd, env=env, check=True)
 
 
 def find_endpoint_id(project):
@@ -63,7 +63,7 @@ def create_pipeline(svc, project):
         '--yaml-path',
         'azure-pipelines.yml',
     ]
-    subprocess.run(cmd)
+    subprocess.run(cmd, check=True)
 
 
 @main

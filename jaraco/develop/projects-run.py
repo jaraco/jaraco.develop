@@ -19,13 +19,14 @@ from . import filters, git
     ),
 )
 def run(
+    # typer supplies the values, so these defaults are never mutated
     tag: Annotated[
         list[filters.Tag], typer.Option('--tag', '-t', parser=filters.Tag)
-    ] = [],
+    ] = [],  # noqa: B006
     keyword: Annotated[
         list[filters.Keyword],
         typer.Option('--keyword', '-k', parser=filters.Keyword),
-    ] = [],
+    ] = [],  # noqa: B006
     *,
     ctx: typer.Context,
 ):

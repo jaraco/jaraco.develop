@@ -56,12 +56,12 @@ def bump_setuptools(build_system):
 def run():
     pyproject = pathlib.Path('pyproject.toml')
     config = Translator().translate(pathlib.Path('setup.cfg').read_text(), 'setup.cfg')
-    config_bs, config_rest = split_build_system(config)
+    _, config_rest = split_build_system(config)
     existing_bs, existing_rest = split_build_system(pyproject.read_text())
     pyproject.write_text(
         bump_setuptools(existing_bs) + tweak(config_rest) + '\n' + existing_rest
     )
-    subprocess.check_call('git rm setup.cfg'.split())
+    subprocess.check_call(['git', 'rm', 'setup.cfg'])
     message = (
         "Migrated config to pyproject.toml using jaraco.develop.migrate-config "
         "and ini2toml."

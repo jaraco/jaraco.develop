@@ -9,6 +9,7 @@ import re
 import subprocess
 import types
 import urllib.parse
+from typing import ClassVar
 
 import path
 import requests
@@ -49,7 +50,7 @@ class URLScheme:
         return f'{self.__class__.__name__}({self.prefix!r}, {self.value!r})'
 
     def matches(self, url):
-        return url.startswith(self.prefix) or url.startswith(self.value)
+        return url.startswith((self.prefix, self.value))
 
     @classmethod
     def parse(cls, line):
@@ -68,7 +69,12 @@ class URLScheme:
     def load(cls):
         cmd = ['git', 'config', '--get-regexp', r'url\..*\.insteadof']
         lines = subprocess.run(
-            cmd, capture_output=True, text=True, encoding='utf-8'
+            cmd,
+            # git exits non-zero when no substitutions are configured
+            check=False,
+            capture_output=True,
+            text=True,
+            encoding='utf-8',
         ).stdout
         return set(map(cls.parse, lines.splitlines()))
 
@@ -122,10 +128,10 @@ class Project(str):
     """
 
     pattern = re.compile(r'(?P<name>\S+)\s*(?P<rest>.*)$')
-    tags: list[str] = []
+    tags: ClassVar[list[str]] = []
 
-    def __new__(self, value, **kwargs):
-        return super().__new__(self, value)
+    def __new__(cls, value, **kwargs):
+        return super().__new__(cls, value)
 
     def __init__(self, value, **kwargs):
         vars(self).update(kwargs)
@@ -170,7 +176,7 @@ def target_for_root(project, root: path.Path = path.Path()):
 def configure_fork(project, repo):
     # special case for calendra - make sure not to fetch tags from upstream.
     if project == 'calendra':
-        cmd = 'git config remote.upstream.tagOpt --no-tags'.split()
+        cmd = ['git', 'config', 'remote.upstream.tagOpt', '--no-tags']
         subprocess.check_output(cmd, cwd=repo)
 
     if 'fork' not in project.tags:
