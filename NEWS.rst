@@ -1,3 +1,19 @@
+v9.0.0
+======
+
+Bugfixes
+--------
+
+- Secrets read from keyring are now wrapped in ``secrets.Secret``, whose repr elides the value, keeping credentials out of rendered tracebacks and other repr-based output. (#32)
+- Adopted the expanded Ruff 0.16 default rule selection, fixing the violations it surfaced. Notably, the subprocess invocations in ``init-azure`` and ``macos-build-python`` now check their return codes, failing fast instead of proceeding after a failed command.
+
+
+Deprecations and Removals
+-------------------------
+
+- ``github.Repo.get_public_key()`` is now the ``Repo.public_key`` cached property, which caches per repo instead of globally.
+
+
 v8.19.2
 =======
 

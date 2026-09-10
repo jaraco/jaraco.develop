@@ -1,1 +1,0 @@
-Adopted the expanded Ruff 0.16 default rule selection, fixing the violations it surfaced. Notably, the subprocess invocations in ``init-azure`` and ``macos-build-python`` now check their return codes, failing fast instead of proceeding after a failed command.

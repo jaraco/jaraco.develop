@@ -1,1 +1,0 @@
-``github.Repo.get_public_key()`` is now the ``Repo.public_key`` cached property, which caches per repo instead of globally.
