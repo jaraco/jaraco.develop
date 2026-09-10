@@ -46,15 +46,15 @@ class Repo(str):
     def detect(cls):
         return cls(repo.get_project_metadata().project)
 
-    @functools.lru_cache
-    def get_public_key(self):
+    @functools.cached_property
+    def public_key(self):
         data = self.session.get(f'{self}/actions/secrets/public-key').json()
         key = Key(data['key'])
         key.id = data['key_id']
         return key
 
     def encrypt(self, value):
-        src = self.get_public_key().encode('utf-8')
+        src = self.public_key.encode('utf-8')
         pub_key = nacl.public.PublicKey(src, nacl.encoding.Base64Encoder())
         box = nacl.public.SealedBox(pub_key)
         cipher_text = box.encrypt(value.encode('utf-8'))
@@ -64,7 +64,7 @@ class Repo(str):
         secret = f'{self}/actions/secrets/{name}'
         params = dict(
             encrypted_value=self.encrypt(value),
-            key_id=self.get_public_key().id,
+            key_id=self.public_key.id,
         )
         resp = self.session.put(secret, json=params)
         resp.raise_for_status()

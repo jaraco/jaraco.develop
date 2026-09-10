@@ -45,14 +45,14 @@ def can_compile_extension():
     test_compiler_c = "#include <python.h>\n"
     # make sure mimetypes knows the extension for c files
     mimetypes.add_type('text/x-c', '.c')
-    with EditableFile(test_compiler_c, 'text/x-c') as file:
-        with temp_dir() as output_dir:
-            try:
-                compiler = ccompiler.new_compiler()
-                compiler.compile(
-                    [file.name], output_dir=output_dir, include_dirs=get_include_dirs()
-                )
-                result = True
-            except Exception as e:
-                result = FalseString(e)
+    with EditableFile(test_compiler_c, 'text/x-c') as file, temp_dir() as output_dir:
+        try:
+            compiler = ccompiler.new_compiler()
+            compiler.compile(
+                [file.name], output_dir=output_dir, include_dirs=get_include_dirs()
+            )
+            result = True
+        # any failure is a failure to compile
+        except Exception as e:  # noqa: BLE001
+            result = FalseString(e)
     return result

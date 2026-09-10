@@ -62,4 +62,5 @@ def run(pre: bool = False):
         '-m',
         f'cpython-{version} rev={tag["commit"]["sha"][:12]}',
     ]
-    subprocess.run(cmd)
+    # tolerate a no-op sync, where there's nothing to commit
+    subprocess.run(cmd, check=False)

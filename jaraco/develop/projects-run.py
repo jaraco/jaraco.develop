@@ -3,6 +3,7 @@ Routine to run a command across all projects.
 """
 
 import functools
+import itertools
 import subprocess
 from typing import Annotated
 
@@ -20,16 +21,16 @@ from . import filters, git
 )
 def run(
     tag: Annotated[
-        list[filters.Tag], typer.Option('--tag', '-t', parser=filters.Tag)
-    ] = [],
+        list[filters.Tag] | None, typer.Option('--tag', '-t', parser=filters.Tag)
+    ] = None,
     keyword: Annotated[
-        list[filters.Keyword],
+        list[filters.Keyword] | None,
         typer.Option('--keyword', '-k', parser=filters.Keyword),
-    ] = [],
+    ] = None,
     *,
     ctx: typer.Context,
 ):
-    selectors = filters.Selectors(tag + keyword)
+    selectors = filters.Selectors(itertools.chain(tag or (), keyword or ()))
     for project in filter(selectors, git.projects()):
         print(project, flush=True)
         with git.temp_checkout(project, quiet=True):
