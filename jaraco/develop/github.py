@@ -6,14 +6,13 @@ import os
 import pathlib
 import re
 
-import keyring
 import nacl.encoding
 import nacl.public
 from jaraco.functools import apply
 from more_itertools import unique_everseen
 from requests_toolbelt import sessions
 
-from . import repo
+from . import repo, secrets
 
 
 class Key(str):
@@ -36,12 +35,12 @@ class Repo(str):
 
     @staticmethod
     def load_token():
-        token = os.environ.get("GITHUB_TOKEN") or keyring.get_password(
+        token = os.environ.get("GITHUB_TOKEN") or secrets.get_password(
             'Github',
             username(),
         )
         assert token, "Token not available"
-        return token
+        return secrets.Secret(token)
 
     @classmethod
     def detect(cls):

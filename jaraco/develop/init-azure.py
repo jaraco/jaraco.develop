@@ -2,8 +2,9 @@ import getpass
 import json
 import subprocess
 
-import keyring
 from jaraco.ui.main import main
+
+from . import secrets
 
 
 def create_project(project, user):
@@ -23,7 +24,7 @@ def create_project(project, user):
 
 
 def create_service_endpoint(project, user):
-    github_token = keyring.get_password('Github', user)
+    github_token = secrets.get_password('Github', user)
     env = dict(AZURE_DEVOPS_EXT_GITHUB_PAT=github_token)
     cmd = [
         'az',

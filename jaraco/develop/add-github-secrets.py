@@ -2,11 +2,10 @@ import getpass
 from typing import Annotated
 
 import jaraco.context
-import keyring
 import typer
 from jaraco.ui.main import main
 
-from . import github
+from . import github, secrets
 
 
 @jaraco.context.suppress(Exception)
@@ -37,5 +36,5 @@ def run(
 ):
     for name in project.find_needed_secrets():
         source = secret_sources[name]
-        value = keyring.get_password(**source)
+        value = secrets.get_password(**source)
         project.add_secret(name, value)
