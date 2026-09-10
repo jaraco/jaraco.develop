@@ -3,7 +3,7 @@ Protection for secret values against incidental disclosure.
 """
 
 import keyring
-from jaraco.functools import pass_none
+from jaraco.functools import compose, pass_none
 
 
 class Secret(str):
@@ -38,10 +38,7 @@ class Secret(str):
         return '<Secret>'
 
 
-def get_password(*args, **kwargs):
-    """
-    Retrieve a password from keyring, wrapped as a Secret.
-
-    Returns None when keyring has no such password.
-    """
-    return pass_none(Secret)(keyring.get_password(*args, **kwargs))
+get_password = compose(pass_none(Secret), keyring.get_password)
+"""
+Retrieve a password from keyring as a Secret, or None if unset.
+"""
