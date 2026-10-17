@@ -123,6 +123,13 @@ Runs older than a few months usually have expired logs. Treat the local
    - RUF012 sometimes exposes real shared-state bugs, such as a mutable class
      attribute that instances mutate. Check before reaching for `ClassVar`,
      and give a real bug its own commit and newsfragment.
+   - PLW0602: removing a do-nothing `global x` can expose F821 when the
+     name is never bound at module level. Find the intended binding site
+     (often `main()`) rather than adding a `noqa`.
+   - RUF012 on a class attribute built from `locals()`: before Python 3.14,
+     any annotation in the class body adds `__annotations__` to `locals()`,
+     so don't use `ClassVar` there. Use a tuple if the attribute is only
+     used for membership checks.
    - When there are more than ~100 violations, split the ruff commit
      sensibly. Also confirm everything still parses on the minimum Python
      (`python3.10 -c "import ast,sys; ast.parse(open(sys.argv[1]).read())"`),
@@ -198,6 +205,9 @@ Runs older than a few months usually have expired logs. Treat the local
      dropping support, a large redesign, or a disputed lint rule.
 
 ## Conventions
+
+- The user's shell is xonsh. Bash-isms such as `set -- $x` misbehave
+  silently. Wrap multi-step shell loops in `bash -c '...'`.
 
 - Qualify cross-repo references (`jaraco/skeleton#210`, not `#210`).
 - Don't pin ruff, and don't trust `.pre-commit-config.yaml` (it's
