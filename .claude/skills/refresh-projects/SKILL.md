@@ -139,6 +139,10 @@ Use `-e push`, because `-b main` also matches fork PRs whose branch is named
    - Ruff 0.17 dropped some 0.16 defaults (DTZ011, for example), so their
      `# noqa` comments now trip RUF100 (unused noqa). Remove the codes and
      keep any explanatory comment.
+   - RUF059 `_` renames: check that the name isn't consumed through
+     `locals()`/`vars()` (e.g. `.format(**locals())`).
+   - SIM118 (`in obj.keys()` → `in obj`) is only safe for real mappings.
+     Check the type first.
    - PLW0602: removing a do-nothing `global x` can expose F821 when the
      name is never bound at module level. Find the intended binding site
      (often `main()`) rather than adding a `noqa`.
@@ -263,7 +267,8 @@ Use `-e push`, because `-b main` also matches fork PRs whose branch is named
      at the source (skeleton's `test-suite.yml`, or the upstream project)
      instead of per project. A missing wheel can also show up as pip
      backtracking to an ancient release of a dependency, which then fails
-     (e.g. `No module named 'pkg_resources'`). Check the job log for
+     (e.g. `No module named 'pkg_resources'`), or as pip's
+     `resolution-too-deep`. Check the job log for
      unexpectedly old versions. When batching, have the coordinator do it so
      issues aren't duplicated.
    - **Minor issues:** fix directly and push.
