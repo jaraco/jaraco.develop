@@ -68,7 +68,9 @@ Runs older than a few months usually have expired logs. Treat the local
      - In `pyproject.toml`, the `# upstream` sections follow skeleton and the
        `# local` sections stay with the project.
      - In `ruff.toml`, take skeleton's upstream entries and keep the
-       project's `# local` entries.
+       project's `# local` entries. Drop local entries that skeleton has since
+       adopted upstream (B008, for example), and fix stray whitespace before
+       `# local`, which otherwise conflicts every time.
      - Files the project deliberately customized or deleted keep the
        project's version.
      - A check the project disabled on purpose stays disabled, even when
@@ -114,6 +116,17 @@ Runs older than a few months usually have expired logs. Treat the local
      configparser, importlib_*, backports) shouldn't be mass-rewritten. Add
      `[lint.per-file-ignores]` under `# local` for them, delivered as a PR
      that names the mass-fix alternative.
+   - Review "safe" autofixes too. G010 (`.warn` → `.warning`) assumes a
+     stdlib logger and broke cssutils' custom handler. RUF059's `_` renames
+     can expose F841. PLC0206 rewrites can shadow a variable the loop body
+     reassigns. Rerun ruff and the tests after each round of fixes.
+   - RUF012 sometimes exposes real shared-state bugs, such as a mutable class
+     attribute that instances mutate. Check before reaching for `ClassVar`,
+     and give a real bug its own commit and newsfragment.
+   - When there are more than ~100 violations, split the ruff commit
+     sensibly. Also confirm everything still parses on the minimum Python
+     (`python3.10 -c "import ast,sys; ast.parse(open(sys.argv[1]).read())"`),
+     since f-string conversions can introduce newer syntax.
    - Use `--unsafe-fixes` only selectively, and only with review.
    - Don't fix a rule by adding it to the project's ignore list unless the
      rule is wrong for the project. If you do, put it under `# local` with a
@@ -166,6 +179,13 @@ Runs older than a few months usually have expired logs. Treat the local
    mypy only checks platform branches (such as `sys.platform == 'win32'`) on
    that platform. A `type: ignore` that is unused on Windows fails only in
    Windows CI. Use `# type: ignore[code, unused-ignore]` there.
+
+   Look up the run with `-w main.yml`. Otherwise the newest run is often
+   the "Dependency Graph" workflow.
+
+   Before fixing a CI failure, search the project's open PRs. If a
+   contributor PR already fixes it, report that rather than duplicating it,
+   because merging someone else's PR is the maintainer's call.
 
    Fix CI-only failures (other platforms or Python versions, diffcov, docs)
    as follows:
