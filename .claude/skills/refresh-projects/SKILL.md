@@ -27,6 +27,11 @@ conventions.
   tempora). Never merge skeleton into these, even when
   `git merge-base HEAD FETCH_HEAD` succeeds, because the merge would
   resurrect deleted skeleton files. Still run the baseline and fix failures.
+  To get a baseline for a Coherent project, run
+  `PYTHONSAFEPATH=1 uvx --python 3.X --from 'coherent.test>=0.7.0' python -m coherent.test`.
+  coherent.build infers `Requires-Python` from the oldest CPython branch,
+  so a CPython end-of-life breaks every Coherent project at once. Fix that in
+  coherent-oss/system, not per project.
 - Otherwise, merge skeleton only into projects that already share its
   history (where `git merge-base HEAD FETCH_HEAD` succeeds). If neither
   applies, leave the project alone and report it.
@@ -34,10 +39,11 @@ conventions.
 Baseline CI state per repo:
 
 ```bash
-gh run list -R ORG/NAME -w main.yml -b main -L 1 --json conclusion,createdAt
+gh run list -R ORG/NAME -w main.yml -b main -e push -L 1 --json conclusion,createdAt
 ```
 
-Runs older than a few months usually have expired logs. Treat the local
+Use `-e push`, because `-b main` also matches fork PRs whose branch is named
+`main`. Runs older than a few months usually have expired logs. Treat the local
 `tox` run as the source of truth.
 
 ## Per-project procedure
@@ -221,6 +227,22 @@ Runs older than a few months usually have expired logs. Treat the local
    mypy only checks platform branches (such as `sys.platform == 'win32'`) on
    that platform. A `type: ignore` that is unused on Windows fails only in
    Windows CI. Use `# type: ignore[code, unused-ignore]` there.
+
+   Fail-fast cancels the rest of the matrix after the first failure. To see
+   every failure, rerun once (`gh run rerun --failed`) or push a throwaway
+   branch. Skeleton's matrix includes 3.14t and PyPy, which fail when a
+   C-extension dependency has no wheel for them (psycopg2, pywin32). Treat
+   those separately from failures the merge caused. A local matrix
+   exclusion goes in a PR.
+
+   Lines that only run when a resource is missing, such as skip branches,
+   are never covered in CI. Avoid touching them for lint, or mark them
+   `# pragma: no cover`.
+
+   During the merge, check `tox.ini` for git-pinned forks and stale pins.
+
+   Network tests broken by a third-party site: `xfail` them with a
+   reference to an issue.
 
    Look up the run with `-w main.yml`. Otherwise the newest run is often
    the "Dependency Graph" workflow.
