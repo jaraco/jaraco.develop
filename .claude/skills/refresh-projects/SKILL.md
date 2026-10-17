@@ -110,6 +110,11 @@ Runs older than a few months usually have expired logs. Treat the local
      - PLE0704 (bare `raise`) in `onerror` handlers and re-raise helpers
      - SIM115 where a file deliberately outlives the block
      - TRY004 where changing the exception type would change behavior
+   - EXE001: for a console-script entry-point module, remove the shebang. For
+     a script that runs through its shebang (e.g. mockproc), `chmod +x` it.
+   - SIM115: prefer a real `with` when the handle would otherwise never be
+     closed. Leaked handles can lose writes on PyPy. Use `noqa` only when the
+     file deliberately outlives the block.
    - SIM905's autofix turns readable `"""...""".split()` word lists into
      long literals. Reject it and use a `# noqa`.
    - SIM102 often has no autofix when comments are present, so collapse
@@ -160,14 +165,22 @@ Runs older than a few months usually have expired logs. Treat the local
    test or simplification in its own commit, ahead of the ruff commit.
    Reordering local, unpushed commits (`git reset`, `--amend`) is fine.
 
+   diffcov compares against `origin/main`, so it only enforces on PRs. On a
+   direct push to main it passes trivially, so don't chase coverage of
+   untestable interactive or hardware code too far.
+
    Doctests can use `getfixture('monkeypatch')` to cover side-effecting
    lines cheaply, without a new test module.
 
    Some rule hits are real bugs and get their own bug-fix commits:
    - C417 on a bare `map(...)` statement is usually dead code that never
      runs.
-   - Python 2 leftovers such as `itertools.imap` and `zip(...).sort()`.
-     Adding tests for diffcov tends to expose these.
+   - Python 2 leftovers such as `itertools.imap`/`ifilter`,
+     `zip(...).sort()`, `obj.next()`, `WindowsError`, and the optparse-style
+     `options, args = parser.parse_args()` used with argparse.
+     Adding tests for diffcov tends to expose these. When a new test exposes a
+     bug, commit the fix before the test so every commit passes. File an
+     issue when a module looks largely broken.
 
 5. **Other failures.** Re-run `tox` and fix what's left: deprecations, test
    breakages from new Python or dependency releases, and mypy. Keep each
@@ -216,7 +229,8 @@ Runs older than a few months usually have expired logs. Treat the local
 ## Conventions
 
 - The user's shell is xonsh. Bash-isms such as `set -- $x` misbehave
-  silently. Wrap multi-step shell loops in `bash -c '...'`.
+  silently. Wrap multi-step shell loops in `bash -c '...'`. macOS
+  `/bin/bash` is 3.2, so there's no `declare -A`.
 
 - Qualify cross-repo references (`jaraco/skeleton#210`, not `#210`).
 - Don't pin ruff, and don't trust `.pre-commit-config.yaml` (it's
