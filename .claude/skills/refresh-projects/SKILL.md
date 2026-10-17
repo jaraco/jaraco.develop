@@ -84,7 +84,9 @@ Runs older than a few months usually have expired logs. Treat the local
    - Then `git commit --no-edit`.
    - "Already up to date" is fine. Confirm `ruff check .` is clean and CI is
      green, then move on.
-4. **Ruff (jaraco/skeleton#210).** Fix only what tox reports. Some projects
+4. **Ruff (jaraco/skeleton#210).** Fix only what tox reports. pytest-ruff
+   shows only the first violation per file, so run `ruff check <file>` on
+   each file tox flags to see all of them. Some projects
    deliberately exclude vendored sources (`collect_ignore` in `conftest.py`)
    or disable pytest-ruff, and a bare `ruff check .` reports false alarms
    there. Run `ruff check .` and
@@ -158,6 +160,9 @@ Runs older than a few months usually have expired logs. Treat the local
    test or simplification in its own commit, ahead of the ruff commit.
    Reordering local, unpushed commits (`git reset`, `--amend`) is fine.
 
+   Doctests can use `getfixture('monkeypatch')` to cover side-effecting
+   lines cheaply, without a new test module.
+
    Some rule hits are real bugs and get their own bug-fix commits:
    - C417 on a bare `map(...)` statement is usually dead code that never
      runs.
@@ -195,7 +200,8 @@ Runs older than a few months usually have expired logs. Treat the local
 
    Before fixing a CI failure, search the project's open PRs. If a
    contributor PR already fixes it, report that rather than duplicating it,
-   because merging someone else's PR is the maintainer's call.
+   because merging someone else's PR is the maintainer's call. Also mention
+   whether the refresh commits will conflict with that PR.
 
    Fix CI-only failures (other platforms or Python versions, diffcov, docs)
    as follows:
