@@ -71,7 +71,10 @@ Use `-e push`, because `-b main` also matches fork PRs whose branch is named
    diffcov.
    Review `git clean -ndx` first. If the clean is denied by the permission
    mode, skip it and use `tox -r` for a fresh environment.
-2. **Baseline.** Run `tox` (current Python) and note what fails before
+2. **Baseline.** Projects that read keys through keyring can hang on a
+   macOS Keychain prompt. Run with
+   `PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring` and
+   `TOX_OVERRIDE=testenv.pass_env+=PYTHON_KEYRING_BACKEND`. Run `tox` (current Python) and note what fails before
    touching anything. That tells you which failures the merge caused. Common
    non-lint causes are dead pytest plugins in test extras (pytest-pep8
    crashes under pytest 9 before collection) and `pkg_resources` imports
@@ -83,6 +86,10 @@ Use `-e push`, because `-b main` also matches fork PRs whose branch is named
      history collapse. Pull the matching handoff branch first
      (`git pull gh://jaraco/skeleton 2023-handoff`), but only if the project
      is otherwise skeleton-based.
+     It can also mean the project's history was rewritten (filter-repo
+     strips signatures, so the SHAs change). Find the skeleton commit with a
+     matching tree, `git merge-recursive <it> -- HEAD <skeleton>`, and
+     commit with skeleton as the second parent. Report it.
    - Conflicts: try `git mergetool -t known-merge`
      (`py -m jaraco.develop.merge`), which resolves placeholder and shebang
      conflicts. Resolve the rest by hand:
@@ -187,6 +194,10 @@ Use `-e push`, because `-b main` also matches fork PRs whose branch is named
      when `a.b` is untyped. Import the needed names directly instead.
    - A `# noqa` for a multi-line string goes after the string's closing
      line. If it's placed inside the string, it becomes part of the string.
+   - UP031 workflow: run `--unsafe-fixes --select UP031`, then
+     `--select UP032`. Do the `%d` sites by hand, adding `int()` where the
+     value may not be an int. Ruff won't autofix F401 in `__init__.py`, so
+     remove newly unused imports by hand.
    - Use `--unsafe-fixes` only selectively, and only with review.
    - Don't fix a rule by adding it to the project's ignore list unless the
      rule is wrong for the project. If you do, put it under `# local` with a
