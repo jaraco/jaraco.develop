@@ -52,6 +52,8 @@ Runs older than a few months usually have expired logs. Treat the local
    Coherent System project). Otherwise:
    `git fetch origin && git switch main && git merge --ff-only origin/main
    && git clean -fdx`. If main can't fast-forward, stop and report.
+   Review `git clean -ndx` first. If the clean is denied by the permission
+   mode, skip it and use `tox -r` for a fresh environment.
 2. **Baseline.** Run `tox` (current Python) and note what fails before
    touching anything. That tells you which failures the merge caused.
 3. **Merge skeleton.** `git pull --no-edit gh://jaraco/skeleton`.
@@ -129,7 +131,15 @@ Runs older than a few months usually have expired logs. Treat the local
    Ref jaraco/skeleton#210.
    ```
    Before pushing, run `tox -e diffcov`. Lint rewrites touch lines that were
-   already uncovered, which fails diffcov in CI. Add a test or simplify.
+   already uncovered, which fails diffcov in CI. Add a test or simplify. Put that
+   test or simplification in its own commit, ahead of the ruff commit.
+   Reordering local, unpushed commits (`git reset`, `--amend`) is fine.
+
+   Some rule hits are real bugs and get their own bug-fix commits:
+   - C417 on a bare `map(...)` statement is usually dead code that never
+     runs.
+   - Python 2 leftovers such as `itertools.imap` and `zip(...).sort()`.
+     Adding tests for diffcov tends to expose these.
 
 5. **Other failures.** Re-run `tox` and fix what's left: deprecations, test
    breakages from new Python or dependency releases, and mypy. Keep each
@@ -142,6 +152,12 @@ Runs older than a few months usually have expired logs. Treat the local
    gh run watch -R ORG/NAME <run-id> --exit-status
    gh run view -R ORG/NAME <run-id> --json conclusion
    ```
+
+   With many agents polling in parallel, GitHub's secondary rate limit
+   blocks `gh run ...` for minutes at a time. Poll sparingly (every 60s or
+   more) and fall back to
+   `gh api "repos/O/N/actions/workflows/main.yml/runs?branch=main&per_page=1"`,
+   matching `head_sha` to the pushed commit.
 
    Confirm the conclusion with `gh run view`. Don't trust a wrapped
    command's exit code. One failed job cancels the rest of the matrix, so a
