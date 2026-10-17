@@ -69,6 +69,11 @@ Runs older than a few months usually have expired logs. Treat the local
        project's `# local` entries.
      - Files the project deliberately customized or deleted keep the
        project's version.
+     - `.github/workflows/main.yml` now delegates to the reusable
+       `test-suite.yml`, so local matrix entries or steps can't carry over
+       as-is. Check whether the customization is still needed (often it's
+       stale) and take skeleton's version if not. If it is still needed,
+       raise it as a PR.
    - Then `git commit --no-edit`.
    - "Already up to date" is fine. Confirm `ruff check .` is clean and CI is
      green, then move on.
@@ -93,6 +98,14 @@ Runs older than a few months usually have expired logs. Treat the local
      - PLE0704 (bare `raise`) in `onerror` handlers and re-raise helpers
      - SIM115 where a file deliberately outlives the block
      - TRY004 where changing the exception type would change behavior
+   - SIM905's autofix turns readable `"""...""".split()` word lists into
+     long literals. Reject it and use a `# noqa`.
+   - SIM102 often has no autofix when comments are present, so collapse
+     those by hand and keep the comments.
+   - Files synced from another upstream (CPython-derived code in
+     configparser, importlib_*, backports) shouldn't be mass-rewritten. Add
+     `[lint.per-file-ignores]` under `# local` for them, delivered as a PR
+     that names the mass-fix alternative.
    - Use `--unsafe-fixes` only selectively, and only with review.
    - Don't fix a rule by adding it to the project's ignore list unless the
      rule is wrong for the project. If you do, put it under `# local` with a
@@ -109,6 +122,9 @@ Runs older than a few months usually have expired logs. Treat the local
 
    Ref jaraco/skeleton#210.
    ```
+   Before pushing, run `tox -e diffcov`. Lint rewrites touch lines that were
+   already uncovered, which fails diffcov in CI. Add a test or simplify.
+
 5. **Other failures.** Re-run `tox` and fix what's left: deprecations, test
    breakages from new Python or dependency releases, and mypy. Keep each
    concern in its own commit with a descriptive message. Add a towncrier
