@@ -150,6 +150,8 @@ Runs older than a few months usually have expired logs. Treat the local
      Revert those, or pass explicit paths.
    - Preserve line endings. Python `open().read()`/`write()` silently turns
      CRLF into LF. Check `git ls-files --eol`.
+   - A `# noqa` for a multi-line string goes after the string's closing
+     line. If it's placed inside the string, it becomes part of the string.
    - Use `--unsafe-fixes` only selectively, and only with review.
    - Don't fix a rule by adding it to the project's ignore list unless the
      rule is wrong for the project. If you do, put it under `# local` with a
@@ -166,7 +168,8 @@ Runs older than a few months usually have expired logs. Treat the local
 
    Ref jaraco/skeleton#210.
    ```
-   Before pushing, run `tox -e diffcov`. Lint rewrites touch lines that were
+   Before pushing, run `tox -e diffcov` and check its exit status. Piping it
+   through `tail` hides failures from `&& git push`. Lint rewrites touch lines that were
    already uncovered, which fails diffcov in CI. Add a test or simplify. Put that
    test or simplification in its own commit, ahead of the ruff commit.
    Reordering local, unpushed commits (`git reset`, `--amend`) is fine.
