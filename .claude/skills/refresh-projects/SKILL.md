@@ -123,6 +123,9 @@ Runs older than a few months usually have expired logs. Treat the local
    - RUF012 sometimes exposes real shared-state bugs, such as a mutable class
      attribute that instances mutate. Check before reaching for `ClassVar`,
      and give a real bug its own commit and newsfragment.
+   - Ruff 0.17 dropped some 0.16 defaults (DTZ011, for example), so their
+     `# noqa` comments now trip RUF100 (unused noqa). Remove the codes and
+     keep any explanatory comment.
    - PLW0602: removing a do-nothing `global x` can expose F821 when the
      name is never bound at module level. Find the intended binding site
      (often `main()`) rather than adding a `noqa`.
