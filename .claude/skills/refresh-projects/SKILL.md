@@ -201,6 +201,9 @@ Use `-e push`, because `-b main` also matches fork PRs whose branch is named
    Some rule hits are real bugs and get their own bug-fix commits:
    - C417 on a bare `map(...)` statement is usually dead code that never
      runs.
+   - B015 (pointless comparison) in tests usually means a missing
+     `assert`. A missing `f` prefix on a continuation line of an implicitly
+     concatenated string is another real bug.
    - `map(pattern.match, ...)` used where `filter` was meant, and PyMongo 4
      removals (`Collection.update`/`insert`/`remove`).
    - Python 2 leftovers such as `__unicode__`, `itertools.imap`/`ifilter`,
@@ -209,6 +212,14 @@ Use `-e push`, because `-b main` also matches fork PRs whose branch is named
      Adding tests for diffcov tends to expose these. When a new test exposes a
      bug, commit the fix before the test so every commit passes. File an
      issue when a module looks largely broken.
+
+   `pkg_resources` imports fail now that recent Setuptools no longer
+   provides it. Swap `resource_stream` for
+   `importlib.resources.files(pkg).joinpath(p).open('rb')`,
+   `resource_filename` for `str(files(pkg) / p)`, and
+   `require(x)[0].version` for `importlib.metadata.version(x)`. Treat the
+   swap as a bugfix with a newsfragment. `git clean` removes an empty
+   `newsfragments/` directory, so recreate it with `mkdir -p` first.
 
 5. **Other failures.** Re-run `tox` and fix what's left: deprecations, test
    breakages from new Python or dependency releases, and mypy. Keep each
