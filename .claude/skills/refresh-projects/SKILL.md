@@ -150,6 +150,8 @@ Runs older than a few months usually have expired logs. Treat the local
      Revert those, or pass explicit paths.
    - Preserve line endings. Python `open().read()`/`write()` silently turns
      CRLF into LF. Check `git ls-files --eol`.
+   - PLR0402's autofix (`import a.b as b` → `from a import b`) can break mypy
+     when `a.b` is untyped. Import the needed names directly instead.
    - A `# noqa` for a multi-line string goes after the string's closing
      line. If it's placed inside the string, it becomes part of the string.
    - Use `--unsafe-fixes` only selectively, and only with review.
@@ -173,6 +175,9 @@ Runs older than a few months usually have expired logs. Treat the local
    already uncovered, which fails diffcov in CI. Add a test or simplify. Put that
    test or simplification in its own commit, ahead of the ruff commit.
    Reordering local, unpushed commits (`git reset`, `--amend`) is fine.
+
+   For packages that register a pytest plugin, diffcov reports import-time
+   lines as uncovered. Ignore those.
 
    diffcov compares against `origin/main`, so it only enforces on PRs. On a
    direct push to main it passes trivially, so don't chase coverage of
@@ -230,7 +235,10 @@ Runs older than a few months usually have expired logs. Treat the local
    - **Shared dependency or install failures** (one cause across many
      projects, such as a missing wheel or a CI image change): fix them once
      at the source (skeleton's `test-suite.yml`, or the upstream project)
-     instead of per project. When batching, have the coordinator do it so
+     instead of per project. A missing wheel can also show up as pip
+     backtracking to an ancient release of a dependency, which then fails
+     (e.g. `No module named 'pkg_resources'`). Check the job log for
+     unexpectedly old versions. When batching, have the coordinator do it so
      issues aren't duplicated.
    - **Minor issues:** fix directly and push.
    - **Significant issues:** file an issue on the project describing the
