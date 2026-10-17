@@ -32,6 +32,12 @@ conventions.
   coherent.build infers `Requires-Python` from the oldest CPython branch,
   so a CPython end-of-life breaks every Coherent project at once. Fix that in
   coherent-oss/system, not per project.
+  To see every violation, fetch skeleton's `ruff.toml` and run
+  `ruff check --config <it> --target-version py3XX .`, matching the inferred
+  Requires-Python. To test a change to coherent.test itself, run another
+  project with `uvx --from ~/code/coherent-oss/coherent.test python -m coherent.test`.
+  UP036 after a CPython end-of-life means support is being dropped, so in
+  coherent.build/coherent.test deliver that through a PR.
 - Otherwise, merge skeleton only into projects that already share its
   history (where `git merge-base HEAD FETCH_HEAD` succeeds). If neither
   applies, leave the project alone and report it.
@@ -141,6 +147,8 @@ Use `-e push`, because `-b main` also matches fork PRs whose branch is named
      configparser, importlib_*, backports) shouldn't be mass-rewritten. Add
      `[lint.per-file-ignores]` under `# local` for them, delivered as a PR
      that names the mass-fix alternative.
+   - UP031 in log calls: when `log` may be a non-stdlib object (as in
+     cssutils/encutils), use f-strings rather than lazy logging arguments.
    - Review "safe" autofixes too. G010 (`.warn` → `.warning`) assumes a
      stdlib logger and broke cssutils' custom handler. RUF059's `_` renames
      can expose F841. PLC0206 rewrites can shadow a variable the loop body
