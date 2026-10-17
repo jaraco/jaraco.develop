@@ -144,6 +144,12 @@ Runs older than a few months usually have expired logs. Treat the local
      sensibly. Also confirm everything still parses on the minimum Python
      (`python3.10 -c "import ast,sys; ast.parse(open(sys.argv[1]).read())"`),
      since f-string conversions can introduce newer syntax.
+   - UP030/UP031 unsafe fixes can produce broken format strings (mixed
+     numbered and unnumbered fields → F525). Rewrite them by hand or recheck.
+   - `ruff check --fix .` also rewrites files excluded via `collect_ignore`.
+     Revert those, or pass explicit paths.
+   - Preserve line endings. Python `open().read()`/`write()` silently turns
+     CRLF into LF. Check `git ls-files --eol`.
    - Use `--unsafe-fixes` only selectively, and only with review.
    - Don't fix a rule by adding it to the project's ignore list unless the
      rule is wrong for the project. If you do, put it under `# local` with a
@@ -175,7 +181,7 @@ Runs older than a few months usually have expired logs. Treat the local
    Some rule hits are real bugs and get their own bug-fix commits:
    - C417 on a bare `map(...)` statement is usually dead code that never
      runs.
-   - Python 2 leftovers such as `itertools.imap`/`ifilter`,
+   - Python 2 leftovers such as `__unicode__`, `itertools.imap`/`ifilter`,
      `zip(...).sort()`, `obj.next()`, `WindowsError`, and the optparse-style
      `options, args = parser.parse_args()` used with argparse.
      Adding tests for diffcov tends to expose these. When a new test exposes a
@@ -218,6 +224,11 @@ Runs older than a few months usually have expired logs. Treat the local
 
    Fix CI-only failures (other platforms or Python versions, diffcov, docs)
    as follows:
+   - **Shared dependency or install failures** (one cause across many
+     projects, such as a missing wheel or a CI image change): fix them once
+     at the source (skeleton's `test-suite.yml`, or the upstream project)
+     instead of per project. When batching, have the coordinator do it so
+     issues aren't duplicated.
    - **Minor issues:** fix directly and push.
    - **Significant issues:** file an issue on the project describing the
      concern, then fix it in a commit that references the issue
