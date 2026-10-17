@@ -57,7 +57,9 @@ Use `-e push`, because `-b main` also matches fork PRs whose branch is named
    `coherent.build` build-system stub (left over from building a
    Coherent System project). Otherwise:
    `git fetch origin && git switch main && git merge --ff-only origin/main
-   && git clean -fdx`. If main can't fast-forward, stop and report.
+   && git clean -fdx`. If main can't fast-forward, stop and report. The exception is a local
+   main that's ahead only by a stale merge whose parents are both already
+   upstream. Move it to a backup branch and reset main.
    Review `git clean -ndx` first. If the clean is denied by the permission
    mode, skip it and use `tox -r` for a fresh environment.
 2. **Baseline.** Run `tox` (current Python) and note what fails before
@@ -272,6 +274,17 @@ Use `-e push`, because `-b main` also matches fork PRs whose branch is named
 
    Look up the run with `-w main.yml`. Otherwise the newest run is often
    the "Dependency Graph" workflow.
+
+   Before pushing, check open PRs for overlap with the refresh. Don't
+   create a file a contributor PR also adds. Running
+   `git merge-tree --write-tree origin/main <pr-head>` before and after the
+   refresh shows whether the refresh introduces a conflict. Report any it
+   does.
+
+   When a lint rewrite touches rendering or formatting code, compare the
+   generated output before and after, using a `git worktree` of the
+   pre-change commit. That catches `vars()`/`locals()` breakage that tests
+   miss.
 
    Before fixing a CI failure, search the project's open PRs. If a
    contributor PR already fixes it, report that rather than duplicating it,
