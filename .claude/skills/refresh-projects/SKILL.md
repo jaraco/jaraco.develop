@@ -66,6 +66,9 @@ Use `-e push`, because `-b main` also matches fork PRs whose branch is named
    && git clean -fdx`. If main can't fast-forward, stop and report. The exception is a local
    main that's ahead only by a stale merge whose parents are both already
    upstream. Move it to a backup branch and reset main.
+   Use `git clean -fdx -e .claude` to keep a user's
+   `.claude/settings.local.json`. Delete `diffcov.html` after running
+   diffcov.
    Review `git clean -ndx` first. If the clean is denied by the permission
    mode, skip it and use `tox -r` for a fresh environment.
 2. **Baseline.** Run `tox` (current Python) and note what fails before
@@ -87,7 +90,7 @@ Use `-e push`, because `-b main` also matches fork PRs whose branch is named
        `# local` sections stay with the project.
      - In `ruff.toml`, take skeleton's upstream entries and keep the
        project's `# local` entries. Drop local entries that skeleton has since
-       adopted upstream (B008, for example), and fix stray whitespace before
+       adopted upstream (B008, or `extend-select` entries such as `UP`), and fix stray whitespace before
        `# local`, which otherwise conflicts every time.
      - Files the project deliberately customized or deleted keep the
        project's version.
