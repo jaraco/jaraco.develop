@@ -21,6 +21,8 @@ conventions.
 - `[lifted]` marks Tidelift-supported projects. Do these first.
 - Some projects have no `.github/workflows/main.yml`. These are cherrypy and
   pypa projects with their own CI, plus a few non-packages such as dotfiles.
+  Coherent System projects (no tracked `pyproject.toml`, such as
+  jaraco.pdf) aren't skeleton-based either.
   Merge skeleton only into projects that already share its history (where
   `git merge-base HEAD FETCH_HEAD` succeeds). Otherwise leave the project
   alone and report it.
@@ -39,7 +41,11 @@ Runs older than a few months usually have expired logs. Treat the local
 1. **Clean.** Run `git status --short` (ignored files don't count). If there
    are tracked changes or untracked files that look meaningful, such as
    source, docs or newsfragments rather than `*.orig` or build leftovers,
-   **stop and report** instead of discarding them. Otherwise:
+   **stop and report** instead of discarding them. Some files are always
+   disposable: report artifacts such as `diffcov.html` and `readme.html`,
+   and an untracked `pyproject.toml` that contains only the
+   `coherent.build` build-system stub (left over from building a
+   Coherent System project). Otherwise:
    `git fetch origin && git switch main && git merge --ff-only origin/main
    && git clean -fdx`. If main can't fast-forward, stop and report.
 2. **Baseline.** Run `tox` (current Python) and note what fails before
