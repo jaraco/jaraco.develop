@@ -63,7 +63,11 @@ Use `-e push`, because `-b main` also matches fork PRs whose branch is named
    Review `git clean -ndx` first. If the clean is denied by the permission
    mode, skip it and use `tox -r` for a fresh environment.
 2. **Baseline.** Run `tox` (current Python) and note what fails before
-   touching anything. That tells you which failures the merge caused.
+   touching anything. That tells you which failures the merge caused. Common
+   non-lint causes are dead pytest plugins in test extras (pytest-pep8
+   crashes under pytest 9 before collection) and `pkg_resources` imports
+   (see below). Tests keyed to `date.today()` can also fail because
+   calendar data expired. Classify those as data expiry, not merge fallout.
 3. **Merge skeleton.** `git pull --no-edit gh://jaraco/skeleton`.
    - Keep the default merge message (`Merge https://github.com/jaraco/skeleton`).
    - "refusing to merge unrelated histories" means the project predates a
@@ -99,7 +103,9 @@ Use `-e push`, because `-b main` also matches fork PRs whose branch is named
    each file tox flags to see all of them. Some projects
    deliberately exclude vendored sources (`collect_ignore` in `conftest.py`)
    or disable pytest-ruff, and a bare `ruff check .` reports false alarms
-   there. Run `ruff check .` and
+   there. A nested `ruff.toml` without `extend = "../ruff.toml"` silently
+   replaces the root config for its subtree, so check for those too. Run
+   `ruff check .` and
    `ruff format --check .`. Fix with `ruff check --fix .` (and `ruff format .`
    if needed), then **review the diff**. The autofixes are not always safe:
    - PLC0414/F401 can delete `import X as X` re-exports. Skeleton ignores
@@ -122,6 +128,8 @@ Use `-e push`, because `-b main` also matches fork PRs whose branch is named
      - TRY004 where changing the exception type would change behavior
    - EXE001: for a console-script entry-point module, remove the shebang. For
      a script that runs through its shebang (e.g. mockproc), `chmod +x` it.
+   - SIM115 for an optional file or stdout:
+     `with (open(p) if p else contextlib.nullcontext(sys.stdout)) as f:`.
    - SIM115: prefer a real `with` when the handle would otherwise never be
      closed. Leaked handles can lose writes on PyPy. Use `noqa` only when the
      file deliberately outlives the block.
@@ -199,6 +207,9 @@ Use `-e push`, because `-b main` also matches fork PRs whose branch is named
 
    Doctests can use `getfixture('monkeypatch')` to cover side-effecting
    lines cheaply, without a new test module.
+
+   Python 3.15 colorizes `--help` output under CI's `FORCE_COLOR`. Tests
+   that assert on help text need `PYTHON_COLORS=0`.
 
    Some rule hits are real bugs and get their own bug-fix commits:
    - C417 on a bare `map(...)` statement is usually dead code that never
