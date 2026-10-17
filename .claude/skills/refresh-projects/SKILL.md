@@ -21,11 +21,15 @@ conventions.
 - `[lifted]` marks Tidelift-supported projects. Do these first.
 - Some projects have no `.github/workflows/main.yml`. These are cherrypy and
   pypa projects with their own CI, plus a few non-packages such as dotfiles.
-  Coherent System projects (no tracked `pyproject.toml`, such as
-  jaraco.pdf) aren't skeleton-based either.
-  Merge skeleton only into projects that already share its history (where
-  `git merge-base HEAD FETCH_HEAD` succeeds). Otherwise leave the project
-  alone and report it.
+- Coherent System projects aren't skeleton-based either. A project is one if
+  it has no tracked `pyproject.toml` (like jaraco.pdf), uses the
+  `coherent.build` backend, or runs CI from `coherent-oss/system` (like
+  tempora). Never merge skeleton into these, even when
+  `git merge-base HEAD FETCH_HEAD` succeeds, because the merge would
+  resurrect deleted skeleton files. Still run the baseline and fix failures.
+- Otherwise, merge skeleton only into projects that already share its
+  history (where `git merge-base HEAD FETCH_HEAD` succeeds). If neither
+  applies, leave the project alone and report it.
 
 Baseline CI state per repo:
 
@@ -66,6 +70,8 @@ Runs older than a few months usually have expired logs. Treat the local
      - Files the project deliberately customized or deleted keep the
        project's version.
    - Then `git commit --no-edit`.
+   - "Already up to date" is fine. Confirm `ruff check .` is clean and CI is
+     green, then move on.
 4. **Ruff (jaraco/skeleton#210).** Run `ruff check .` and
    `ruff format --check .`. Fix with `ruff check --fix .` (and `ruff format .`
    if needed), then **review the diff**. The autofixes are not always safe:
@@ -78,10 +84,23 @@ Runs older than a few months usually have expired logs. Treat the local
    - RUF012 (mutable class attributes): annotate with `ClassVar` (bare
      `ClassVar` when the type is inferable). If the class attribute is an
      intentional, never-mutated default, use `# noqa` with a reason.
+   - UP036 (outdated version block) often marks a `compat` shim for a Python
+     below `requires-python`. Remove the shim and its call sites in a
+     separate commit before the ruff commit.
+   - Some patterns are intentional. Give these a `# noqa` with a reason
+     instead of a code change:
+     - BLE001 in error-handler callbacks
+     - PLE0704 (bare `raise`) in `onerror` handlers and re-raise helpers
+     - SIM115 where a file deliberately outlives the block
+     - TRY004 where changing the exception type would change behavior
    - Use `--unsafe-fixes` only selectively, and only with review.
    - Don't fix a rule by adding it to the project's ignore list unless the
      rule is wrong for the project. If you do, put it under `# local` with a
      comment.
+
+   When ruff fixes and other fixes touch the same file, keep them in
+   separate commits. `git add -p` is interactive, so stage with `git stash`
+   or by applying the fixes in sequence.
 
    Commit as:
 
@@ -99,7 +118,16 @@ Runs older than a few months usually have expired logs. Treat the local
 
    ```bash
    gh run watch -R ORG/NAME <run-id> --exit-status
+   gh run view -R ORG/NAME <run-id> --json conclusion
    ```
+
+   Confirm the conclusion with `gh run view`. Don't trust a wrapped
+   command's exit code. One failed job cancels the rest of the matrix, so a
+   second run may surface more failures.
+
+   mypy only checks platform branches (such as `sys.platform == 'win32'`) on
+   that platform. A `type: ignore` that is unused on Windows fails only in
+   Windows CI. Use `# type: ignore[code, unused-ignore]` there.
 
    Fix CI-only failures (other platforms or Python versions, diffcov, docs)
    as follows:
