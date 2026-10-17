@@ -82,6 +82,8 @@ Use `-e push`, because `-b main` also matches fork PRs whose branch is named
      - A check the project disabled on purpose stays disabled, even when
        skeleton edits that line. An example is a commented-out
        `pytest-mypy` or `pytest-ruff` dependency.
+     - Local `actions/cache@v1`/`v2` steps are dead (those versions are
+       retired), so drop them.
      - `.github/workflows/main.yml` now delegates to the reusable
        `test-suite.yml`, so local matrix entries or steps can't carry over
        as-is. Check whether the customization is still needed (often it's
@@ -229,6 +231,11 @@ Use `-e push`, because `-b main` also matches fork PRs whose branch is named
    Confirm the conclusion with `gh run view`. Don't trust a wrapped
    command's exit code. One failed job cancels the rest of the matrix, so a
    second run may surface more failures.
+
+   For Windows-only code, run `mypy --platform win32 .` locally, and run
+   `ruff check` on platform-collected files to see what Windows CI will
+   report. First check whether the matrix disables windows-latest, in which
+   case CI won't verify those fixes.
 
    mypy only checks platform branches (such as `sys.platform == 'win32'`) on
    that platform. A `type: ignore` that is unused on Windows fails only in
