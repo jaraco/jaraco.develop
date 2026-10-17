@@ -195,6 +195,8 @@ Use `-e push`, because `-b main` also matches fork PRs whose branch is named
    Some rule hits are real bugs and get their own bug-fix commits:
    - C417 on a bare `map(...)` statement is usually dead code that never
      runs.
+   - `map(pattern.match, ...)` used where `filter` was meant, and PyMongo 4
+     removals (`Collection.update`/`insert`/`remove`).
    - Python 2 leftovers such as `__unicode__`, `itertools.imap`/`ifilter`,
      `zip(...).sort()`, `obj.next()`, `WindowsError`, and the optparse-style
      `options, args = parser.parse_args()` used with argparse.
@@ -230,7 +232,8 @@ Use `-e push`, because `-b main` also matches fork PRs whose branch is named
 
    Fail-fast cancels the rest of the matrix after the first failure. To see
    every failure, rerun once (`gh run rerun --failed`) or push a throwaway
-   branch. Skeleton's matrix includes 3.14t and PyPy, which fail when a
+   branch. A cancelled job may already have passed, so read its log
+   before rerunning. Skeleton's matrix includes 3.14t and PyPy, which fail when a
    C-extension dependency has no wheel for them (psycopg2, pywin32). Treat
    those separately from failures the merge caused. A local matrix
    exclusion goes in a PR.
@@ -239,7 +242,8 @@ Use `-e push`, because `-b main` also matches fork PRs whose branch is named
    are never covered in CI. Avoid touching them for lint, or mark them
    `# pragma: no cover`.
 
-   During the merge, check `tox.ini` for git-pinned forks and stale pins.
+   During the merge, check `tox.ini` for git-pinned forks, stale pins and
+   `extras` that no longer exist (fatal under tox 4).
 
    Network tests broken by a third-party site: `xfail` them with a
    reference to an issue.
