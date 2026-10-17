@@ -69,6 +69,9 @@ Runs older than a few months usually have expired logs. Treat the local
        project's `# local` entries.
      - Files the project deliberately customized or deleted keep the
        project's version.
+     - A check the project disabled on purpose stays disabled, even when
+       skeleton edits that line. An example is a commented-out
+       `pytest-mypy` or `pytest-ruff` dependency.
      - `.github/workflows/main.yml` now delegates to the reusable
        `test-suite.yml`, so local matrix entries or steps can't carry over
        as-is. Check whether the customization is still needed (often it's
@@ -77,7 +80,10 @@ Runs older than a few months usually have expired logs. Treat the local
    - Then `git commit --no-edit`.
    - "Already up to date" is fine. Confirm `ruff check .` is clean and CI is
      green, then move on.
-4. **Ruff (jaraco/skeleton#210).** Run `ruff check .` and
+4. **Ruff (jaraco/skeleton#210).** Fix only what tox reports. Some projects
+   deliberately exclude vendored sources (`collect_ignore` in `conftest.py`)
+   or disable pytest-ruff, and a bare `ruff check .` reports false alarms
+   there. Run `ruff check .` and
    `ruff format --check .`. Fix with `ruff check --fix .` (and `ruff format .`
    if needed), then **review the diff**. The autofixes are not always safe:
    - PLC0414/F401 can delete `import X as X` re-exports. Skeleton ignores
