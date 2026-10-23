@@ -33,7 +33,11 @@ jobs:
   run:
     runs-on: ${{ inputs.platform }}
     # Tolerate failures on pre-release Pythons (jaraco/skeleton#199)
-    continue-on-error: ${{ inputs.python == '3.16' }}
+    # local: and on free-threaded Windows, where PyNaCl publishes no
+    # cp315t wheels and can't build from source (jaraco/skeleton#227)
+    continue-on-error: >-
+      ${{ inputs.python == '3.16'
+      || (inputs.python == '3.15t' && inputs.platform == 'windows-latest') }}
     permissions:
       contents: read
     steps:
