@@ -1,3 +1,21 @@
+v9.1.0
+======
+
+Features
+--------
+
+- Require Python 3.11 or later.
+
+
+Bugfixes
+--------
+
+- Fragment types are now parsed from the right of the filename, as towncrier
+  itself does, so a dot in the fragment id no longer causes ``finalize`` to
+  fail with a ``KeyError``. Fragment names are also validated before the
+  release kind is computed, giving a clear error for unrecognized names. (#34)
+
+
 v9.0.0
 ======
 
